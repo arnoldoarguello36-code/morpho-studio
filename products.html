@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What we build — Products &amp; possible uses · Morpho Studio</title>
+<meta name="description" content="Every Morpho Studio package, explained plainly — what it is, who it's for, and concrete examples of it in use, from guesthouses and tour operators to restaurants, laundromats, and shops.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MORPHO STUDIO — design tokens (shared with the main page)
+   ============================================================ */
+:root{
+  --fog:        #F2F5F8;
+  --fog-deep:   #E5EBF0;
+  --ink:        #0D1A26;
+  --ink-soft:   #142638;
+  --basalt:     #56646E;
+  --mist:       #93A3AD;
+  --line:       rgba(13,26,38,.14);
+  --line-dark:  rgba(242,245,248,.16);
+
+  --m-blue:   #1F6FE0;
+  --m-cyan:   #2FB6E8;
+  --m-violet: #6E6BE8;
+  --m-text:   #1D5FBF;
+  --m-grad:   linear-gradient(100deg, var(--m-violet), var(--m-blue) 45%, var(--m-cyan));
+
+  --display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --body:    "Instrument Sans", system-ui, -apple-system, sans-serif;
+  --mono:    "Spline Sans Mono", ui-monospace, "SF Mono", monospace;
+
+  --s-1: 8px;  --s-2: 16px; --s-3: 24px; --s-4: 32px;
+  --s-6: 48px; --s-8: 64px; --s-12: 96px; --s-16: 128px;
+
+  --max: 1120px;
+  --radius: 12px;
+  --ease: cubic-bezier(.22,.9,.3,1);
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+
+body{
+  font-family:var(--body);
+  font-size:17px; line-height:1.6;
+  color:var(--ink); background:var(--fog);
+  -webkit-font-smoothing:antialiased;
+}
+
+::selection{ background:var(--m-cyan); color:var(--ink); }
+
+.skip-link{
+  position:absolute; left:var(--s-2); top:-64px;
+  background:var(--ink); color:var(--fog);
+  padding:var(--s-1) var(--s-2); border-radius:6px;
+  font-family:var(--mono); font-size:13px; z-index:60;
+  transition:top .2s var(--ease);
+}
+.skip-link:focus{ top:var(--s-2); }
+a, button, summary{ outline-offset:3px; }
+a:focus-visible, button:focus-visible{ outline:2px solid var(--m-text); border-radius:4px; }
+.dark a:focus-visible{ outline-color:var(--m-cyan); }
+
+/* ---------- nav (identical to main page) ---------- */
+.nav{
+  position:sticky; top:0; z-index:40;
+  background:rgba(242,245,248,.82);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:var(--max); margin:0 auto;
+  padding:var(--s-2) var(--s-3);
+  display:flex; align-items:center; justify-content:space-between; gap:var(--s-3);
+}
+.brand{
+  font-family:var(--display); font-weight:700; font-size:20px;
+  letter-spacing:-.02em; color:var(--ink); text-decoration:none;
+  display:flex; align-items:center; gap:10px;
+}
+.brand-mark{ width:22px; height:22px; flex:none; }
+.nav-links{ display:flex; gap:var(--s-3); align-items:center; list-style:none; }
+.nav-links a{ color:var(--basalt); text-decoration:none; font-size:15px; transition:color .18s var(--ease); }
+.nav-links a:hover{ color:var(--ink); }
+.nav-cta{
+  font-family:var(--mono); font-size:13px; letter-spacing:.02em;
+  color:var(--fog) !important; background:var(--ink);
+  padding:10px var(--s-2); border-radius:8px;
+  transition:background .18s var(--ease);
+}
+.nav-cta:hover{ background:var(--m-text); color:var(--fog) !important; }
+@media (max-width:760px){ .nav-links li:not(.keep){ display:none; } }
+
+/* ---------- shared section scaffolding ---------- */
+.section{ padding:var(--s-12) var(--s-3); }
+.section-inner{ max-width:var(--max); margin:0 auto; }
+.eyebrow{
+  font-family:var(--mono); font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--m-text);
+  display:flex; align-items:center; gap:var(--s-2);
+  margin-bottom:var(--s-3);
+}
+.eyebrow::after{ content:""; height:1px; width:48px; background:var(--m-grad); }
+h2{
+  font-family:var(--display); font-weight:600;
+  font-size:clamp(28px, 4.2vw, 44px); line-height:1.12;
+  letter-spacing:-.02em; max-width:22ch;
+  margin-bottom:var(--s-3);
+}
+.lede{ color:var(--basalt); max-width:60ch; font-size:18px; }
+.irid{ background:var(--m-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+.reveal{ opacity:0; transform:translateY(16px); transition:opacity .6s var(--ease), transform .6s var(--ease); }
+.reveal.in{ opacity:1; transform:none; }
+@media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+
+/* ---------- page intro ---------- */
+.intro{ padding:calc(var(--s-8) + var(--s-2)) var(--s-3) var(--s-8); }
+.intro-inner{ max-width:var(--max); margin:0 auto; }
+h1{
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(36px, 5.6vw, 60px); line-height:1.06;
+  letter-spacing:-.03em; max-width:18ch;
+}
+.intro-sub{ margin-top:var(--s-3); max-width:60ch; color:var(--basalt); font-size:19px; }
+.intro-back{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--mono); font-size:13px; color:var(--basalt);
+  text-decoration:none; margin-bottom:var(--s-4);
+}
+.intro-back:hover{ color:var(--ink); }
+.intro-back .arrow{ transition:transform .18s var(--ease); }
+.intro-back:hover .arrow{ transform:translateX(-3px); }
+
+/* jump nav */
+.jumpnav{
+  margin-top:var(--s-6); display:flex; flex-wrap:wrap; gap:10px;
+}
+.jumpnav a{
+  font-family:var(--mono); font-size:13px; letter-spacing:.02em;
+  color:var(--ink); background:#FFFFFF; border:1px solid var(--line);
+  border-radius:999px; padding:8px 16px; text-decoration:none;
+  transition:border-color .18s var(--ease), color .18s var(--ease);
+}
+.jumpnav a:hover{ border-color:var(--m-blue); color:var(--m-text); }
+
+/* ---------- product sections ---------- */
+.product{ border-top:1px solid var(--line); }
+.product.alt{ background:var(--fog-deep); }
+.product-inner{ max-width:var(--max); margin:0 auto; padding:var(--s-8) var(--s-3); }
+.product-head{ display:grid; grid-template-columns:1fr auto; gap:var(--s-4); align-items:start; }
+@media (max-width:700px){ .product-head{ grid-template-columns:1fr; } }
+.product-kind{
+  font-family:var(--mono); font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--m-text); display:block; margin-bottom:var(--s-2);
+}
+.product-price{
+  font-family:var(--mono); font-size:15px; color:var(--ink);
+  background:#FFFFFF; border:1px solid var(--line); border-radius:10px;
+  padding:14px var(--s-3); white-space:nowrap; height:fit-content;
+}
+.product-price strong{ font-size:20px; letter-spacing:-.01em; display:block; margin-top:2px; }
+.product-for{
+  margin-top:var(--s-2); font-size:15px; color:var(--basalt);
+  border-left:2px solid var(--m-blue); background:var(--fog-deep);
+  padding:8px var(--s-2); border-radius:0 8px 8px 0; max-width:64ch;
+}
+.product.alt .product-for{ background:#FFFFFF; }
+
+.use-label{
+  margin-top:var(--s-6); font-family:var(--mono); font-size:13px;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--basalt);
+}
+.use-grid{
+  margin-top:var(--s-3); display:grid; grid-template-columns:repeat(2, 1fr); gap:var(--s-2);
+}
+@media (max-width:700px){ .use-grid{ grid-template-columns:1fr; } }
+.use{
+  background:#FFFFFF; border:1px solid var(--line); border-radius:10px;
+  padding:var(--s-3); display:flex; gap:12px; align-items:flex-start;
+}
+.product.alt .use{ background:var(--fog); }
+.use-tag{
+  flex:none; font-family:var(--mono); font-size:11px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--m-text); background:var(--fog);
+  border:1px solid var(--line); border-radius:6px; padding:3px 8px; margin-top:2px;
+}
+.product.alt .use-tag{ background:#FFFFFF; }
+.use p{ font-size:15px; color:var(--ink); }
+
+.product-cta{ margin-top:var(--s-4); }
+.btn{
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--body); font-weight:600; font-size:15px;
+  text-decoration:none; border-radius:10px;
+  padding:12px var(--s-3); transition:all .18s var(--ease);
+  border:1px solid var(--line); background:transparent; color:var(--ink);
+}
+.btn:hover{ border-color:var(--ink); }
+.btn .arrow{ transition:transform .18s var(--ease); }
+.btn:hover .arrow{ transform:translateX(3px); }
+
+/* ---------- closing CTA (dark) ---------- */
+.dark{ background:linear-gradient(180deg, var(--ink) 0%, var(--ink-soft) 100%); color:var(--fog); }
+.dark h2{ color:var(--fog); }
+.dark .lede{ color:var(--mist); }
+.closing{ padding:var(--s-16) var(--s-3); text-align:center; }
+.closing-inner{ max-width:640px; margin:0 auto; }
+.closing .lede{ margin:0 auto; }
+.btn-morpho{
+  background:var(--m-grad); color:#FFFFFF; border:none;
+  box-shadow:0 8px 24px -10px rgba(31,111,224,.55);
+  margin-top:var(--s-4);
+}
+.btn-morpho:hover{ transform:translateY(-1px); box-shadow:0 12px 28px -10px rgba(47,182,232,.6); }
+
+/* ---------- footer (identical to main page) ---------- */
+footer{ background:var(--ink); color:var(--mist); padding:var(--s-4) var(--s-3); border-top:1px solid var(--line-dark); }
+.footer-inner{
+  max-width:var(--max); margin:0 auto;
+  display:flex; justify-content:space-between; gap:var(--s-3); flex-wrap:wrap;
+  font-size:14px;
+}
+footer a{ color:var(--fog); text-decoration:none; }
+footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
+.footer-brand{ font-family:var(--display); font-weight:600; color:var(--fog); display:flex; align-items:center; gap:8px; }
+.footer-brand svg{ width:18px; height:18px; }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html#top">
+      <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true">
+        <defs>
+          <linearGradient id="mg-nav" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6E6BE8"/><stop offset=".5" stop-color="#1F6FE0"/><stop offset="1" stop-color="#2FB6E8"/>
+          </linearGradient>
+        </defs>
+        <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z" fill="url(#mg-nav)"/>
+        <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z" fill="url(#mg-nav)"/>
+        <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" fill="url(#mg-nav)" opacity=".8"/>
+        <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" fill="url(#mg-nav)" opacity=".8"/>
+        <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#0D1A26"/>
+        <path d="M11.4 9.2 C 10.7 7.6, 9.7 6.5, 8.6 5.8 M12.6 9.2 C 13.3 7.6, 14.3 6.5, 15.4 5.8"
+              stroke="#0D1A26" stroke-width="1" fill="none" stroke-linecap="round"/>
+      </svg>
+      Morpho
+    </a>
+    <nav aria-label="Main">
+      <ul class="nav-links">
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="index.html#engagement">Pricing</a></li>
+        <li><a href="#top">Product guide</a></li>
+        <li class="keep"><a class="nav-cta" href="index.html#contact">Start a project</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ================= INTRO ================= -->
+  <section class="intro" id="top">
+    <div class="intro-inner">
+      <a class="intro-back" href="index.html"><span class="arrow" aria-hidden="true">←</span> Back to morpho.is</a>
+      <p class="eyebrow">The full product guide</p>
+      <h1>What we build, <span class="irid">and where it fits.</span></h1>
+      <p class="intro-sub">Seven packages, each with a fixed starting price and a plain description of who it's actually for. Below every one: concrete examples — guesthouses, tour operators, restaurants, laundromats, shops — so you can picture your own version before you email.</p>
+
+      <nav class="jumpnav" aria-label="Jump to a package">
+        <a href="#website">Website</a>
+        <a href="#booking-site">Direct Booking Site</a>
+        <a href="#app-simple">App — Simple</a>
+        <a href="#app-connected">App — Connected</a>
+        <a href="#ai-automation">AI Automation</a>
+        <a href="#site-care">Site Care</a>
+        <a href="#bundle">Site Care + Automation</a>
+      </nav>
+    </div>
+  </section>
+
+  <!-- ================= WEBSITE ================= -->
+  <section class="product" id="website">
+    <div class="product-inner">
+      <div class="product-head reveal">
+        <div>
+          <span class="product-kind">Build once · Package 01</span>
+          <h2>Website</h2>
+          <p class="lede">A fast, multilingual website for businesses that don't take reservations — built to turn visits into calls, emails, and walk-ins, not just compliments.</p>
+        </div>
+        <div class="product-price">from<strong>390,000 kr</strong></div>
+      </div>
+      <p class="product-for reveal">Best for: any small business whose main job online is to be found, look credible, and make it easy to get in touch.</p>
+
+      <p class="use-label reveal">Possible uses</p>
+      <div class="use-grid">
+        <div class="use reveal"><span class="use-tag">Tour guide</span><p>A portfolio site with photos, guest reviews, and a simple "message me" form — no booking engine needed for a one-person operation.</p></div>
+        <div class="use reveal"><span class="use-tag">Contractor</span><p>Past-work gallery, service area, and a quote-request form that lands straight in your inbox.</p></div>
+        <div class="use reveal"><span class="use-tag">Professional services</span><p>A lawyer, accountant, or therapist's site that builds trust before the first call — credentials up front, easy contact.</p></div>
+        <div class="use reveal"><span class="use-tag">Retail shop</span><p>Hours, location, and a product catalog people can browse before they visit — without needing full e-commerce checkout.</p></div>
+        <div class="use reveal"><span class="use-tag">Gym or studio</span><p>Class schedule, membership info, and a signup form, replacing a Facebook page as the source of truth.</p></div>
+        <div class="use reveal"><span class="use-tag">Laundromat</span><p>Locations, hours, pricing, and machine-status link (pairs well with App — Simple below) in one clean page.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DIRECT BOOKING SITE ================= -->
+  <section class="product alt" id="booking-site">
+    <div class="product-inner">
+      <div class="product-head reveal">
+        <div>
+          <span class="product-kind">Build once · Package 02</span>
+          <h2>Direct Booking Site</h2>
+          <p class="lede">A fast, multilingual website with its own booking engine, synced to your channel manager. Built specifically to recover commissions lost to booking platforms.</p>
+        </div>
+        <div class="product-price">from<strong>590,000 kr</strong></div>
+      </div>
+      <p class="product-for reveal">Best for: hospitality and tour businesses that take reservations and currently rely on Booking.com, Expedia, or GetYourGuide for most of their volume.</p>
+
+      <p class="use-label reveal">Possible uses</p>
+      <div class="use-grid">
+        <div class="use reveal"><span class="use-tag">Guesthouse · 9 rooms</span><p>Own booking engine synced to the channel manager, so a room never double-books across platforms and the site.</p></div>
+        <div class="use reveal"><span class="use-tag">Tour operator</span><p>Live availability calendar with online payment for daily departures, cutting out phone-tag for every booking.</p></div>
+        <div class="use reveal"><span class="use-tag">Cabin or campsite rental</span><p>Direct reservations with a deposit collected online, no commission paid to a listing site.</p></div>
+        <div class="use reveal"><span class="use-tag">Restaurant</span><p>A built-in table-reservation system instead of a third-party widget that plasters its own branding on your site.</p></div>
+      </div>
+
+      <p class="product-cta reveal"><a class="btn" href="index.html#calculator">See the commission math for your numbers <span class="arrow" aria-hidden="true">→</span></a></p>
+    </div>
+  </section>
+
+  <!-- ================= APP — SIMPLE ================= -->
+  <section class="product" id="app-simple">
+    <div class="product-inner">
+      <div class="product-head reveal">
+        <div>
+          <span class="product-kind">Build once · Package 03</span>
+          <h2>App — Simple</h2>
+          <p class="lede">One core workflow, purpose-built around how you actually work — instead of a generic subscription tool you're renting and half-using.</p>
+        </div>
+        <div class="product-price">from<strong>320,000 kr</strong></div>
+      </div>
+      <p class="product-for reveal">Best for: a single recurring task that's currently a spreadsheet, a whiteboard, a paper log, or a SaaS tool you pay for every month.</p>
+
+      <p class="use-label reveal">Possible uses</p>
+      <div class="use-grid">
+        <div class="use reveal"><span class="use-tag">Laundromat</span><p>A machine-status board customers check from their phone before they walk over — which washers and dryers are free, right now.</p></div>
+        <div class="use reveal"><span class="use-tag">Restaurant</span><p>An updatable menu: change a dish in a simple sheet, and the website, the printable PDF, and the translations update together.</p></div>
+        <div class="use reveal"><span class="use-tag">Car wash / detailing</span><p>A booking or queue form so customers reserve a slot instead of showing up and waiting.</p></div>
+        <div class="use reveal"><span class="use-tag">Hair salon or barber</span><p>A simple appointment-request form with staff notifications — no third-party booking app fee.</p></div>
+        <div class="use reveal"><span class="use-tag">Equipment rental</span><p>An availability calendar for kayaks, bikes, or gear that the whole team can read and update at a glance.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= APP — CONNECTED ================= -->
+  <section class="product alt" id="app-connected">
+    <div class="product-inner">
+      <div class="product-head reveal">
+        <div>
+          <span class="product-kind">Build once · Package 04</span>
+          <h2>App — Connected</h2>
+          <p class="lede">Several workflows wired together — inventory, orders, staff dashboards — synced with the systems you already run, instead of replacing them.</p>
+        </div>
+        <div class="product-price">from<strong>560,000 kr</strong></div>
+      </div>
+      <p class="product-for reveal">Best for: businesses that have outgrown one spreadsheet and are now juggling two or three tools that don't talk to each other.</p>
+
+      <p class="use-label reveal">Possible uses</p>
+      <div class="use-grid">
+        <div class="use reveal"><span class="use-tag">Laundromat with multiple locations</span><p>Machine status, payment, loyalty points, and an owner dashboard across every location in one system.</p></div>
+        <div class="use reveal"><span class="use-tag">Restaurant group</span><p>Menu management, low-stock alerts, and POS-linked sales reporting the owner can check from anywhere.</p></div>
+        <div class="use reveal"><span class="use-tag">Tour company</span><p>Bookings, guide scheduling, and equipment inventory in one dashboard instead of three separate tools.</p></div>
+        <div class="use reveal"><span class="use-tag">Retail shop</span><p>Point-of-sale linked to stock levels, with automatic reorder alerts before something sells out.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= AI AUTOMATION ================= -->
+  <section class="product" id="ai-automation">
+    <div class="product-inner">
+      <div class="product-head reveal">
+        <div>
+          <span class="product-kind">Keep it running · Setup + monthly</span>
+          <h2>AI Automation</h2>
+          <p class="lede">The repetitive 80% of customer contact, handled: questions, confirmations, reminders, review replies — trained on your business, not generic chatbot filler.</p>
+        </div>
+        <div class="product-price">from<strong>190,000 kr</strong> setup<br>+ 39,000 kr / month</div>
+      </div>
+      <p class="product-for reveal">Best for: any business answering the same handful of questions all day, every day, by phone, email, or chat.</p>
+
+      <p class="use-label reveal">Possible uses</p>
+      <div class="use-grid">
+        <div class="use reveal"><span class="use-tag">Guesthouse</span><p>Automated check-in, parking, and wifi answers in multiple languages, day and night.</p></div>
+        <div class="use reveal"><span class="use-tag">Tour operator</span><p>Automatic weather-cancellation notices and rebooking offers sent within minutes instead of forty phone calls.</p></div>
+        <div class="use reveal"><span class="use-tag">Restaurant</span><p>Review replies drafted every morning, ready for a one-tap approval instead of a nightly chore.</p></div>
+        <div class="use reveal"><span class="use-tag">Laundromat</span><p>Automated answers about hours, pricing, and "is the app down" — with a clear handoff to a human for anything real.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SITE CARE ================= -->
+  <section class="product alt" id="site-care">
+    <div class="product-inner">
+      <div class="product-head reveal">
+        <div>
+          <span class="product-kind">Keep it running · Ongoing</span>
+          <h2>Site Care</h2>
+          <p class="lede">Content updated, small changes made, the site kept fast and current — so whatever we built together keeps working long after launch, with no developer on speed-dial.</p>
+        </div>
+        <div class="product-price">from<strong>29,000 kr</strong> / month</div>
+      </div>
+      <p class="product-for reveal">Best for: anyone who owns a Website, Direct Booking Site, or App package and would rather not touch the code themselves.</p>
+
+      <p class="use-label reveal">Possible uses</p>
+      <div class="use-grid">
+        <div class="use reveal"><span class="use-tag">Restaurant</span><p>Seasonal menu and price changes turned around the same week, every time they happen.</p></div>
+        <div class="use reveal"><span class="use-tag">Tour operator</span><p>New tour dates, new photos, and updated pricing reflected before the next booking window opens.</p></div>
+        <div class="use reveal"><span class="use-tag">Any business</span><p>Security and platform updates handled quietly in the background — nothing breaks during your busiest week.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SITE CARE + AUTOMATION (BUNDLE) ================= -->
+  <section class="product" id="bundle">
+    <div class="product-inner">
+      <div class="product-head reveal">
+        <div>
+          <span class="product-kind">Keep it running · Bundle · Best value</span>
+          <h2>Site Care + Automation</h2>
+          <p class="lede">Everything in Site Care, plus the AI Automation retainer — bundled below the combined price of buying the two separately, on one invoice.</p>
+        </div>
+        <div class="product-price">from<strong>59,000 kr</strong> / month</div>
+      </div>
+      <p class="product-for reveal">Best for: businesses running the full stack — a Direct Booking Site or App plus AI Automation — who want one predictable monthly bill instead of two.</p>
+
+      <p class="use-label reveal">Possible uses</p>
+      <div class="use-grid">
+        <div class="use reveal"><span class="use-tag">Guesthouse</span><p>Direct Booking Site kept current, plus the guest assistant tuned monthly, both on one report.</p></div>
+        <div class="use reveal"><span class="use-tag">Tour operator</span><p>Site updates and automated rebooking messages managed together as the season changes.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CLOSING CTA ================= -->
+  <section class="dark closing">
+    <div class="closing-inner">
+      <p class="eyebrow" style="justify-content:center">Ready when you are</p>
+      <h2>Still not sure which one fits?</h2>
+      <p class="lede">That's what the discovery call is for — free, thirty minutes, and you'll leave with a written recommendation either way.</p>
+      <a class="btn btn-morpho" href="index.html#contact">Start a project <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <defs>
+          <linearGradient id="mg-ft" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6E6BE8"/><stop offset=".5" stop-color="#1F6FE0"/><stop offset="1" stop-color="#2FB6E8"/>
+          </linearGradient>
+        </defs>
+        <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z" fill="url(#mg-ft)"/>
+        <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z" fill="url(#mg-ft)"/>
+        <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" fill="url(#mg-ft)" opacity=".8"/>
+        <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" fill="url(#mg-ft)" opacity=".8"/>
+        <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#F2F5F8"/>
+      </svg>
+      Morpho Studio
+    </span>
+    <span>9.93°N → 66.04°N</span>
+    <a href="mailto:hello@morpho.is">hello@morpho.is</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)){
+    els.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(el){ io.observe(el); });
+  }
+})();
+</script>
+
+</body>
+</html>

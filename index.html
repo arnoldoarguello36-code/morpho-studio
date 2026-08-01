@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morpho Studio — Web design, AI automation & apps · Húsavík, Iceland</title>
+<meta name="description" content="Morpho is a small digital studio in Húsavík, Iceland — with roots in Costa Rica — building websites, AI automation, and apps for hotels, tour operators, restaurants, laundromats, and other small businesses tired of renting software they'll never own.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MORPHO STUDIO — design tokens
+   Brand idea: the morpho's blue is not pigment, it is structure.
+   Iridescence is rationed; everything else stays quiet arctic
+   daylight. Type: Familjen Grotesk / Instrument Sans /
+   Spline Sans Mono. Spacing: 8-point grid.
+   ============================================================ */
+:root{
+  --fog:        #F2F5F8;
+  --fog-deep:   #E5EBF0;
+  --ink:        #0D1A26;
+  --ink-soft:   #142638;
+  --basalt:     #56646E;
+  --mist:       #93A3AD;
+  --line:       rgba(13,26,38,.14);
+  --line-dark:  rgba(242,245,248,.16);
+
+  --m-blue:   #1F6FE0;
+  --m-cyan:   #2FB6E8;
+  --m-violet: #6E6BE8;
+  --m-text:   #1D5FBF;
+  --m-grad:   linear-gradient(100deg, var(--m-violet), var(--m-blue) 45%, var(--m-cyan));
+
+  --display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --body:    "Instrument Sans", system-ui, -apple-system, sans-serif;
+  --mono:    "Spline Sans Mono", ui-monospace, "SF Mono", monospace;
+
+  --s-1: 8px;  --s-2: 16px; --s-3: 24px; --s-4: 32px;
+  --s-6: 48px; --s-8: 64px; --s-12: 96px; --s-16: 128px;
+
+  --max: 1120px;
+  --radius: 12px;
+  --ease: cubic-bezier(.22,.9,.3,1);
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+
+body{
+  font-family:var(--body);
+  font-size:17px; line-height:1.6;
+  color:var(--ink); background:var(--fog);
+  -webkit-font-smoothing:antialiased;
+}
+
+::selection{ background:var(--m-cyan); color:var(--ink); }
+
+/* ---------- accessibility ---------- */
+.skip-link{
+  position:absolute; left:var(--s-2); top:-64px;
+  background:var(--ink); color:var(--fog);
+  padding:var(--s-1) var(--s-2); border-radius:6px;
+  font-family:var(--mono); font-size:13px; z-index:60;
+  transition:top .2s var(--ease);
+}
+.skip-link:focus{ top:var(--s-2); }
+a, button, summary{ outline-offset:3px; }
+a:focus-visible, button:focus-visible, summary:focus-visible{
+  outline:2px solid var(--m-text); border-radius:4px;
+}
+.dark a:focus-visible, .dark button:focus-visible{ outline-color:var(--m-cyan); }
+
+/* ============================================================
+   SIGNATURE — the wing line
+   Scroll position is the viewing angle: the traveling mark's
+   hue tilts violet → blue → cyan, like structural color.
+   ============================================================ */
+.wingline{
+  position:fixed; top:0; left:0; right:0; height:0;
+  border-top:1px solid var(--line);
+  z-index:50; pointer-events:none;
+}
+.wingline .morpho-dot{
+  position:absolute; top:-6px; left:0;
+  width:12px; height:12px; border-radius:50% 50% 50% 4px;
+  background:var(--m-blue);
+  box-shadow:0 0 0 4px rgba(47,182,232,.22), 0 0 18px 4px rgba(31,111,224,.35);
+  transform:translateX(-6px) rotate(45deg);
+  will-change:left, background;
+}
+
+/* ---------- nav ---------- */
+.nav{
+  position:sticky; top:0; z-index:40;
+  background:rgba(242,245,248,.82);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:var(--max); margin:0 auto;
+  padding:var(--s-2) var(--s-3);
+  display:flex; align-items:center; justify-content:space-between; gap:var(--s-3);
+}
+.brand{
+  font-family:var(--display); font-weight:700; font-size:20px;
+  letter-spacing:-.02em; color:var(--ink); text-decoration:none;
+  display:flex; align-items:center; gap:10px;
+}
+.brand-mark{ width:22px; height:22px; flex:none; }
+.nav-links{ display:flex; gap:var(--s-3); align-items:center; list-style:none; }
+.nav-links a{
+  color:var(--basalt); text-decoration:none; font-size:15px;
+  transition:color .18s var(--ease);
+}
+.nav-links a:hover{ color:var(--ink); }
+.nav-cta{
+  font-family:var(--mono); font-size:13px; letter-spacing:.02em;
+  color:var(--fog) !important; background:var(--ink);
+  padding:10px var(--s-2); border-radius:8px;
+  transition:background .18s var(--ease);
+}
+.nav-cta:hover{ background:var(--m-text); color:var(--fog) !important; }
+@media (max-width:760px){
+  .nav-links li:not(.keep){ display:none; }
+}
+
+/* ---------- shared section scaffolding ---------- */
+.section{ padding:var(--s-12) var(--s-3); }
+.section-inner{ max-width:var(--max); margin:0 auto; }
+.eyebrow{
+  font-family:var(--mono); font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--m-text);
+  display:flex; align-items:center; gap:var(--s-2);
+  margin-bottom:var(--s-3);
+}
+.eyebrow::after{ content:""; height:1px; width:48px; background:var(--m-grad); }
+.dark .eyebrow{ color:var(--m-cyan); }
+h2{
+  font-family:var(--display); font-weight:600;
+  font-size:clamp(28px, 4.2vw, 44px); line-height:1.12;
+  letter-spacing:-.02em; max-width:20ch;
+  margin-bottom:var(--s-3);
+}
+.lede{ color:var(--basalt); max-width:56ch; font-size:18px; }
+.dark .lede{ color:var(--mist); }
+
+.irid{
+  background:var(--m-grad);
+  -webkit-background-clip:text; background-clip:text;
+  color:transparent;
+}
+
+/* ---------- reveal on scroll ---------- */
+.reveal{ opacity:0; transform:translateY(16px);
+  transition:opacity .6s var(--ease), transform .6s var(--ease); }
+.reveal.in{ opacity:1; transform:none; }
+@media (prefers-reduced-motion: reduce){
+  .reveal{ opacity:1; transform:none; transition:none; }
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{ padding:calc(var(--s-8) + var(--s-2)) var(--s-3) 0; overflow:hidden; }
+.hero-inner{ max-width:var(--max); margin:0 auto; }
+.hero .eyebrow{ margin-bottom:var(--s-4); }
+h1{
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(40px, 6.5vw, 76px); line-height:1.04;
+  letter-spacing:-.03em; max-width:16ch;
+}
+.hero-sub{
+  margin-top:var(--s-3); max-width:54ch;
+  color:var(--basalt); font-size:19px;
+}
+.hero-credential{
+  margin-top:var(--s-3); max-width:56ch;
+  font-family:var(--mono); font-size:13px; letter-spacing:.02em;
+  line-height:1.55; color:var(--ink);
+  background:var(--fog-deep); border-left:2px solid var(--m-blue);
+  padding:10px var(--s-3); border-radius:0 8px 8px 0;
+}
+.hero-actions{ margin-top:var(--s-4); display:flex; gap:var(--s-2); flex-wrap:wrap; }
+.btn{
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--body); font-weight:600; font-size:16px;
+  text-decoration:none; border-radius:10px;
+  padding:14px var(--s-3); transition:all .18s var(--ease);
+  border:1px solid transparent; cursor:pointer;
+}
+.btn-primary{ background:var(--ink); color:var(--fog); }
+.btn-primary:hover{ background:var(--m-text); transform:translateY(-1px); }
+.btn-ghost{ color:var(--ink); border-color:var(--line); background:transparent; }
+.btn-ghost:hover{ border-color:var(--ink); }
+.btn .arrow{ transition:transform .18s var(--ease); }
+.btn:hover .arrow{ transform:translateX(3px); }
+
+/* hero artwork: aurora-wing arcs over an Icelandic ridge */
+.hero-art{ margin-top:var(--s-8); position:relative; }
+.hero-art svg{ display:block; width:100%; height:auto; }
+.hero-caption{
+  font-family:var(--mono); font-size:11px; letter-spacing:.08em;
+  color:var(--basalt); text-transform:uppercase;
+  padding:var(--s-1) 0 0; display:flex; justify-content:space-between; gap:var(--s-2);
+  border-top:1px solid var(--line); max-width:var(--max); margin:0 auto;
+  flex-wrap:wrap;
+}
+@keyframes wingTilt{
+  0%{ opacity:.8; } 50%{ opacity:1; } 100%{ opacity:.8; }
+}
+.wing-shimmer{ animation:wingTilt 9s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce){ .wing-shimmer{ animation:none; } }
+
+/* ============================================================
+   SERVICES
+   ============================================================ */
+.svc-grid{
+  display:grid; grid-template-columns:repeat(3, 1fr);
+  gap:var(--s-3); margin-top:var(--s-6);
+}
+@media (max-width:920px){ .svc-grid{ grid-template-columns:1fr; } }
+.svc{
+  background:#FFFFFF; border:1px solid var(--line);
+  border-radius:var(--radius); padding:var(--s-4);
+  display:flex; flex-direction:column; gap:var(--s-2);
+  transition:transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease);
+}
+.svc:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 32px -16px rgba(13,26,38,.25);
+  border-color:rgba(31,111,224,.45);
+}
+@media (prefers-reduced-motion: reduce){ .svc, .svc:hover{ transform:none; } }
+.svc-head{ display:flex; align-items:center; gap:var(--s-2); }
+.svc-icon{
+  width:44px; height:44px; flex:none; border-radius:10px;
+  background:var(--fog); border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center;
+}
+.svc-icon svg{ width:22px; height:22px; stroke:var(--m-text); fill:none;
+  stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.svc-label{
+  font-family:var(--mono); font-size:12px; letter-spacing:.14em;
+  color:var(--m-text);
+}
+.svc h3{
+  font-family:var(--display); font-weight:600; font-size:24px;
+  letter-spacing:-.01em; line-height:1.2;
+}
+.svc p{ color:var(--basalt); font-size:16px; }
+.svc ul{ list-style:none; margin-top:var(--s-1); display:grid; gap:10px; }
+.svc li{
+  font-size:15px; color:var(--ink);
+  padding-left:var(--s-3); position:relative;
+}
+.svc li::before{
+  content:""; position:absolute; left:0; top:.62em;
+  width:12px; height:2px; background:var(--m-grad); border-radius:1px;
+}
+
+.note{
+  margin-top:var(--s-4); padding:var(--s-2) var(--s-3);
+  border-left:2px solid var(--m-blue);
+  background:var(--fog-deep); border-radius:0 8px 8px 0;
+  color:var(--basalt); font-size:15px; max-width:72ch;
+}
+.note strong{ color:var(--ink); }
+
+/* ============================================================
+   ABOUT — the founder is the brand
+   ============================================================ */
+.about{ background:var(--fog-deep); }
+.about-grid{
+  margin-top:var(--s-6); display:grid;
+  grid-template-columns:320px 1fr; gap:var(--s-6); align-items:start;
+}
+@media (max-width:880px){ .about-grid{ grid-template-columns:1fr; } }
+.about-art{
+  border-radius:var(--radius); overflow:hidden;
+  border:1px solid var(--line); background:var(--ink);
+  position:relative;
+}
+.about-art svg{ display:block; width:100%; height:auto; }
+.photo-placeholder{
+  aspect-ratio:4/5; width:100%;
+  background:var(--ink); border-bottom:1px dashed var(--line-dark);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:var(--s-2); padding:var(--s-4); text-align:center;
+}
+.photo-placeholder svg{
+  width:36px; height:36px; stroke:var(--mist); fill:none;
+  stroke-width:1.4; stroke-linecap:round; stroke-linejoin:round;
+}
+.photo-placeholder p{
+  font-family:var(--mono); font-size:12px; letter-spacing:.04em;
+  color:var(--mist); line-height:1.6; margin:0;
+}
+.photo-placeholder p span{ display:block; color:var(--basalt); margin-top:4px; }
+.about-art figcaption{
+  position:absolute; bottom:0; left:0; right:0;
+  font-family:var(--mono); font-size:10px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--mist);
+  padding:10px var(--s-2);
+  background:rgba(13,26,38,.72); border-top:1px solid var(--line-dark);
+  display:flex; justify-content:space-between; gap:var(--s-1);
+}
+.about-body p{ color:var(--ink); font-size:17px; max-width:60ch; }
+.about-body p + p{ margin-top:var(--s-2); }
+.about-body .muted{ color:var(--basalt); }
+.about-facts{
+  margin-top:var(--s-4); display:grid; gap:var(--s-2);
+  border-top:1px solid var(--line); padding-top:var(--s-3);
+}
+.about-facts div{
+  display:grid; grid-template-columns:180px 1fr; gap:var(--s-2);
+  font-size:15px;
+}
+@media (max-width:560px){ .about-facts div{ grid-template-columns:1fr; gap:4px; } }
+.about-facts dt{
+  font-family:var(--mono); font-size:12px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--basalt); padding-top:2px;
+}
+.about-facts dd{ color:var(--ink); }
+.tool-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+.tool-tags span{
+  font-family:var(--mono); font-size:12px; letter-spacing:.02em;
+  color:var(--ink); background:#FFFFFF;
+  border:1px solid var(--line); border-radius:6px;
+  padding:5px 10px;
+}
+
+/* ============================================================
+   PROCESS — the only numbered section (a real sequence)
+   ============================================================ */
+.steps{ margin-top:var(--s-6); display:grid; gap:0; border-top:1px solid var(--line); }
+.step{
+  display:grid; grid-template-columns:96px 1fr 2fr;
+  gap:var(--s-3); padding:var(--s-4) 0;
+  border-bottom:1px solid var(--line); align-items:baseline;
+}
+@media (max-width:760px){ .step{ grid-template-columns:56px 1fr; } .step p{ grid-column:2; } }
+.step-num{
+  font-family:var(--mono); font-size:14px; color:var(--m-text);
+  letter-spacing:.08em;
+}
+.step h3{
+  font-family:var(--display); font-weight:600; font-size:22px; letter-spacing:-.01em;
+}
+.step h3 .dur{
+  display:block; font-family:var(--mono); font-weight:400;
+  font-size:12px; color:var(--basalt); letter-spacing:.08em; margin-top:6px;
+}
+.step p{ color:var(--basalt); font-size:16px; max-width:52ch; }
+
+/* ============================================================
+   EXAMPLES
+   ============================================================ */
+.ex-grid{ margin-top:var(--s-6); display:grid; gap:var(--s-3); }
+.ex{
+  display:grid; grid-template-columns:200px 1fr; gap:var(--s-3);
+  padding:var(--s-4); background:#FFFFFF;
+  border:1px solid var(--line); border-radius:var(--radius);
+}
+@media (max-width:760px){ .ex{ grid-template-columns:1fr; } }
+.ex-side{ display:flex; flex-direction:column; gap:var(--s-2); align-items:flex-start; }
+.ex-icon{
+  width:44px; height:44px; border-radius:10px;
+  background:var(--fog); border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center;
+}
+.ex-icon svg{ width:22px; height:22px; stroke:var(--m-text); fill:none;
+  stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.ex-tag{
+  font-family:var(--mono); font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--m-text);
+}
+.ex h3{
+  font-family:var(--display); font-weight:600; font-size:21px;
+  letter-spacing:-.01em; margin-bottom:var(--s-1);
+}
+.ex p{ color:var(--basalt); font-size:16px; max-width:60ch; }
+.ex .result{
+  margin-top:var(--s-2); font-size:15px; color:var(--ink);
+  display:flex; align-items:baseline; gap:10px;
+}
+.ex .result::before{ content:"→"; color:var(--m-text); font-family:var(--mono); }
+
+/* ============================================================
+   ENGAGEMENT
+   ============================================================ */
+.eng-group-label{
+  font-family:var(--mono); font-size:13px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--basalt);
+  margin-top:var(--s-6); margin-bottom:var(--s-2);
+}
+.eng-grid{
+  margin-top:var(--s-2); display:grid;
+  grid-template-columns:repeat(3, 1fr); gap:var(--s-3);
+}
+.eng-grid.four{ grid-template-columns:repeat(4, 1fr); }
+@media (max-width:1100px){ .eng-grid.four{ grid-template-columns:repeat(2, 1fr); } }
+@media (max-width:920px){
+  .eng-grid{ grid-template-columns:1fr; }
+  .eng-grid.four{ grid-template-columns:1fr; }
+}
+.eng{
+  position:relative;
+  border:1px solid var(--line); border-radius:var(--radius);
+  padding:var(--s-4); background:#FFFFFF;
+}
+.eng-badge{
+  position:absolute; top:var(--s-3); right:var(--s-3);
+  font-family:var(--mono); font-size:11px; letter-spacing:.08em;
+  text-transform:uppercase; color:#fff; background:var(--m-grad);
+  padding:4px 10px; border-radius:999px;
+}
+.eng h3{ font-family:var(--display); font-weight:600; font-size:24px; letter-spacing:-.01em; }
+.eng .eng-kind{
+  font-family:var(--mono); font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--m-text); display:block; margin-bottom:var(--s-2);
+}
+.eng p{ color:var(--basalt); margin-top:var(--s-1); font-size:16px; }
+.eng ul{ list-style:none; margin-top:var(--s-3); display:grid; gap:10px; }
+.eng li{ font-size:15px; padding-left:var(--s-3); position:relative; }
+.eng li::before{
+  content:""; position:absolute; left:0; top:.62em;
+  width:12px; height:2px; background:var(--m-grad); border-radius:1px;
+}
+
+/* ============================================================
+   CALCULATOR — the sales wedge: commission math, live
+   ============================================================ */
+.calc{
+  margin-top:var(--s-6); display:grid;
+  grid-template-columns:1fr 1fr; gap:var(--s-3);
+  align-items:stretch;
+}
+@media (max-width:860px){ .calc{ grid-template-columns:1fr; } }
+.calc-form{
+  background:#FFFFFF; border:1px solid var(--line);
+  border-radius:var(--radius); padding:var(--s-4);
+  display:grid; gap:var(--s-3); align-content:start;
+}
+.calc-field label{
+  display:flex; justify-content:space-between; align-items:baseline;
+  font-size:15px; font-weight:600; margin-bottom:8px; gap:var(--s-2);
+}
+.calc-field label output{
+  font-family:var(--mono); font-weight:400; font-size:14px; color:var(--m-text);
+  white-space:nowrap;
+}
+.calc-field input[type="range"]{
+  width:100%; accent-color:var(--m-blue); height:22px; cursor:pointer;
+}
+.calc-result{
+  background:linear-gradient(180deg, var(--ink), var(--ink-soft));
+  border-radius:var(--radius); padding:var(--s-4);
+  color:var(--fog); display:flex; flex-direction:column; gap:var(--s-3);
+  justify-content:center;
+}
+.calc-stat dt{
+  font-family:var(--mono); font-size:12px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--mist); margin-bottom:4px;
+}
+.calc-stat dd{
+  font-family:var(--display); font-weight:700; letter-spacing:-.02em;
+  font-size:clamp(24px, 3vw, 34px); line-height:1.1;
+}
+.calc-stat.hot dd{
+  background:var(--m-grad);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.calc-cta{ margin-top:var(--s-1); }
+.calc-note{
+  margin-top:var(--s-3); font-size:13px; color:var(--basalt); max-width:72ch;
+}
+
+/* package pricing */
+.eng-price{
+  font-family:var(--mono); font-size:15px; color:var(--ink);
+  display:block; margin-top:var(--s-1);
+}
+.eng-price strong{ font-size:20px; letter-spacing:-.01em; }
+.pkg-note{
+  margin-top:var(--s-4); font-family:var(--mono); font-size:13px;
+  color:var(--basalt); letter-spacing:.02em; max-width:72ch;
+}
+.pkg-note a{ color:var(--m-text); text-decoration:underline; text-underline-offset:3px; }
+.pkg-note a:hover{ color:var(--ink); }
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.faq-list{ margin-top:var(--s-6); border-top:1px solid var(--line); max-width:820px; }
+.faq-list details{ border-bottom:1px solid var(--line); }
+.faq-list summary{
+  list-style:none; cursor:pointer;
+  padding:var(--s-3) 0; display:flex; justify-content:space-between; gap:var(--s-3);
+  font-family:var(--display); font-weight:600; font-size:19px; letter-spacing:-.01em;
+}
+.faq-list summary::-webkit-details-marker{ display:none; }
+.faq-list summary::after{
+  content:"+"; font-family:var(--mono); color:var(--m-text);
+  font-size:20px; flex:none; transition:transform .2s var(--ease);
+}
+.faq-list details[open] summary::after{ transform:rotate(45deg); }
+.faq-list details p{
+  color:var(--basalt); font-size:16px; max-width:62ch;
+  padding:0 0 var(--s-3);
+}
+
+/* ============================================================
+   CONTACT — the wing closes. Dark, one iridescent mark.
+   ============================================================ */
+.dark{
+  background:linear-gradient(180deg, var(--ink) 0%, var(--ink-soft) 100%);
+  color:var(--fog);
+}
+.dark h2{ color:var(--fog); }
+.contact{ padding-top:var(--s-16); padding-bottom:var(--s-12); position:relative; overflow:hidden; }
+.contact::before{
+  content:""; position:absolute; left:50%; top:-160px;
+  width:560px; height:300px; transform:translateX(-50%);
+  background:radial-gradient(ellipse at center, rgba(47,182,232,.14), rgba(110,107,232,.08) 55%, transparent 70%);
+  pointer-events:none;
+}
+.contact-inner{ max-width:var(--max); margin:0 auto; position:relative; }
+.contact .lede{ max-width:50ch; }
+.contact-actions{ margin-top:var(--s-6); display:flex; gap:var(--s-3); flex-wrap:wrap; align-items:center; }
+.btn-morpho{
+  background:var(--m-grad); color:#FFFFFF;
+  box-shadow:0 8px 24px -10px rgba(31,111,224,.55);
+}
+.btn-morpho:hover{ transform:translateY(-1px); box-shadow:0 12px 28px -10px rgba(47,182,232,.6); }
+.contact-alt{
+  font-family:var(--mono); font-size:13px; color:var(--mist); letter-spacing:.02em;
+}
+.contact-alt a{ color:var(--fog); text-decoration:underline; text-underline-offset:3px; }
+.contact-meta{
+  margin-top:var(--s-8); padding-top:var(--s-3);
+  border-top:1px solid var(--line-dark);
+  display:flex; flex-wrap:wrap; gap:var(--s-2) var(--s-6);
+  font-family:var(--mono); font-size:12px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--mist);
+}
+
+/* ---------- footer ---------- */
+footer{
+  background:var(--ink); color:var(--mist);
+  padding:var(--s-4) var(--s-3);
+  border-top:1px solid var(--line-dark);
+}
+.footer-inner{
+  max-width:var(--max); margin:0 auto;
+  display:flex; justify-content:space-between; gap:var(--s-3); flex-wrap:wrap;
+  font-size:14px;
+}
+footer a{ color:var(--fog); text-decoration:none; }
+footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
+.footer-brand{ font-family:var(--display); font-weight:600; color:var(--fog);
+  display:flex; align-items:center; gap:8px; }
+.footer-brand svg{ width:18px; height:18px; }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- signature: the morpho mark travels as you read; hue tilts with scroll -->
+<div class="wingline" aria-hidden="true"><span class="morpho-dot" id="morphoDot"></span></div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top">
+      <!-- Butterfly mark: four wings + body + antennae -->
+      <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true">
+        <defs>
+          <linearGradient id="mg-nav" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6E6BE8"/><stop offset=".5" stop-color="#1F6FE0"/><stop offset="1" stop-color="#2FB6E8"/>
+          </linearGradient>
+        </defs>
+        <!-- upper wings -->
+        <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z" fill="url(#mg-nav)"/>
+        <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z" fill="url(#mg-nav)"/>
+        <!-- lower wings -->
+        <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" fill="url(#mg-nav)" opacity=".8"/>
+        <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" fill="url(#mg-nav)" opacity=".8"/>
+        <!-- body + antennae -->
+        <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#0D1A26"/>
+        <path d="M11.4 9.2 C 10.7 7.6, 9.7 6.5, 8.6 5.8 M12.6 9.2 C 13.3 7.6, 14.3 6.5, 15.4 5.8"
+              stroke="#0D1A26" stroke-width="1" fill="none" stroke-linecap="round"/>
+      </svg>
+      Morpho
+    </a>
+    <nav aria-label="Main">
+      <ul class="nav-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#calculator">Calculator</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="products.html">Product guide</a></li>
+        <li class="keep"><a class="nav-cta" href="#contact">Start a project</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="top">
+    <div class="hero-inner">
+      <p class="eyebrow">Húsavík, Iceland · Roots in Costa Rica</p>
+      <h1>The morpho’s blue isn’t paint. <span class="irid">It’s structure.</span></h1>
+      <p class="hero-sub">Good digital work is the same: the results come from how it’s built, not how it’s decorated. Morpho is a small studio building websites, AI&nbsp;automation, and apps for hotels, tour operators, restaurants, laundromats, and other small businesses tired of paying rent to someone else’s software.</p>
+      <p class="hero-credential">Built by one person, not an agency: 10+ years leading global enterprise programs — medical technology, business-process re-architecture, multi-country compliance — now applied at small-business scale.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#contact">Start a project <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="#process">See how it works</a>
+      </div>
+    </div>
+
+    <!-- Aurora-wing arcs over an Icelandic ridge: two lands, one blue -->
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="w1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#6E6BE8" stop-opacity=".9"/>
+            <stop offset=".5" stop-color="#1F6FE0" stop-opacity=".9"/>
+            <stop offset="1" stop-color="#2FB6E8" stop-opacity=".9"/>
+          </linearGradient>
+          <linearGradient id="w2" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#6E6BE8" stop-opacity=".45"/>
+            <stop offset=".5" stop-color="#1F6FE0" stop-opacity=".45"/>
+            <stop offset="1" stop-color="#2FB6E8" stop-opacity=".45"/>
+          </linearGradient>
+          <linearGradient id="w3" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#6E6BE8" stop-opacity=".18"/>
+            <stop offset=".5" stop-color="#1F6FE0" stop-opacity=".18"/>
+            <stop offset="1" stop-color="#2FB6E8" stop-opacity=".18"/>
+          </linearGradient>
+        </defs>
+        <!-- structural color: the same curve layered like wing scales -->
+        <g fill="none" stroke-linecap="round">
+          <path class="wing-shimmer" d="M0,240 C 300,235 480,100 600,100 C 720,100 900,235 1200,240"
+                stroke="url(#w1)" stroke-width="3"/>
+          <path class="wing-shimmer" style="animation-delay:-3s"
+                d="M0,252 C 310,242 470,135 600,135 C 730,135 890,242 1200,252"
+                stroke="url(#w2)" stroke-width="2.5"/>
+          <path class="wing-shimmer" style="animation-delay:-6s"
+                d="M0,264 C 320,252 460,170 600,170 C 740,170 880,252 1200,264"
+                stroke="url(#w3)" stroke-width="2"/>
+        </g>
+        <!-- butterfly at the apex -->
+        <g transform="translate(588,86) scale(1.05)">
+          <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z" fill="url(#w1)"/>
+          <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z" fill="url(#w1)"/>
+          <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" fill="url(#w1)" opacity=".8"/>
+          <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" fill="url(#w1)" opacity=".8"/>
+          <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#0D1A26"/>
+        </g>
+        <!-- Icelandic table-mountain ridge -->
+        <path d="M0,296 L90,296 L130,268 L250,268 L290,296 L420,296 L470,258 L610,258 L660,296 L800,296 L840,272 L960,272 L1000,296 L1200,296 L1200,320 L0,320 Z"
+              fill="#0D1A26" opacity=".16"/>
+        <line x1="0" y1="296" x2="1200" y2="296" stroke="#0D1A26" stroke-opacity=".28" stroke-width="1"/>
+      </svg>
+      <p class="hero-caption">
+        <span>Morpho peleides · structural color, no pigment</span>
+        <span>9.93°N Costa Rica → 66.04°N Iceland</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= SERVICES ================= -->
+  <section class="section" id="services">
+    <div class="section-inner">
+      <p class="eyebrow reveal">What we build</p>
+      <h2 class="reveal">Three ways to stop losing time and money to friction.</h2>
+      <p class="lede reveal">Every engagement targets the same thing: fewer hours lost to admin, more revenue that doesn’t go to a middleman, and tools you actually own.</p>
+
+      <div class="svc-grid">
+        <article class="svc reveal">
+          <div class="svc-head">
+            <span class="svc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18"/><path d="m8.5 14.5 2 2 4.5-4.5"/></svg>
+            </span>
+            <span class="svc-label">WEB DESIGN</span>
+          </div>
+          <h3>Sites that take bookings, not just compliments.</h3>
+          <p>Designed and built by hand — no page builders, no monthly platform fees you can’t escape.</p>
+          <ul>
+            <li>Direct booking, so fewer commissions go to the big platforms</li>
+            <li>Fast on a phone with weak signal — where your guests actually are</li>
+            <li>Multilingual from day one (English, Icelandic, and more)</li>
+            <li>You own the code, the domain, and the content</li>
+          </ul>
+        </article>
+
+        <article class="svc reveal">
+          <div class="svc-head">
+            <span class="svc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M6 5h11a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H10l-5 4V7a2 2 0 0 1 1-2z"/><path d="M18.5 2.6l.6 1.5 1.5.6-1.5.6-.6 1.5-.6-1.5-1.5-.6 1.5-.6z"/></svg>
+            </span>
+            <span class="svc-label">AI SERVICES</span>
+          </div>
+          <h3>Your front desk, answered at 2 a.m.</h3>
+          <p>Automation trained on your business — your rooms, your tours, your menu, your machines — not generic chatbot filler.</p>
+          <ul>
+            <li>A customer assistant that answers the same questions you answer every day, by phone or chat, day and night</li>
+            <li>Review replies drafted every morning for you to approve</li>
+            <li>Confirmations, reminders, and cancellation messages sent automatically</li>
+            <li>Clear handoff to a human whenever the question needs one</li>
+          </ul>
+        </article>
+
+        <article class="svc reveal">
+          <div class="svc-head">
+            <span class="svc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 17.5h6"/><path d="M9 8h6M9 11.5h6"/></svg>
+            </span>
+            <span class="svc-label">APP CREATION</span>
+          </div>
+          <h3>Tools shaped to how you actually work.</h3>
+          <p>Web apps and internal tools that replace the spreadsheet held together with hope — and the SaaS subscription you never wanted. Updatable menus, machine-status boards, booking or queue tools: built for one workflow, not a generic template.</p>
+          <ul>
+            <li>Availability dashboards, updatable menus, or queue/status boards your whole team can read at a glance</li>
+            <li>Works in the browser on any device — no app store, no downloads</li>
+            <li>Connects to the systems you already use instead of replacing them</li>
+            <li>Pay once and own it — no per-month software rent</li>
+          </ul>
+        </article>
+      </div>
+
+      <p class="note reveal"><strong>A straight answer on AI:</strong> automation handles the repetitive 80% — the same twelve questions, the confirmations, the reminders. The judgement calls stay with you. We design that boundary together, and it’s always visible to your guests.</p>
+    </div>
+  </section>
+
+  <!-- ================= CALCULATOR ================= -->
+  <section class="section" id="calculator">
+    <div class="section-inner">
+      <p class="eyebrow reveal">The commission math</p>
+      <h2 class="reveal">What do the booking platforms cost you <span class="irid">every year?</span></h2>
+      <p class="lede reveal">Move the sliders to your numbers. This is the argument for a direct-booking website, in króna instead of adjectives.</p>
+
+      <div class="calc reveal">
+        <div class="calc-form">
+          <div class="calc-field">
+            <label for="c-rooms">Rooms <output id="o-rooms">9</output></label>
+            <input type="range" id="c-rooms" min="1" max="40" step="1" value="9">
+          </div>
+          <div class="calc-field">
+            <label for="c-rate">Average nightly rate <output id="o-rate">25,000 kr</output></label>
+            <input type="range" id="c-rate" min="8000" max="60000" step="1000" value="25000">
+          </div>
+          <div class="calc-field">
+            <label for="c-occ">Occupancy over the year <output id="o-occ">65%</output></label>
+            <input type="range" id="c-occ" min="20" max="100" step="5" value="65">
+          </div>
+          <div class="calc-field">
+            <label for="c-ota">Bookings arriving via platforms <output id="o-ota">80%</output></label>
+            <input type="range" id="c-ota" min="0" max="100" step="5" value="80">
+          </div>
+          <div class="calc-field">
+            <label for="c-fee">Platform commission <output id="o-fee">18%</output></label>
+            <input type="range" id="c-fee" min="10" max="25" step="1" value="18">
+          </div>
+        </div>
+
+        <dl class="calc-result" aria-live="polite">
+          <div class="calc-stat">
+            <dt>Estimated room revenue / year</dt>
+            <dd id="r-rev">—</dd>
+          </div>
+          <div class="calc-stat hot">
+            <dt>Paid in platform commissions / year</dt>
+            <dd id="r-fee">—</dd>
+          </div>
+          <div class="calc-stat">
+            <dt>Kept, if 1 in 4 of those book direct instead</dt>
+            <dd id="r-save">—</dd>
+          </div>
+          <div class="calc-cta">
+            <a class="btn btn-morpho" href="#contact">Get the plan for your numbers <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </dl>
+      </div>
+      <p class="calc-note reveal">A rough estimate for guesthouses and hotels — tour operators and restaurants have their own version of this math, and the discovery call covers it. Platforms still have a role; the goal is balance, not war.</p>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section class="section about" id="about">
+    <div class="section-inner">
+      <p class="eyebrow reveal">Who you’re working with</p>
+      <h2 class="reveal">From the cloud forest to the <span class="irid">Arctic Circle.</span></h2>
+
+      <div class="about-grid">
+        <!-- Photo placeholder: the founder is the credibility signal here, not
+             an illustration. Swap the div below for a real <img> — a founder
+             headshot or a real Húsavík landscape photo, 4:5 ratio — as soon
+             as one exists. Keeping the morpho mark small and in the nav/footer
+             only, so this section reads as "real person with a track record"
+             rather than "brand mythology." -->
+        <figure class="about-art reveal">
+          <div class="photo-placeholder" role="img" aria-label="Placeholder for a real photo — founder headshot or Húsavík landscape">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="6" width="18" height="14" rx="2"/>
+              <circle cx="12" cy="13" r="3.5"/>
+              <path d="M8 6l1.3-2h5.4L16 6"/>
+            </svg>
+            <p>TODO — replace with a real photo<span>Founder headshot or Húsavík landscape · 4:5</span></p>
+          </div>
+          <figcaption><span>Two lands, one blue</span><span>Skjálfandi · 66°N</span></figcaption>
+        </figure>
+
+        <div class="about-body reveal">
+          <p>Morpho is run by one person: born in Costa Rica, more than a decade leading global programs in medical technology — enterprise platforms, business improvement, and multi-country compliance — and now based in Húsavík, on Iceland’s north coast.</p>
+          <p class="muted">Both of my countries run on small operators guiding people through extraordinary landscapes. Enterprise work taught me discipline — fixed scopes, honest timelines, no surprises in week five. This studio brings that discipline to a size, and price, that fits a small business.</p>
+
+          <dl class="about-facts">
+            <div><dt>Experience</dt><dd>10+ years · global program management, medical technology</dd></div>
+            <div><dt>Domains</dt><dd>Business improvement · enterprise process re-architecture · IT &amp; enterprise software · regulatory compliance</dd></div>
+            <div><dt>Delivery record</dt><dd>Enterprise platform rollouts · AI adoption initiatives · global compliance programs</dd></div>
+            <div><dt>Based</dt><dd>Húsavík, Iceland · working across Iceland &amp; Europe</dd></div>
+            <div><dt>Languages</dt><dd>English · Español</dd></div>
+            <div>
+              <dt>Studio stack</dt>
+              <dd class="tool-tags">
+                <span>HTML / CSS / JS</span><span>React</span><span>Framer</span>
+                <span>Make</span><span>ManyChat</span><span>Cal.com</span>
+                <span>Claude &amp; GPT assistants</span><span>Booking &amp; channel-manager APIs</span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROCESS ================= -->
+  <section class="section" id="process">
+    <div class="section-inner">
+      <p class="eyebrow reveal">How it works</p>
+      <h2 class="reveal">Four steps. Fixed price. No surprises in week five.</h2>
+      <p class="lede reveal">You’ll always know what’s happening, what it costs, and what you’ll have at the end.</p>
+
+      <div class="steps">
+        <div class="step reveal">
+          <span class="step-num">01</span>
+          <h3>Discover <span class="dur">One call · free</span></h3>
+          <p>We look at your current setup together — website, bookings, the tasks eating your evenings. You get a written plan with a fixed price within three days. Keep it even if we never speak again.</p>
+        </div>
+        <div class="step reveal">
+          <span class="step-num">02</span>
+          <h3>Design <span class="dur">1–2 weeks</span></h3>
+          <p>You review real screens with your real content — your rooms, your tours, your prices. Two revision rounds are included, and most projects only need one.</p>
+        </div>
+        <div class="step reveal">
+          <span class="step-num">03</span>
+          <h3>Build <span class="dur">2–4 weeks</span></h3>
+          <p>A private link updates as the work progresses, so you can click through the real thing any evening. Nothing is revealed at the end that you haven’t already seen.</p>
+        </div>
+        <div class="step reveal">
+          <span class="step-num">04</span>
+          <h3>Run <span class="dur">Launch + optional retainer</span></h3>
+          <p>Launch, a training session for your team, and thirty days of included fixes. After that, an optional monthly retainer keeps automations tuned and content fresh — cancel any month.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EXAMPLES ================= -->
+  <section class="section about" id="examples">
+    <div class="section-inner">
+      <p class="eyebrow reveal">In practice</p>
+      <h2 class="reveal">What this looks like for a business like yours.</h2>
+      <p class="lede reveal">Three concrete setups — described plainly, because you should be able to picture the result before you pay for it.</p>
+
+      <div class="ex-grid">
+        <article class="ex reveal">
+          <div class="ex-side">
+            <span class="ex-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 11 12 4l8 7"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg>
+            </span>
+            <span class="ex-tag">Guesthouse · 9 rooms</span>
+          </div>
+          <div>
+            <h3>Direct bookings instead of 15% commissions.</h3>
+            <p>A fast site with its own booking engine, synced to the channel manager so nothing double-books. A guest assistant answers check-in and parking questions in four languages, day and night.</p>
+            <p class="result">Every direct booking keeps the commission that used to leave the country.</p>
+          </div>
+        </article>
+
+        <article class="ex reveal">
+          <div class="ex-side">
+            <span class="ex-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M3 17c1.5 1.2 3 1.2 4.5 0s3-1.2 4.5 0 3 1.2 4.5 0 3-1.2 4.5 0"/><path d="M5 14 12 6l3 3.5"/><path d="M12 6v8"/><path d="M8.5 14h9"/></svg>
+            </span>
+            <span class="ex-tag">Tour operator · daily departures</span>
+          </div>
+          <div>
+            <h3>Weather cancels the tour. Software rebooks the guests.</h3>
+            <p>Live availability on the site, and when a departure is cancelled, every guest gets a message with rebooking options within minutes — instead of forty phone calls from the harbour.</p>
+            <p class="result">A cancelled morning stops costing an afternoon of admin.</p>
+          </div>
+        </article>
+
+        <article class="ex reveal">
+          <div class="ex-side">
+            <span class="ex-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M7 3v7a2 2 0 0 0 2 2v9"/><path d="M5 3v4M9 3v4"/><path d="M16 3c-1.5 0-2.5 2-2.5 5 0 2 .8 3 2 3v10"/></svg>
+            </span>
+            <span class="ex-tag">Restaurant · seasonal menu</span>
+          </div>
+          <div>
+            <h3>The menu updates itself. The reviews answer themselves.</h3>
+            <p>Change a dish in a simple sheet and the website, the printable PDF, and the translations update together. Each morning, drafted replies to new reviews wait for a one-tap approval.</p>
+            <p class="result">The website stops being the last place to hear about tonight’s menu.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ENGAGEMENT ================= -->
+  <section class="section" id="engagement">
+    <div class="section-inner">
+      <p class="eyebrow reveal">Packages · fixed price, in writing</p>
+      <h2 class="reveal">Build once, or keep it running. Priced before day one.</h2>
+      <p class="lede reveal">Starting prices below — your exact quote is fixed in the discovery plan and doesn’t move unless the scope does.</p>
+
+      <p class="eng-group-label reveal">Build once</p>
+      <div class="eng-grid four">
+        <article class="eng reveal">
+          <span class="eng-kind">Package 01</span>
+          <h3>Website</h3>
+          <span class="eng-price">from <strong>390,000 kr</strong></span>
+          <p>A fast, multilingual website for businesses that don’t need a booking engine — built to turn visits into calls, emails, and walk-ins.</p>
+          <ul>
+            <li>Design, build, and launch in 2–4 weeks</li>
+            <li>English &amp; Icelandic content structure</li>
+            <li>Fast on a phone with weak signal</li>
+            <li>You own code, domain, and content</li>
+            <li>30 days of included fixes</li>
+          </ul>
+        </article>
+
+        <article class="eng reveal">
+          <span class="eng-kind">Package 02</span>
+          <h3>Direct Booking Site</h3>
+          <span class="eng-price">from <strong>590,000 kr</strong></span>
+          <p>A fast, multilingual website with its own booking engine, synced to your channel manager. Built to recover commissions.</p>
+          <ul>
+            <li>Design, build, and launch in 3–6 weeks</li>
+            <li>Booking engine + channel-manager sync</li>
+            <li>English &amp; Icelandic content structure</li>
+            <li>You own code, domain, and accounts</li>
+            <li>30 days of included fixes</li>
+          </ul>
+        </article>
+
+        <article class="eng reveal">
+          <span class="eng-kind">Package 03</span>
+          <h3>App — Simple</h3>
+          <span class="eng-price">from <strong>320,000 kr</strong></span>
+          <p>One core workflow, built around how you actually work — an updatable menu, a machine-status board, a booking or queue form — instead of a subscription you’re renting today.</p>
+          <ul>
+            <li>One core workflow, purpose-built</li>
+            <li>You update content yourself, no developer needed day to day</li>
+            <li>Works on any device, in the browser</li>
+            <li>Pay once — no monthly software fee</li>
+          </ul>
+        </article>
+
+        <article class="eng reveal">
+          <span class="eng-kind">Package 04</span>
+          <h3>App — Connected</h3>
+          <span class="eng-price">from <strong>560,000 kr</strong></span>
+          <p>Several workflows wired together — inventory, orders, staff dashboards — synced with the systems you already run.</p>
+          <ul>
+            <li>Multiple connected workflows in one tool</li>
+            <li>Integrates with your POS, booking engine, or existing systems</li>
+            <li>Role-based access for staff and managers</li>
+            <li>Documented, built to be maintained by anyone</li>
+          </ul>
+        </article>
+      </div>
+
+      <p class="eng-group-label reveal">Keep it running</p>
+      <div class="eng-grid">
+        <article class="eng reveal">
+          <span class="eng-kind">Setup + monthly</span>
+          <h3>AI Automation</h3>
+          <span class="eng-price">from <strong>190,000 kr</strong> setup + <strong>39,000 kr</strong> / month</span>
+          <p>The repetitive 80%, handled: customer questions, confirmations, reminders, review replies — trained on your business.</p>
+          <ul>
+            <li>Customer assistant on your site &amp; channels</li>
+            <li>Cancellation &amp; rebooking messages</li>
+            <li>Review replies drafted for approval</li>
+            <li>Human handoff designed with you</li>
+            <li>Team training in plain language</li>
+          </ul>
+        </article>
+
+        <article class="eng reveal">
+          <span class="eng-kind">Ongoing</span>
+          <h3>Site Care</h3>
+          <span class="eng-price">from <strong>29,000 kr</strong> / month</span>
+          <p>Content updated, small changes made, the site kept fast and current — so it keeps working long after launch.</p>
+          <ul>
+            <li>Flat fee, cancel any month</li>
+            <li>Response within one business day, faster in season</li>
+            <li>Monthly plain-language report: what changed</li>
+            <li>Priority booking for new work</li>
+          </ul>
+        </article>
+
+        <article class="eng reveal">
+          <span class="eng-badge">Best value</span>
+          <span class="eng-kind">Bundle</span>
+          <h3>Site Care + Automation</h3>
+          <span class="eng-price">from <strong>59,000 kr</strong> / month</span>
+          <p>Everything in Site Care, plus the AI Automation retainer — bundled below the combined price of buying them separately.</p>
+          <ul>
+            <li>Everything in Site Care</li>
+            <li>Automation tuned and monitored monthly</li>
+            <li>One invoice instead of two</li>
+            <li>Priority booking for new work</li>
+          </ul>
+        </article>
+      </div>
+
+      <p class="pkg-note reveal">Season-ready promise: projects signed before 1 March launch before your first summer guest — or the final invoice waits until they do.</p>
+      <p class="pkg-note reveal">Not sure which package fits? <a href="products.html">See what each one looks like in practice →</a></p>
+    </div>
+  </section>
+
+  <!-- ================= FAQ ================= -->
+  <section class="section about" id="faq">
+    <div class="section-inner">
+      <p class="eyebrow reveal">Questions, answered plainly</p>
+      <h2 class="reveal">The things people ask before they email.</h2>
+
+      <div class="faq-list reveal">
+        <details>
+          <summary>What does a website cost?</summary>
+          <p>The packages above show honest starting prices — a Website from 390,000 kr, a Direct Booking Site from 590,000 kr, a custom app from 320,000 kr, AI Automation from 190,000 kr setup plus 39,000 kr/month. Your exact quote is fixed in writing in the discovery plan and won’t change unless the scope does. If it isn’t in your budget, you keep the plan and owe nothing.</p>
+        </details>
+        <details>
+          <summary>Why not just use a cheap AI chatbot subscription?</summary>
+          <p>Generic chatbot SaaS is cheap because it’s generic — trained on nothing specific to you, connected to nothing you already use, and billed forever. What we build is trained on your business, connects to the systems you already run, and for apps, you can own the result outright instead of renting it every month. If a $99/month tool genuinely covers what you need, we’ll say so on the discovery call — we’d rather lose the sale than sell you something you don’t need.</p>
+        </details>
+        <details>
+          <summary>Do I need to understand AI to use the automation?</summary>
+          <p>No. You’ll see the results — answered questions, drafted replies, sent reminders — in tools you already use. The training session covers everything in plain language, and the monthly note tells you what ran and what changed.</p>
+        </details>
+        <details>
+          <summary>Can you work with our existing booking system?</summary>
+          <p>Usually, yes. Most projects connect to what you already have — booking engines, channel managers, point-of-sale — rather than replacing it. If your current system genuinely can’t support what you need, you’ll hear that in the discovery plan, with options.</p>
+        </details>
+        <details>
+          <summary>What happens if we stop working together?</summary>
+          <p>Nothing breaks. You own the code, the domain, the content, and the accounts from day one, and everything is documented so any developer can pick it up. The retainer is convenience, not a hostage situation.</p>
+        </details>
+        <details>
+          <summary>We’re not in Iceland. Can we still work with you?</summary>
+          <p>Yes — the studio is based in Húsavík but works with businesses across Iceland and Europe, in English or Spanish. Everything from discovery to launch works over video calls and shared links.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section class="section dark contact" id="contact">
+    <div class="contact-inner">
+      <p class="eyebrow reveal">Start a project</p>
+      <h2 class="reveal">Tell us what’s eating your time.</h2>
+      <p class="lede reveal">One email is enough — a sentence about your business and the thing you’d most like to stop doing by hand. You’ll get a reply within one business day, and the discovery call is free.</p>
+      <div class="contact-actions reveal">
+        <a class="btn btn-morpho" href="mailto:hello@morpho.is?subject=Project%20inquiry">Email hello@morpho.is <span class="arrow" aria-hidden="true">→</span></a>
+        <!-- Cal.com booking: wired to the real account (arnoldo-a-morphos),
+             using the default "30 min meeting" event. Consider renaming that
+             event to "Discovery call" in Cal.com's dashboard (Event Types)
+             so the popup title matches the copy above — purely cosmetic,
+             the link/slug below doesn't need to change either way. -->
+        <span class="contact-alt">or book a call directly —
+          <a href="https://cal.com/arnoldo-a-morphos/30min"
+             data-cal-namespace="discovery-call"
+             data-cal-link="arnoldo-a-morphos/30min"
+             data-cal-config='{"layout":"month_view"}'>pick a time</a>
+        </span>
+      </div>
+      <div class="contact-meta reveal">
+        <span>Húsavík, Iceland</span>
+        <span>Roots in Costa Rica</span>
+        <span>English · Español</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <defs>
+          <linearGradient id="mg-ft" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6E6BE8"/><stop offset=".5" stop-color="#1F6FE0"/><stop offset="1" stop-color="#2FB6E8"/>
+          </linearGradient>
+        </defs>
+        <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z" fill="url(#mg-ft)"/>
+        <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z" fill="url(#mg-ft)"/>
+        <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" fill="url(#mg-ft)" opacity=".8"/>
+        <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" fill="url(#mg-ft)" opacity=".8"/>
+        <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#F2F5F8"/>
+      </svg>
+      Morpho Studio
+    </span>
+    <span>9.93°N → 66.04°N</span>
+    <a href="mailto:hello@morpho.is">hello@morpho.is</a>
+  </div>
+</footer>
+
+<script>
+/* Signature: the morpho mark travels the wing line as you read.
+   Scroll position acts as the viewing angle — structural color
+   tilts violet → blue → cyan across the page. */
+(function(){
+  var dot = document.getElementById('morphoDot');
+  var ticking = false;
+  function mix(a, b, t){
+    function h(c){ return [parseInt(c.slice(1,3),16), parseInt(c.slice(3,5),16), parseInt(c.slice(5,7),16)]; }
+    var A = h(a), B = h(b);
+    var r = A.map(function(v,i){ return Math.round(v + (B[i]-v)*t); });
+    return 'rgb(' + r.join(',') + ')';
+  }
+  function update(){
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+    dot.style.left = (p * 100) + '%';
+    dot.style.background = p < .5
+      ? mix('#6E6BE8', '#1F6FE0', p * 2)
+      : mix('#1F6FE0', '#2FB6E8', (p - .5) * 2);
+    ticking = false;
+  }
+  window.addEventListener('scroll', function(){
+    if(!ticking){ requestAnimationFrame(update); ticking = true; }
+  }, {passive:true});
+  update();
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)){
+    els.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(el){ io.observe(el); });
+  }
+  /* Commission calculator — live math, ISK formatting */
+  var $ = function(id){ return document.getElementById(id); };
+  var calcIds = ['c-rooms','c-rate','c-occ','c-ota','c-fee'];
+  function isk(n){
+    return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' kr';
+  }
+  function calc(){
+    var rooms = +$('c-rooms').value,
+        rate  = +$('c-rate').value,
+        occ   = +$('c-occ').value / 100,
+        ota   = +$('c-ota').value / 100,
+        fee   = +$('c-fee').value / 100;
+    $('o-rooms').textContent = rooms;
+    $('o-rate').textContent  = isk(rate);
+    $('o-occ').textContent   = Math.round(occ*100) + '%';
+    $('o-ota').textContent   = Math.round(ota*100) + '%';
+    $('o-fee').textContent   = Math.round(fee*100) + '%';
+    var revenue = rooms * rate * 365 * occ;
+    var commission = revenue * ota * fee;
+    $('r-rev').textContent  = isk(revenue);
+    $('r-fee').textContent  = isk(commission);
+    $('r-save').textContent = isk(commission * 0.25) + ' / year';
+  }
+  if ($('c-rooms')){
+    calcIds.forEach(function(id){ $(id).addEventListener('input', calc); });
+    calc();
+  }
+})();
+</script>
+
+<!-- Cal.com embed: opens the booking flow (arnoldo-a-morphos/30min) in a
+     popup modal instead of leaving the page. Official embed snippet,
+     unmodified apart from the namespace/link. Free tier covers this. -->
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+  Cal("init", "discovery-call", {origin: "https://cal.com"});
+  Cal.ns["discovery-call"]("ui", {
+    "styles": { "branding": { "brandColor": "#1F6FE0" } },
+    "hideEventTypeDetails": false,
+    "layout": "month_view"
+  });
+</script>
+
+</body>
+</html>
