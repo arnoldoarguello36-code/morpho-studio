@@ -93,7 +93,37 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--m-text); border-r
   transition:background .18s var(--ease);
 }
 .nav-cta:hover{ background:var(--m-text); color:var(--fog) !important; }
-@media (max-width:760px){ .nav-links li:not(.keep){ display:none; } }
+.nav-toggle{
+  display:none; background:none; border:1px solid var(--line); border-radius:8px;
+  width:40px; height:40px; align-items:center; justify-content:center; cursor:pointer; flex:none;
+}
+.nav-toggle svg{ width:20px; height:20px; stroke:var(--ink); fill:none; stroke-width:1.8; stroke-linecap:round; }
+@media (max-width:760px){
+  .nav-toggle{ display:flex; }
+  .nav-links{
+    position:absolute; top:100%; left:0; right:0; z-index:39;
+    flex-direction:column; align-items:stretch; gap:0;
+    background:var(--fog); border-bottom:1px solid var(--line);
+    max-height:0; overflow:hidden; transition:max-height .25s var(--ease);
+  }
+  .nav-links.open{ max-height:420px; }
+  .nav-links li{ width:100%; }
+  .nav-links li:not(.keep) a{ display:block; padding:14px var(--s-3); border-top:1px solid var(--line); }
+  .nav-links li.keep{ padding:var(--s-2) var(--s-3); }
+  .nav-links li.keep .nav-cta{ display:block; text-align:center; }
+}
+.sticky-cta{
+  display:none;
+  position:fixed; left:0; right:0; bottom:0; z-index:45;
+  padding:var(--s-2) var(--s-3);
+  background:rgba(242,245,248,.92); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);
+}
+.sticky-cta .btn{ width:100%; justify-content:center; }
+@media (max-width:760px){
+  .sticky-cta{ display:block; }
+  body{ padding-bottom:76px; }
+}
 
 /* ---------- shared section scaffolding ---------- */
 .section{ padding:var(--s-12) var(--s-3); }
@@ -255,7 +285,10 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
       Morpho
     </a>
     <nav aria-label="Main">
-      <ul class="nav-links">
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <ul class="nav-links" id="navLinks">
         <li><a href="index.html#services">Services</a></li>
         <li><a href="index.html#engagement">Pricing</a></li>
         <li><a href="#top">Product guide</a></li>
@@ -264,6 +297,10 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
     </nav>
   </div>
 </header>
+
+<div class="sticky-cta" aria-hidden="false">
+  <a class="btn btn-morpho" href="index.html#contact">Start a project <span class="arrow" aria-hidden="true">→</span></a>
+</div>
 
 <main id="main">
 
@@ -486,6 +523,21 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
 
 <script>
 (function(){
+  var navToggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  if (navToggle && navLinks){
+    navToggle.addEventListener('click', function(){
+      var open = navLinks.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    navLinks.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){
+        navLinks.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var els = document.querySelectorAll('.reveal');
   if (reduce || !('IntersectionObserver' in window)){
