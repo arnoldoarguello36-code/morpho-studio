@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commission calculator — What platforms cost you every year · Morpho Studio</title>
+<meta name="description" content="Move the sliders to your own numbers and see, in króna, what Booking.com, Expedia, and GetYourGuide commissions actually cost a small Icelandic hospitality or tour business per year.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MORPHO STUDIO — design tokens (shared with the main page)
+   ============================================================ */
+:root{
+  --fog:        #F2F5F8;
+  --fog-deep:   #E5EBF0;
+  --ink:        #0D1A26;
+  --ink-soft:   #142638;
+  --basalt:     #56646E;
+  --mist:       #93A3AD;
+  --line:       rgba(13,26,38,.14);
+  --line-dark:  rgba(242,245,248,.16);
+
+  --m-blue:   #1F6FE0;
+  --m-cyan:   #2FB6E8;
+  --m-violet: #6E6BE8;
+  --m-text:   #1D5FBF;
+  --m-grad:   linear-gradient(100deg, var(--m-violet), var(--m-blue) 45%, var(--m-cyan));
+
+  --display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --body:    "Instrument Sans", system-ui, -apple-system, sans-serif;
+  --mono:    "Spline Sans Mono", ui-monospace, "SF Mono", monospace;
+
+  --s-1: 8px;  --s-2: 16px; --s-3: 24px; --s-4: 32px;
+  --s-6: 48px; --s-8: 64px; --s-12: 96px; --s-16: 128px;
+
+  --max: 1120px;
+  --radius: 12px;
+  --ease: cubic-bezier(.22,.9,.3,1);
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+
+body{
+  font-family:var(--body);
+  font-size:17px; line-height:1.6;
+  color:var(--ink); background:var(--fog);
+  -webkit-font-smoothing:antialiased;
+}
+
+::selection{ background:var(--m-cyan); color:var(--ink); }
+
+.skip-link{
+  position:absolute; left:var(--s-2); top:-64px;
+  background:var(--ink); color:var(--fog);
+  padding:var(--s-1) var(--s-2); border-radius:6px;
+  font-family:var(--mono); font-size:13px; z-index:60;
+  transition:top .2s var(--ease);
+}
+.skip-link:focus{ top:var(--s-2); }
+a, button, summary{ outline-offset:3px; }
+a:focus-visible, button:focus-visible{ outline:2px solid var(--m-text); border-radius:4px; }
+.dark a:focus-visible{ outline-color:var(--m-cyan); }
+
+/* ---------- nav (identical to main page) ---------- */
+.nav{
+  position:sticky; top:0; z-index:40;
+  background:rgba(242,245,248,.82);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:var(--max); margin:0 auto;
+  padding:var(--s-2) var(--s-3);
+  display:flex; align-items:center; justify-content:space-between; gap:var(--s-3);
+}
+.brand{
+  font-family:var(--display); font-weight:700; font-size:20px;
+  letter-spacing:-.02em; color:var(--ink); text-decoration:none;
+  display:flex; align-items:center; gap:10px;
+}
+.brand-mark{ width:22px; height:22px; flex:none; }
+.nav-links{ display:flex; gap:var(--s-3); align-items:center; list-style:none; }
+.nav-links a{ color:var(--basalt); text-decoration:none; font-size:15px; transition:color .18s var(--ease); }
+.nav-links a:hover{ color:var(--ink); }
+.nav-cta{
+  font-family:var(--mono); font-size:13px; letter-spacing:.02em;
+  color:var(--fog) !important; background:var(--ink);
+  padding:10px var(--s-2); border-radius:8px;
+  transition:background .18s var(--ease);
+}
+.nav-cta:hover{ background:var(--m-text); color:var(--fog) !important; }
+.nav-toggle{
+  display:none; background:none; border:1px solid var(--line); border-radius:8px;
+  width:40px; height:40px; align-items:center; justify-content:center; cursor:pointer; flex:none;
+}
+.nav-toggle svg{ width:20px; height:20px; stroke:var(--ink); fill:none; stroke-width:1.8; stroke-linecap:round; }
+@media (max-width:760px){
+  .nav-toggle{ display:flex; }
+  .nav-links{
+    position:absolute; top:100%; left:0; right:0; z-index:39;
+    flex-direction:column; align-items:stretch; gap:0;
+    background:var(--fog); border-bottom:1px solid var(--line);
+    max-height:0; overflow:hidden; transition:max-height .25s var(--ease);
+  }
+  .nav-links.open{ max-height:420px; }
+  .nav-links li{ width:100%; }
+  .nav-links li:not(.keep) a{ display:block; padding:14px var(--s-3); border-top:1px solid var(--line); }
+  .nav-links li.keep{ padding:var(--s-2) var(--s-3); }
+  .nav-links li.keep .nav-cta{ display:block; text-align:center; }
+}
+.sticky-cta{
+  display:none;
+  position:fixed; left:0; right:0; bottom:0; z-index:45;
+  padding:var(--s-2) var(--s-3);
+  background:rgba(242,245,248,.92); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);
+}
+.sticky-cta .btn{ width:100%; justify-content:center; }
+@media (max-width:760px){
+  .sticky-cta{ display:block; }
+  body{ padding-bottom:76px; }
+}
+
+/* ---------- shared section scaffolding ---------- */
+.section{ padding:var(--s-12) var(--s-3); }
+.section-inner{ max-width:var(--max); margin:0 auto; }
+.eyebrow{
+  font-family:var(--mono); font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--m-text);
+  display:flex; align-items:center; gap:var(--s-2);
+  margin-bottom:var(--s-3);
+}
+.eyebrow::after{ content:""; height:1px; width:48px; background:var(--m-grad); }
+h2{
+  font-family:var(--display); font-weight:600;
+  font-size:clamp(28px, 4.2vw, 44px); line-height:1.12;
+  letter-spacing:-.02em; max-width:22ch;
+  margin-bottom:var(--s-3);
+}
+.lede{ color:var(--basalt); max-width:60ch; font-size:18px; }
+.irid{ background:var(--m-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+.reveal{ opacity:0; transform:translateY(16px); transition:opacity .6s var(--ease), transform .6s var(--ease); }
+.reveal.in{ opacity:1; transform:none; }
+@media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+
+/* ---------- page intro ---------- */
+.intro{ padding:calc(var(--s-8) + var(--s-2)) var(--s-3) var(--s-8); }
+.intro-inner{ max-width:var(--max); margin:0 auto; }
+h1{
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(36px, 5.6vw, 60px); line-height:1.06;
+  letter-spacing:-.03em; max-width:20ch;
+}
+.intro-sub{ margin-top:var(--s-3); max-width:60ch; color:var(--basalt); font-size:19px; }
+.intro-back{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--mono); font-size:13px; color:var(--basalt);
+  text-decoration:none; margin-bottom:var(--s-4);
+}
+.intro-back:hover{ color:var(--ink); }
+.intro-back .arrow{ transition:transform .18s var(--ease); }
+.intro-back:hover .arrow{ transform:translateX(-3px); }
+
+/* ---------- calculator (identical math/markup to the main page) ---------- */
+.calc{
+  margin-top:var(--s-2); display:grid;
+  grid-template-columns:1fr 1fr; gap:var(--s-3);
+  align-items:stretch;
+}
+@media (max-width:860px){ .calc{ grid-template-columns:1fr; } }
+.calc-form{
+  background:#FFFFFF; border:1px solid var(--line);
+  border-radius:var(--radius); padding:var(--s-4);
+  display:grid; gap:var(--s-3); align-content:start;
+}
+.calc-field label{
+  display:flex; justify-content:space-between; align-items:baseline;
+  font-size:15px; font-weight:600; margin-bottom:8px; gap:var(--s-2);
+}
+.calc-field label output{
+  font-family:var(--mono); font-weight:400; font-size:14px; color:var(--m-text);
+  white-space:nowrap;
+}
+.calc-field input[type="range"]{
+  width:100%; accent-color:var(--m-blue); height:22px; cursor:pointer;
+}
+.calc-result{
+  background:linear-gradient(180deg, var(--ink), var(--ink-soft));
+  border-radius:var(--radius); padding:var(--s-4);
+  color:var(--fog); display:flex; flex-direction:column; gap:var(--s-3);
+  justify-content:center;
+}
+.calc-stat dt{
+  font-family:var(--mono); font-size:12px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--mist); margin-bottom:4px;
+}
+.calc-stat dd{
+  font-family:var(--display); font-weight:700; letter-spacing:-.02em;
+  font-size:clamp(24px, 3vw, 34px); line-height:1.1;
+}
+.calc-stat.hot dd{
+  background:var(--m-grad);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.calc-cta{ margin-top:var(--s-1); }
+.calc-note{
+  margin-top:var(--s-3); font-size:13px; color:var(--basalt); max-width:72ch;
+}
+
+.btn{
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--body); font-weight:600; font-size:15px;
+  text-decoration:none; border-radius:10px;
+  padding:12px var(--s-3); transition:all .18s var(--ease);
+  border:1px solid var(--line); background:transparent; color:var(--ink);
+}
+.btn:hover{ border-color:var(--ink); }
+.btn .arrow{ transition:transform .18s var(--ease); }
+.btn:hover .arrow{ transform:translateX(3px); }
+
+/* ---------- closing CTA (dark) ---------- */
+.dark{ background:linear-gradient(180deg, var(--ink) 0%, var(--ink-soft) 100%); color:var(--fog); }
+.dark h2{ color:var(--fog); }
+.dark .lede{ color:var(--mist); }
+.closing{ padding:var(--s-16) var(--s-3); text-align:center; }
+.closing-inner{ max-width:640px; margin:0 auto; }
+.closing .lede{ margin:0 auto; }
+.btn-morpho{
+  background:var(--m-grad); color:#FFFFFF; border:none;
+  box-shadow:0 8px 24px -10px rgba(31,111,224,.55);
+  margin-top:var(--s-4);
+}
+.btn-morpho:hover{ transform:translateY(-1px); box-shadow:0 12px 28px -10px rgba(47,182,232,.6); }
+
+/* ---------- footer (identical to main page) ---------- */
+footer{ background:var(--ink); color:var(--mist); padding:var(--s-4) var(--s-3); border-top:1px solid var(--line-dark); }
+.footer-inner{
+  max-width:var(--max); margin:0 auto;
+  display:flex; justify-content:space-between; gap:var(--s-3); flex-wrap:wrap;
+  font-size:14px;
+}
+footer a{ color:var(--fog); text-decoration:none; }
+footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
+.footer-brand{ font-family:var(--display); font-weight:600; color:var(--fog); display:flex; align-items:center; gap:8px; }
+.footer-brand svg{ width:18px; height:18px; }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html#top">
+      <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true">
+        <defs>
+          <linearGradient id="mg-nav" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6E6BE8"/><stop offset=".5" stop-color="#1F6FE0"/><stop offset="1" stop-color="#2FB6E8"/>
+          </linearGradient>
+        </defs>
+        <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z" fill="url(#mg-nav)"/>
+        <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z" fill="url(#mg-nav)"/>
+        <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" fill="url(#mg-nav)" opacity=".8"/>
+        <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" fill="url(#mg-nav)" opacity=".8"/>
+        <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#0D1A26"/>
+        <path d="M11.4 9.2 C 10.7 7.6, 9.7 6.5, 8.6 5.8 M12.6 9.2 C 13.3 7.6, 14.3 6.5, 15.4 5.8"
+              stroke="#0D1A26" stroke-width="1" fill="none" stroke-linecap="round"/>
+      </svg>
+      Morpho
+    </a>
+    <nav aria-label="Main">
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="products.html">Product guide</a></li>
+        <li><a href="#top">Calculator</a></li>
+        <li class="keep"><a class="nav-cta" href="index.html#contact">Start a project</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="sticky-cta" aria-hidden="false">
+  <a class="btn btn-morpho" href="index.html#contact">Start a project <span class="arrow" aria-hidden="true">→</span></a>
+</div>
+
+<main id="main">
+
+  <!-- ================= INTRO ================= -->
+  <section class="intro" id="top">
+    <div class="intro-inner">
+      <a class="intro-back" href="index.html"><span class="arrow" aria-hidden="true">←</span> Back to hellomorpho.com</a>
+      <p class="eyebrow">The commission math</p>
+      <h1>What do the booking platforms cost you, <span class="irid">every year?</span></h1>
+      <p class="intro-sub">Move the sliders to your numbers. This is the argument for a direct-booking website, in króna instead of adjectives — share this page directly with anyone still on the fence.</p>
+    </div>
+  </section>
+
+  <!-- ================= CALCULATOR ================= -->
+  <section class="section" style="padding-top:0">
+    <div class="section-inner">
+      <div class="calc reveal">
+        <div class="calc-form">
+          <div class="calc-field">
+            <label for="c-rooms">Rooms <output id="o-rooms">9</output></label>
+            <input type="range" id="c-rooms" min="1" max="40" step="1" value="9">
+          </div>
+          <div class="calc-field">
+            <label for="c-rate">Average nightly rate <output id="o-rate">25,000 kr</output></label>
+            <input type="range" id="c-rate" min="8000" max="60000" step="1000" value="25000">
+          </div>
+          <div class="calc-field">
+            <label for="c-occ">Occupancy over the year <output id="o-occ">65%</output></label>
+            <input type="range" id="c-occ" min="20" max="100" step="5" value="65">
+          </div>
+          <div class="calc-field">
+            <label for="c-ota">Bookings arriving via platforms <output id="o-ota">80%</output></label>
+            <input type="range" id="c-ota" min="0" max="100" step="5" value="80">
+          </div>
+          <div class="calc-field">
+            <label for="c-fee">Platform commission <output id="o-fee">18%</output></label>
+            <input type="range" id="c-fee" min="10" max="25" step="1" value="18">
+          </div>
+        </div>
+
+        <dl class="calc-result" aria-live="polite">
+          <div class="calc-stat">
+            <dt>Estimated room revenue / year</dt>
+            <dd id="r-rev">—</dd>
+          </div>
+          <div class="calc-stat hot">
+            <dt>Paid in platform commissions / year</dt>
+            <dd id="r-fee">—</dd>
+          </div>
+          <div class="calc-stat">
+            <dt>Kept, if 1 in 4 of those book direct instead</dt>
+            <dd id="r-save">—</dd>
+          </div>
+          <div class="calc-cta">
+            <a class="btn btn-morpho" href="index.html#contact">Get the plan for your numbers <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </dl>
+      </div>
+      <p class="calc-note reveal">A rough estimate for guesthouses and hotels — tour operators and restaurants have their own version of this math, and the discovery call covers it. Platforms still have a role; the goal is balance, not war.</p>
+    </div>
+  </section>
+
+  <!-- ================= CLOSING CTA ================= -->
+  <section class="dark closing">
+    <div class="closing-inner">
+      <p class="eyebrow" style="justify-content:center">Ready when you are</p>
+      <h2>Like what the numbers say?</h2>
+      <p class="lede">That's what the discovery call is for — free, thirty minutes, and you'll leave with a written recommendation either way.</p>
+      <a class="btn btn-morpho" href="index.html#contact">Start a project <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <defs>
+          <linearGradient id="mg-ft" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6E6BE8"/><stop offset=".5" stop-color="#1F6FE0"/><stop offset="1" stop-color="#2FB6E8"/>
+          </linearGradient>
+        </defs>
+        <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z" fill="url(#mg-ft)"/>
+        <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z" fill="url(#mg-ft)"/>
+        <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" fill="url(#mg-ft)" opacity=".8"/>
+        <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" fill="url(#mg-ft)" opacity=".8"/>
+        <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#F2F5F8"/>
+      </svg>
+      Morpho Studio
+    </span>
+    <span>9.93°N → 66.04°N</span>
+    <a href="mailto:hi@hellomorpho.com">hi@hellomorpho.com</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var navToggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  if (navToggle && navLinks){
+    navToggle.addEventListener('click', function(){
+      var open = navLinks.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    navLinks.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){
+        navLinks.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)){
+    els.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(el){ io.observe(el); });
+  }
+
+  /* Commission calculator — live math, ISK formatting (identical to the main page) */
+  var $ = function(id){ return document.getElementById(id); };
+  var calcIds = ['c-rooms','c-rate','c-occ','c-ota','c-fee'];
+  function isk(n){
+    return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' kr';
+  }
+  function calc(){
+    var rooms = +$('c-rooms').value,
+        rate  = +$('c-rate').value,
+        occ   = +$('c-occ').value / 100,
+        ota   = +$('c-ota').value / 100,
+        fee   = +$('c-fee').value / 100;
+    $('o-rooms').textContent = rooms;
+    $('o-rate').textContent  = isk(rate);
+    $('o-occ').textContent   = Math.round(occ*100) + '%';
+    $('o-ota').textContent   = Math.round(ota*100) + '%';
+    $('o-fee').textContent   = Math.round(fee*100) + '%';
+    var revenue = rooms * rate * 365 * occ;
+    var commission = revenue * ota * fee;
+    $('r-rev').textContent  = isk(revenue);
+    $('r-fee').textContent  = isk(commission);
+    $('r-save').textContent = isk(commission * 0.25) + ' / year';
+  }
+  if ($('c-rooms')){
+    calcIds.forEach(function(id){ $(id).addEventListener('input', calc); });
+    calc();
+  }
+})();
+</script>
+
+</body>
+</html>
