@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /husavik-concept.html
+Disallow: /proposal-husavik.html
+Disallow: /email-signature.html
+
+Sitemap: https://hellomorpho.com/sitemap.xml
