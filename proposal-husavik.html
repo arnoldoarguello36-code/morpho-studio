@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hótel Húsavík — Direct Booking Platform · Proposal from Morpho Studio</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/x-icon" href="assets/img/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/img/favicon/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Spline+Sans+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MORPHO STUDIO — design tokens (shared with the main site)
+   ============================================================ */
+:root{
+  --fog:        #F2F5F8;
+  --fog-deep:   #E5EBF0;
+  --ink:        #0D1A26;
+  --ink-soft:   #142638;
+  --basalt:     #56646E;
+  --mist:       #93A3AD;
+  --line:       rgba(13,26,38,.14);
+  --line-dark:  rgba(242,245,248,.16);
+
+  --m-blue:   #1F6FE0;
+  --m-cyan:   #2FB6E8;
+  --m-violet: #6E6BE8;
+  --m-text:   #1D5FBF;
+  --m-grad:   linear-gradient(100deg, var(--m-violet), var(--m-blue) 45%, var(--m-cyan));
+
+  --display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --body:    "Instrument Sans", system-ui, -apple-system, sans-serif;
+  --mono:    "Spline Sans Mono", ui-monospace, "SF Mono", monospace;
+
+  --s-1: 8px;  --s-2: 16px; --s-3: 24px; --s-4: 32px;
+  --s-6: 48px; --s-8: 64px; --s-12: 96px; --s-16: 128px;
+
+  --max: 1120px;
+  --radius: 12px;
+  --ease: cubic-bezier(.22,.9,.3,1);
+}
+
+/* ---------- Hótel Húsavík concept palette (scoped to mockups only) ---------- */
+.hv{
+  --hv-navy-deep: #071523;
+  --hv-navy:      #0B2438;
+  --hv-navy-soft: #123351;
+  --hv-ice:       #DCEEF6;
+  --hv-glacier:   #4FB8E0;
+  --hv-aurora:    #4FD9A6;
+  --hv-sand:      #F4EFE4;
+  --hv-serif:     "Fraunces", Georgia, serif;
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+input, select, textarea, button{ font:inherit; color:inherit; }
+html{ scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+
+body{
+  font-family:var(--body);
+  font-size:17px; line-height:1.6;
+  color:var(--ink); background:var(--fog);
+  -webkit-font-smoothing:antialiased;
+}
+::selection{ background:var(--m-cyan); color:var(--ink); }
+
+.skip-link{
+  position:absolute; left:var(--s-2); top:-64px;
+  background:var(--ink); color:var(--fog);
+  padding:var(--s-1) var(--s-2); border-radius:6px;
+  font-family:var(--mono); font-size:13px; z-index:60;
+  transition:top .2s var(--ease);
+}
+.skip-link:focus{ top:var(--s-2); }
+a, button, summary{ outline-offset:3px; }
+a:focus-visible, button:focus-visible{ outline:2px solid var(--m-text); border-radius:4px; }
+.dark a:focus-visible{ outline-color:var(--m-cyan); }
+
+/* ---------- nav ---------- */
+.nav{
+  position:sticky; top:0; z-index:40;
+  background:rgba(242,245,248,.86);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:var(--max); margin:0 auto;
+  padding:var(--s-2) var(--s-3);
+  display:flex; align-items:center; justify-content:space-between; gap:var(--s-3);
+}
+.brand{
+  font-family:var(--display); font-weight:700; font-size:20px;
+  letter-spacing:-.02em; color:var(--ink); text-decoration:none;
+  display:flex; align-items:center; gap:10px;
+}
+.brand-mark{ width:22px; height:22px; flex:none; }
+.nav-tag{
+  font-family:var(--mono); font-size:12px; letter-spacing:.08em;
+  color:var(--basalt); border:1px solid var(--line); border-radius:999px;
+  padding:6px 14px; white-space:nowrap;
+}
+@media (max-width:640px){ .nav-tag{ display:none; } }
+
+/* ---------- shared section scaffolding ---------- */
+.section{ padding:var(--s-12) var(--s-3); }
+.section-inner{ max-width:var(--max); margin:0 auto; }
+.eyebrow{
+  font-family:var(--mono); font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--m-text);
+  display:flex; align-items:center; gap:var(--s-2);
+  margin-bottom:var(--s-3);
+}
+.eyebrow::after{ content:""; height:1px; width:48px; background:var(--m-grad); }
+h2{
+  font-family:var(--display); font-weight:600;
+  font-size:clamp(28px, 4.2vw, 42px); line-height:1.14;
+  letter-spacing:-.02em; max-width:22ch;
+  margin-bottom:var(--s-3);
+}
+.lede{ color:var(--basalt); max-width:64ch; font-size:18px; }
+.irid{ background:var(--m-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+.reveal{ opacity:0; transform:translateY(16px); transition:opacity .6s var(--ease), transform .6s var(--ease); }
+.reveal.in{ opacity:1; transform:none; }
+@media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+
+/* ---------- intro / hero ---------- */
+.intro{ padding:calc(var(--s-8) + var(--s-2)) var(--s-3) var(--s-8); }
+.intro-inner{ max-width:var(--max); margin:0 auto; }
+h1{
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(34px, 5.4vw, 58px); line-height:1.08;
+  letter-spacing:-.03em; max-width:18ch;
+}
+.intro-sub{ margin-top:var(--s-3); max-width:64ch; color:var(--basalt); font-size:19px; }
+.intro-meta{
+  margin-top:var(--s-4); display:flex; flex-wrap:wrap; gap:var(--s-2) var(--s-4);
+  font-family:var(--mono); font-size:13px; color:var(--basalt);
+  padding-top:var(--s-3); border-top:1px solid var(--line);
+}
+.intro-meta strong{ color:var(--ink); font-weight:500; }
+
+/* ---------- diagnosis list ---------- */
+.diag-grid{ margin-top:var(--s-6); display:grid; grid-template-columns:repeat(2,1fr); gap:var(--s-2); }
+@media (max-width:760px){ .diag-grid{ grid-template-columns:1fr; } }
+.diag{
+  background:#FFFFFF; border:1px solid var(--line); border-radius:var(--radius);
+  padding:var(--s-3); display:flex; gap:14px; align-items:flex-start;
+}
+.diag-mark{
+  flex:none; width:28px; height:28px; border-radius:8px;
+  background:var(--fog-deep); display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:13px; color:var(--basalt); margin-top:2px;
+}
+.diag h3{ font-family:var(--display); font-weight:600; font-size:17px; margin-bottom:4px; }
+.diag p{ font-size:15px; color:var(--basalt); }
+.diag p a{ color:var(--m-text); }
+
+/* ---------- pillar cards ---------- */
+.pillars{ margin-top:var(--s-6); display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s-3); }
+@media (max-width:920px){ .pillars{ grid-template-columns:1fr; } }
+.pillar{
+  background:#FFFFFF; border:1px solid var(--line); border-radius:var(--radius);
+  padding:var(--s-4); display:flex; flex-direction:column; gap:var(--s-2);
+  transition:transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease);
+}
+.pillar:hover{ transform:translateY(-3px); box-shadow:0 12px 32px -16px rgba(13,26,38,.25); border-color:rgba(31,111,224,.4); }
+@media (prefers-reduced-motion: reduce){ .pillar, .pillar:hover{ transform:none; } }
+.pillar-num{ font-family:var(--mono); font-size:12px; letter-spacing:.14em; color:var(--m-text); }
+.pillar h3{ font-family:var(--display); font-weight:600; font-size:21px; letter-spacing:-.01em; }
+.pillar p{ color:var(--basalt); font-size:15.5px; }
+
+/* ---------- concept preview mockups ---------- */
+.concept-wrap{ margin-top:var(--s-6); display:grid; grid-template-columns:1.3fr 1fr; gap:var(--s-3); align-items:start; }
+@media (max-width:920px){ .concept-wrap{ grid-template-columns:1fr; } }
+
+.concept-frame{
+  border-radius:16px; overflow:hidden; border:1px solid var(--line);
+  box-shadow:0 20px 48px -24px rgba(7,21,35,.45);
+  font-family:var(--body);
+}
+.concept-chrome{
+  background:var(--hv-navy-deep); padding:10px 14px; display:flex; align-items:center; gap:8px;
+}
+.concept-chrome span.dot{ width:9px; height:9px; border-radius:50%; background:rgba(244,239,228,.25); }
+.concept-url{
+  margin-left:8px; font-family:var(--mono); font-size:11px; letter-spacing:.04em;
+  color:rgba(244,239,228,.55);
+}
+.concept-hero{
+  position:relative; padding:var(--s-6) var(--s-3) 64px;
+  background:
+    radial-gradient(120% 90% at 15% 0%, rgba(79,184,224,.35), transparent 60%),
+    radial-gradient(90% 70% at 100% 100%, rgba(79,217,166,.25), transparent 55%),
+    linear-gradient(160deg, var(--hv-navy) 0%, var(--hv-navy-deep) 100%);
+  color:var(--hv-sand); min-height:280px;
+}
+.concept-eyebrow{
+  display:block; font-family:var(--mono); font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--hv-glacier); margin-bottom:14px;
+}
+.concept-hero h4{
+  font-family:var(--hv-serif); font-weight:500; font-style:italic;
+  font-size:clamp(24px,3.4vw,32px); line-height:1.2; max-width:14ch; color:#FFFFFF;
+}
+.concept-booking-card{
+  position:absolute; left:var(--s-3); right:var(--s-3); bottom:-40px;
+  background:rgba(244,239,228,.97); color:var(--hv-navy-deep);
+  border-radius:12px; padding:16px; display:grid;
+  grid-template-columns:1fr 1fr 1fr auto; gap:10px; align-items:end;
+  box-shadow:0 16px 32px -14px rgba(7,21,35,.5);
+}
+@media (max-width:560px){ .concept-booking-card{ grid-template-columns:1fr 1fr; } }
+.concept-field label{
+  display:block; font-family:var(--mono); font-size:10px; letter-spacing:.1em;
+  text-transform:uppercase; color:rgba(11,36,56,.55); margin-bottom:4px;
+}
+.concept-field span{ font-family:var(--display); font-weight:600; font-size:15px; }
+.concept-btn{
+  background:var(--hv-navy-deep); color:var(--hv-sand); border:none; border-radius:8px;
+  padding:12px 16px; font-family:var(--body); font-weight:600; font-size:13.5px; white-space:nowrap;
+}
+@media (max-width:560px){ .concept-btn{ grid-column:1 / -1; } }
+.concept-sync{
+  position:absolute; right:16px; bottom:-64px;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.04em; color:var(--basalt);
+}
+.concept-sync::before{ content:"●"; color:var(--hv-aurora); margin-right:6px; font-size:9px; }
+.concept-below-space{ height:64px; background:var(--fog); }
+
+.concept-dash-body{ background:var(--hv-navy-deep); padding:var(--s-3); }
+.concept-dash-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+@media (max-width:560px){ .concept-dash-grid{ grid-template-columns:1fr; } }
+.concept-stat{
+  background:rgba(244,239,228,.06); border:1px solid rgba(244,239,228,.12); border-radius:10px;
+  padding:12px 14px;
+}
+.concept-stat .k{ display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; color:var(--hv-glacier); text-transform:uppercase; }
+.concept-stat .v{ display:block; margin-top:4px; font-family:var(--display); font-weight:600; font-size:19px; color:var(--hv-sand); }
+.concept-stat .v.ok{ color:var(--hv-aurora); font-family:var(--mono); font-size:13px; }
+.concept-row{
+  margin-top:8px; grid-column:1 / -1;
+  background:rgba(244,239,228,.06); border:1px solid rgba(244,239,228,.12); border-radius:10px;
+  padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+}
+.concept-row span:first-child{ color:var(--hv-sand); font-size:14px; }
+.concept-row .rate{ font-family:var(--mono); color:var(--hv-ice); font-size:13.5px; background:rgba(79,184,224,.15); padding:4px 10px; border-radius:6px; }
+.concept-row .tag{ font-family:var(--mono); font-size:11px; color:var(--hv-aurora); border:1px solid rgba(79,217,166,.4); padding:3px 8px; border-radius:999px; }
+.concept-caption{ margin-top:var(--s-2); font-size:13.5px; color:var(--basalt); }
+.concept-caption strong{ color:var(--ink); }
+
+/* ---------- direction notes ---------- */
+.direction-list{ margin-top:var(--s-2); display:grid; gap:14px; }
+.direction-item{ display:flex; gap:14px; align-items:flex-start; }
+.direction-swatch{ flex:none; width:20px; height:20px; border-radius:6px; margin-top:2px; border:1px solid var(--line); }
+.direction-item p{ font-size:15.5px; color:var(--basalt); }
+.direction-item strong{ color:var(--ink); }
+
+/* ---------- architecture flow ---------- */
+.flow{ margin-top:var(--s-6); display:flex; align-items:stretch; gap:0; flex-wrap:wrap; }
+.flow-step{
+  flex:1 1 200px; background:#FFFFFF; border:1px solid var(--line); border-radius:var(--radius);
+  padding:var(--s-3); position:relative;
+}
+.flow-step .fk{ font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--m-text); }
+.flow-step h4{ font-family:var(--display); font-weight:600; font-size:17px; margin:6px 0 6px; }
+.flow-step p{ font-size:14px; color:var(--basalt); }
+.flow-arrow{
+  flex:none; width:40px; display:flex; align-items:center; justify-content:center;
+  color:var(--mist); font-family:var(--mono);
+}
+@media (max-width:860px){
+  .flow{ flex-direction:column; }
+  .flow-arrow{ width:auto; height:28px; transform:rotate(90deg); }
+}
+
+/* ---------- investment / timeline ---------- */
+.invest-grid{ margin-top:var(--s-6); display:grid; grid-template-columns:1fr 1fr; gap:var(--s-3); align-items:start; }
+@media (max-width:860px){ .invest-grid{ grid-template-columns:1fr; } }
+.invest-card{ background:#FFFFFF; border:1px solid var(--line); border-radius:var(--radius); padding:var(--s-4); }
+.invest-price{ font-family:var(--mono); font-size:14px; color:var(--basalt); }
+.invest-price strong{ display:block; font-family:var(--display); font-size:32px; color:var(--ink); letter-spacing:-.01em; margin-top:4px; }
+.invest-note{ margin-top:var(--s-2); font-size:14.5px; color:var(--basalt); }
+.phase-list{ display:grid; gap:0; }
+.phase{ display:grid; grid-template-columns:auto 1fr; gap:14px; padding:14px 0; border-top:1px solid var(--line); }
+.phase:first-child{ border-top:none; }
+.phase-wk{ font-family:var(--mono); font-size:12px; color:var(--m-text); white-space:nowrap; padding-top:2px; }
+.phase h4{ font-family:var(--display); font-weight:600; font-size:16px; margin-bottom:2px; }
+.phase p{ font-size:14.5px; color:var(--basalt); }
+
+/* ---------- closing CTA (dark) ---------- */
+.dark{ background:linear-gradient(180deg, var(--ink) 0%, var(--ink-soft) 100%); color:var(--fog); }
+.dark h2{ color:var(--fog); }
+.dark .lede{ color:var(--mist); }
+.closing{ padding:var(--s-16) var(--s-3); text-align:center; }
+.closing-inner{ max-width:640px; margin:0 auto; }
+.closing .lede{ margin:0 auto; }
+.btn{
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--body); font-weight:600; font-size:15px;
+  text-decoration:none; border-radius:10px;
+  padding:13px var(--s-3); transition:all .18s var(--ease);
+  border:1px solid var(--line); background:transparent; color:var(--ink);
+}
+.btn:hover{ border-color:var(--ink); }
+.btn .arrow{ transition:transform .18s var(--ease); }
+.btn:hover .arrow{ transform:translateX(3px); }
+.btn-morpho{
+  background:var(--m-grad); color:#FFFFFF; border:none;
+  box-shadow:0 8px 24px -10px rgba(31,111,224,.55);
+}
+.btn-morpho:hover{ transform:translateY(-1px); box-shadow:0 12px 28px -10px rgba(47,182,232,.6); }
+.closing-actions{ margin-top:var(--s-4); display:flex; gap:var(--s-2); justify-content:center; flex-wrap:wrap; }
+.dark .btn-ghost{ color:var(--fog); border-color:var(--line-dark); }
+.dark .btn-ghost:hover{ border-color:var(--fog); }
+
+/* ---------- footer ---------- */
+footer{ background:var(--ink); color:var(--mist); padding:var(--s-4) var(--s-3); border-top:1px solid var(--line-dark); }
+.footer-inner{
+  max-width:var(--max); margin:0 auto;
+  display:flex; justify-content:space-between; gap:var(--s-3); flex-wrap:wrap;
+  font-size:14px;
+}
+footer a{ color:var(--fog); text-decoration:none; }
+footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
+.footer-brand{ font-family:var(--display); font-weight:600; color:var(--fog); display:flex; align-items:center; gap:8px; }
+.footer-brand svg{ width:18px; height:18px; }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html#top">
+      <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true">
+        <defs>
+          <linearGradient id="mg-nav" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6E6BE8"/><stop offset=".5" stop-color="#1F6FE0"/><stop offset="1" stop-color="#2FB6E8"/>
+          </linearGradient>
+        </defs>
+        <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z" fill="url(#mg-nav)"/>
+        <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z" fill="url(#mg-nav)"/>
+        <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" fill="url(#mg-nav)" opacity=".8"/>
+        <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" fill="url(#mg-nav)" opacity=".8"/>
+        <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#0D1A26"/>
+      </svg>
+      Morpho
+    </a>
+    <span class="nav-tag">Confidential · Prepared for Hótel Húsavík</span>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ================= INTRO ================= -->
+  <section class="intro" id="top">
+    <div class="intro-inner">
+      <p class="eyebrow">Proposal · Direct Booking Platform</p>
+      <h1>Stop paying commission <span class="irid">on your own guests.</span></h1>
+      <p class="intro-sub">A booking site Hótel Húsavík actually owns — live rooms, live pricing, its own payment flow, and a straight line into godo — built by a studio based in the same town as the hotel it's designing for.</p>
+      <div class="intro-meta">
+        <span>Prepared for <strong>Hótel Húsavík</strong>, Laugarbrekka 26</span>
+        <span>By <strong>Morpho Studio</strong>, Húsavík</span>
+        <span><strong>September 2026</strong></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WHERE THINGS STAND ================= -->
+  <section class="section" id="today">
+    <div class="section-inner">
+      <p class="eyebrow">Where things stand today</p>
+      <h2>We looked at hotelhusavik.is before writing a single line of this.</h2>
+      <p class="lede">Nothing below is a guess — it's what the current site actually does, room by room.</p>
+
+      <div class="diag-grid">
+        <div class="diag reveal">
+          <span class="diag-mark">01</span>
+          <div>
+            <h3>Built on a shared template</h3>
+            <p>The site runs on SiteMinder's "Canvas" builder — the same layout, carousel, and widget hundreds of other small hotels use. It's tidy, but there's nothing in it that says <em>this is Húsavík</em>, specifically.</p>
+          </div>
+        </div>
+        <div class="diag reveal">
+          <span class="diag-mark">02</span>
+          <div>
+            <h3>Six room types, one seasonal deal</h3>
+            <p>Deluxe Sea View, Superior Mountain View, Standard, Economy, Triple, and Family — plus the Winter Deal with GeoSea, from 19,900 ISK/person/night. All static HTML: changing a price or a promo means editing the page itself.</p>
+          </div>
+        </div>
+        <div class="diag reveal">
+          <span class="diag-mark">03</span>
+          <div>
+            <h3>Booking handed off to a widget</h3>
+            <p>Arrival, departure, and guest count are collected on-site, then the guest is passed to a third-party booking engine before ever seeing a room or a price — the exact friction point where OTAs win the booking instead.</p>
+          </div>
+        </div>
+        <div class="diag reveal">
+          <span class="diag-mark">04</span>
+          <div>
+            <h3>No visible link to godo</h3>
+            <p>There's nothing on the public site that shows rates or availability coming from godo in real time — which usually means someone on staff is updating prices in two or three places by hand, and one of them eventually falls out of sync.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= THE PROPOSAL: THREE PILLARS ================= -->
+  <section class="section" id="pillars" style="background:var(--fog-deep)">
+    <div class="section-inner">
+      <p class="eyebrow">What we'd build instead</p>
+      <h2>One site, three jobs, wired together.</h2>
+      <p class="lede">This is Morpho's <a href="products.html#booking-site" style="color:var(--m-text)">Direct Booking Site</a> package, scoped specifically to Hótel Húsavík's six room types and its relationship with godo.</p>
+
+      <div class="pillars">
+        <div class="pillar reveal">
+          <span class="pillar-num">Pillar 01</span>
+          <h3>A booking engine that talks to godo</h3>
+          <p>Rates and availability are read from godo, not typed in twice — and every booking made on the site is pushed back to godo the moment it's confirmed. A room sold on the website is a room godo already knows is gone, so it can't be sold again through an OTA five minutes later.</p>
+        </div>
+        <div class="pillar reveal">
+          <span class="pillar-num">Pillar 02</span>
+          <h3>One screen for prices and promotions</h3>
+          <p>Change a nightly rate, open or close a room type, launch a seasonal offer like the Winter Deal — from a plain dashboard, published instantly. No developer, no template edit, no waiting on an agency abroad.</p>
+        </div>
+        <div class="pillar reveal">
+          <span class="pillar-num">Pillar 03</span>
+          <h3>Payment inside the booking flow</h3>
+          <p>Card capture — deposit or full stay — at the moment of booking, in ISK with EUR/USD support for international guests. A confirmed booking becomes a paid one, without ever leaving hotelhusavik.is.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DESIGN DIRECTION ================= -->
+  <section class="section hv" id="design">
+    <div class="section-inner">
+      <p class="eyebrow">The design direction</p>
+      <h2>Arctic, specific, and legible as a booking flow — not another template.</h2>
+      <p class="lede">A concept direction, not a finished design — enough to show the shift in feel and to make the booking and admin flows concrete.</p>
+
+      <div class="concept-wrap">
+        <div>
+          <div class="concept-frame reveal">
+            <div class="concept-chrome">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <span class="concept-url">hotelhusavik.is</span>
+            </div>
+            <div class="concept-hero">
+              <span class="concept-eyebrow">Diamond Circle · North Iceland</span>
+              <h4>Sleep where the whales surface.</h4>
+              <div class="concept-booking-card">
+                <div class="concept-field"><label>Arrival</label><span>12 Feb</span></div>
+                <div class="concept-field"><label>Departure</label><span>14 Feb</span></div>
+                <div class="concept-field"><label>Guests</label><span>2</span></div>
+                <button class="concept-btn" type="button" tabindex="-1">Check rooms →</button>
+              </div>
+            </div>
+            <div class="concept-below-space"></div>
+          </div>
+          <p class="concept-caption"><strong>Booking flow —</strong> three steps (dates → room → pay) instead of a redirect to an outside widget. Live rates pulled straight from godo.</p>
+        </div>
+
+        <div>
+          <div class="concept-frame reveal">
+            <div class="concept-chrome">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <span class="concept-url">admin.hotelhusavik.is</span>
+            </div>
+            <div class="concept-dash-body">
+              <div class="concept-dash-grid">
+                <div class="concept-stat"><span class="k">Direct vs. OTA</span><span class="v">62%</span></div>
+                <div class="concept-stat"><span class="k">Avg. nightly rate</span><span class="v">27,400 kr</span></div>
+                <div class="concept-stat"><span class="k">godo sync</span><span class="v ok">● Live</span></div>
+                <div class="concept-row">
+                  <span>Deluxe Double · Sea View</span>
+                  <span class="rate">34,900 ISK</span>
+                  <span class="tag">Winter Deal active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="concept-caption"><strong>Admin dashboard —</strong> illustrative numbers, not a projection. The point is the shape: a glance at occupancy and channel mix, and a rate you can edit in place.</p>
+        </div>
+      </div>
+
+      <div class="direction-list" style="margin-top:var(--s-6)">
+        <div class="direction-item reveal">
+          <span class="direction-swatch" style="background:#0B2438"></span>
+          <p><strong>Palette —</strong> arctic navy as the base, with a glacier-blue and aurora-green accent pair. Distinct from the generic template blue, and pulled from the actual place: Skjálfandi Bay, GeoSea, the northern lights.</p>
+        </div>
+        <div class="direction-item reveal">
+          <span class="direction-swatch" style="background:linear-gradient(135deg,#0B2438,#4FB8E0)"></span>
+          <p><strong>Type —</strong> a geometric sans for structure (nav, prices, forms) paired with an editorial serif, set in italic, for room names and trip stories — so a "Deluxe Double with Sea View" reads like a place, not a database row.</p>
+        </div>
+        <div class="direction-item reveal">
+          <span class="direction-swatch" style="background:#4FD9A6"></span>
+          <p><strong>Motion —</strong> a tide-style progress indicator across the three booking steps instead of a generic form wizard — a small, specific touch that a stock template can't replicate.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ARCHITECTURE ================= -->
+  <section class="section" id="architecture" style="background:var(--fog-deep)">
+    <div class="section-inner">
+      <p class="eyebrow">How it connects to godo</p>
+      <h2>No new place to keep guests, rates, or rooms in sync by hand.</h2>
+      <p class="lede">Four pieces, one direction of truth. The site never becomes a second system to maintain.</p>
+
+      <div class="flow">
+        <div class="flow-step reveal">
+          <span class="fk">Guest</span>
+          <h4>Booking site</h4>
+          <p>Guest picks dates and a room, sees the real price — pulled live from godo, not a cached copy.</p>
+        </div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-step reveal">
+          <span class="fk">Checkout</span>
+          <h4>Payment</h4>
+          <p>Card captured at booking — deposit or full stay — through a processor that supports ISK and card payments from abroad.</p>
+        </div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-step reveal">
+          <span class="fk">Confirm</span>
+          <h4>Booking engine</h4>
+          <p>Reservation is confirmed on the site and immediately written back to godo — same reservation, one record.</p>
+        </div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-step reveal">
+          <span class="fk">Sync</span>
+          <h4>godo → channels</h4>
+          <p>godo updates availability across the channel manager, so Booking.com and Expedia see the room as sold too. No double bookings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= INVESTMENT & TIMELINE ================= -->
+  <section class="section" id="investment">
+    <div class="section-inner">
+      <p class="eyebrow">Investment &amp; timeline</p>
+      <h2>A fixed starting price, and a straight ten-to-twelve week build.</h2>
+
+      <div class="invest-grid">
+        <div class="invest-card reveal">
+          <span class="invest-price">Direct Booking Site<strong>from 590,000 kr</strong></span>
+          <p class="invest-note">Covers the booking engine, the godo sync, the admin dashboard, and payment integration for the six existing room types. The final number depends on godo's API terms, the payment processor chosen, and how much of the current photography and copy can be reused versus reshot.</p>
+          <p class="invest-note">See <a href="calculator.html" style="color:var(--m-text)">the commission math for your numbers →</a> — most of this pays for itself in avoided OTA commission within the first season.</p>
+        </div>
+        <div class="invest-card reveal">
+          <div class="phase-list">
+            <div class="phase">
+              <span class="phase-wk">Wk 1–2</span>
+              <div><h4>Discovery &amp; content</h4><p>Confirm godo's API access, payment processor, room content, and photography.</p></div>
+            </div>
+            <div class="phase">
+              <span class="phase-wk">Wk 3–4</span>
+              <div><h4>Design</h4><p>Full visual design of the booking flow and admin dashboard, signed off before development starts.</p></div>
+            </div>
+            <div class="phase">
+              <span class="phase-wk">Wk 5–8</span>
+              <div><h4>Build</h4><p>Booking engine, godo integration, and the admin dashboard for prices and promotions.</p></div>
+            </div>
+            <div class="phase">
+              <span class="phase-wk">Wk 9–10</span>
+              <div><h4>Payments &amp; QA</h4><p>Payment integration, double-booking tests against godo, staff walkthrough.</p></div>
+            </div>
+            <div class="phase">
+              <span class="phase-wk">Wk 11–12</span>
+              <div><h4>Launch</h4><p>Go live, monitor the first bookings, handover and support plan.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CLOSING ================= -->
+  <section class="dark closing">
+    <div class="closing-inner">
+      <p class="eyebrow" style="justify-content:center">Next step</p>
+      <h2>A thirty-minute walkthrough, whenever it works.</h2>
+      <p class="lede">We'll walk through this proposal room by room, put real numbers behind the OTA commission math, and confirm what godo's API actually allows before anything is signed.</p>
+      <div class="closing-actions">
+        <a class="btn btn-morpho" href="mailto:hi@hellomorpho.com?subject=Hótel%20Húsavík%20—%20Direct%20Booking%20Platform">Schedule a walkthrough <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="calculator.html">See the commission math <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <defs>
+          <linearGradient id="mg-ft" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6E6BE8"/><stop offset=".5" stop-color="#1F6FE0"/><stop offset="1" stop-color="#2FB6E8"/>
+          </linearGradient>
+        </defs>
+        <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z" fill="url(#mg-ft)"/>
+        <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z" fill="url(#mg-ft)"/>
+        <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" fill="url(#mg-ft)" opacity=".8"/>
+        <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" fill="url(#mg-ft)" opacity=".8"/>
+        <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#F2F5F8"/>
+      </svg>
+      Morpho Studio
+    </span>
+    <span>Prepared exclusively for Hótel Húsavík · Confidential</span>
+    <a href="mailto:hi@hellomorpho.com">hi@hellomorpho.com</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)){
+    els.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(el){ io.observe(el); });
+  }
+})();
+</script>
+
+</body>
+</html>
