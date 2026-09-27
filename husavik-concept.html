@@ -1,0 +1,2228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hótel Húsavík — Concept homepage (design review) · prepared by Morpho Studio</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-deep: #071523;
+  --navy:      #0B2438;
+  --navy-soft: #123351;
+  --ice:       #DCEEF6;
+  --glacier:   #4FB8E0;
+  --glacier-dark: #1D7EA6;
+  --aurora:    #4FD9A6;
+  --sand:      #F4EFE4;
+  --sand-deep: #EAE3D3;
+  --ink:       #0B2438;
+  --mist:      #4E5F72;
+  --danger:    #A8332B;
+  --line:      rgba(11,36,56,.12);
+
+  --serif: "Fraunces", Georgia, serif;
+  --sans:  "Instrument Sans", system-ui, -apple-system, sans-serif;
+  --mono:  "Spline Sans Mono", ui-monospace, "SF Mono", monospace;
+
+  --s-1:8px; --s-2:16px; --s-3:24px; --s-4:32px; --s-6:48px; --s-8:64px; --s-12:96px;
+  --max:1180px;
+  --ease: cubic-bezier(.22,.9,.3,1);
+  --anchor-offset: 84px;
+}
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+body{
+  font-family:var(--sans); font-size:17px; line-height:1.6;
+  color:var(--ink); background:var(--sand);
+  -webkit-font-smoothing:antialiased;
+}
+img{ max-width:100%; display:block; }
+a{ color:inherit; }
+::selection{ background:var(--aurora); color:var(--navy-deep); }
+button{ font:inherit; }
+:focus-visible{ outline:2px solid var(--glacier); outline-offset:3px; border-radius:4px; }
+
+.skip-link{
+  position:absolute; left:12px; top:-60px; z-index:200;
+  background:var(--aurora); color:var(--navy-deep); font-weight:600; font-size:13px;
+  padding:10px 16px; border-radius:8px; text-decoration:none; transition:top .18s var(--ease);
+}
+.skip-link:focus{ top:48px; }
+
+/* ---------- demo banner ---------- */
+/* In normal flow (not fixed) on purpose: a fixed banner of variable height
+   (its text wraps to 2-3 lines on narrow phones) would sit at a higher
+   z-index than the sticky nav below it and silently block taps on the
+   hamburger button. Letting it scroll away with the page removes that
+   whole class of bug and keeps the offset math for the sticky nav simple. */
+.demo-banner{
+  background:var(--navy-deep); color:var(--ice);
+  font-family:var(--mono); font-size:12px; letter-spacing:.02em;
+  padding:10px var(--s-2); text-align:center;
+}
+.demo-banner a{ color:var(--aurora); text-decoration:underline; text-underline-offset:2px; }
+.demo-banner strong{ color:#FFFFFF; }
+
+/* ---------- nav ---------- */
+.nav{
+  position:sticky; top:0; z-index:80;
+  background:var(--navy-deep);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.nav-inner{
+  max-width:var(--max); margin:0 auto; padding:16px var(--s-3);
+  display:flex; align-items:center; justify-content:space-between; gap:var(--s-3);
+  position:relative;
+}
+.wordmark{
+  font-family:var(--serif); font-weight:600; font-size:20px; letter-spacing:.01em;
+  color:#FFFFFF; text-decoration:none; white-space:nowrap;
+}
+.nav-links{ display:flex; gap:26px; align-items:center; list-style:none; }
+.nav-links a{ color:var(--ice); text-decoration:none; font-size:14px; letter-spacing:.02em; opacity:.85; transition:opacity .18s var(--ease); }
+.nav-links a:hover, .nav-links a:focus-visible{ opacity:1; }
+.nav-phone{ font-family:var(--mono); font-size:13px; color:var(--ice); text-decoration:none; opacity:.8; }
+.nav-cta{
+  font-family:var(--sans); font-weight:600; font-size:13.5px;
+  background:var(--aurora); color:var(--navy-deep) !important;
+  padding:11px 18px; border-radius:999px; text-decoration:none; white-space:nowrap;
+  min-height:44px; display:inline-flex; align-items:center;
+}
+.nav-toggle{
+  display:none; background:none; border:none; color:#FFFFFF; cursor:pointer;
+  width:44px; height:44px; align-items:center; justify-content:center; border-radius:8px;
+}
+.nav-toggle:hover{ background:rgba(255,255,255,.08); }
+.nav-toggle svg{ display:block; }
+@media (max-width:900px){
+  .nav-toggle{ display:flex; }
+  .nav-links{
+    display:none; position:absolute; top:100%; left:0; right:0;
+    background:var(--navy-deep); flex-direction:column; align-items:stretch; gap:2px;
+    padding:8px var(--s-3) var(--s-2); border-top:1px solid rgba(255,255,255,.08);
+    box-shadow:0 16px 30px -14px rgba(0,0,0,.5);
+  }
+  .nav-links.open{ display:flex; }
+  .nav-links li{ width:100%; }
+  .nav-links a{ display:block; padding:12px 4px; font-size:15.5px; opacity:1; border-bottom:1px solid rgba(255,255,255,.06); }
+  .nav-cta{ justify-content:center; margin-top:8px; }
+}
+
+/* ---------- motion ---------- */
+.reveal{ opacity:0; transform:translateY(16px); transition:opacity .6s var(--ease), transform .6s var(--ease); }
+.reveal.in{ opacity:1; transform:none; }
+@media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+
+@keyframes kenburns{ from{ transform:scale(1); } to{ transform:scale(1.09); } }
+@keyframes fadeUp{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+.hero-anim{ animation:fadeUp .8s var(--ease) both; }
+@media (prefers-reduced-motion: reduce){ .hero-anim{ animation:none; } }
+
+/* ---------- hero ---------- */
+.hero{ position:relative; color:#FFFFFF; overflow:hidden; }
+.hero-bg{
+  position:absolute; inset:0; z-index:0;
+  background-image:
+    linear-gradient(180deg, rgba(7,21,35,.55) 0%, rgba(7,21,35,.72) 60%, var(--navy-deep) 100%),
+    url("https://webbox.imgix.net/images/uaekzdvhoxtrqfbo/3a11755d-81fc-4479-9712-df9b4957dda0.jpg?auto=format,compress&fit=crop&crop=entropy&w=1800&h=1000");
+  background-size:cover; background-position:center;
+  animation:kenburns 22s ease-out forwards;
+}
+@media (prefers-reduced-motion: reduce){ .hero-bg{ animation:none; } }
+.hero-inner{
+  position:relative; z-index:1; max-width:var(--max); margin:0 auto;
+  padding:var(--s-12) var(--s-3) calc(var(--s-12) + 130px);
+}
+.hero-eyebrow{
+  font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--glacier); margin-bottom:var(--s-3); display:block;
+}
+.hero h1{
+  font-family:var(--serif); font-style:italic; font-weight:500;
+  font-size:clamp(38px, 6vw, 66px); line-height:1.06; max-width:14ch; letter-spacing:-.01em;
+}
+.hero-sub{ margin-top:var(--s-3); max-width:52ch; font-size:18.5px; color:var(--ice); opacity:.92; }
+.hero-badge{
+  margin-top:var(--s-3); display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap;
+  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18); backdrop-filter:blur(6px);
+  padding:9px 16px; border-radius:999px; font-size:13.5px; color:var(--ice);
+}
+.hero-badge::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--aurora); flex:none; box-shadow:0 0 0 3px rgba(79,217,166,.28); }
+.hero-badge em{ font-style:normal; font-family:var(--mono); font-size:11px; color:var(--mist); background:rgba(7,21,35,.4); padding:2px 8px; border-radius:999px; }
+
+/* floating booking card */
+.booking-card{ position:relative; z-index:2; max-width:var(--max); margin:-92px auto 0; padding:0 var(--s-3); scroll-margin-top:var(--anchor-offset); }
+.booking-inner{
+  background:var(--sand); border-radius:16px; padding:var(--s-3);
+  box-shadow:0 24px 60px -20px rgba(7,21,35,.5);
+}
+.booking-inner + .booking-inner{ margin-top:0; }
+.bk-search-grid{ display:grid; grid-template-columns:1fr 1fr 1fr 1fr auto; gap:var(--s-2); align-items:end; }
+@media (max-width:980px){ .bk-search-grid{ grid-template-columns:1fr 1fr; } }
+.bk-dates-field{ position:relative; grid-column:span 2; }
+.bk-dates-trigger{
+  width:100%; display:flex; align-items:center; justify-content:space-between; gap:8px;
+  border:1px solid var(--line); border-radius:8px; padding:11px 12px; min-height:44px;
+  font-family:var(--sans); font-size:15px; color:var(--ink); background:#FFFFFF; cursor:pointer; text-align:left;
+}
+.bk-dates-trigger:focus-visible, .bk-dates-trigger:focus{ outline:2px solid var(--glacier); outline-offset:1px; }
+.bk-dates-trigger-nights{ font-family:var(--mono); font-size:12px; color:var(--mist); white-space:nowrap; }
+.bk-cal-popover{
+  position:absolute; top:calc(100% + 8px); left:0; z-index:40; width:328px; max-width:calc(100vw - 32px);
+  background:#FFFFFF; border:1px solid var(--line); border-radius:12px;
+  box-shadow:0 24px 48px -16px rgba(7,21,35,.35); padding:var(--s-2);
+}
+.bk-cal-popover[hidden]{ display:none; }
+.bk-cal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.bk-cal-month{ font-family:var(--serif); font-size:17px; color:var(--navy-deep); }
+.bk-cal-nav button{
+  width:30px; height:30px; border-radius:50%; border:1px solid var(--line); background:#FFFFFF;
+  color:var(--navy); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px;
+}
+.bk-cal-nav button:hover{ background:var(--sand); }
+.bk-cal-weekdays, .bk-cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+.bk-cal-weekdays span{ font-family:var(--mono); font-size:10px; text-transform:uppercase; color:var(--mist); text-align:center; padding:4px 0; }
+.bk-cal-day{
+  border:none; background:none; padding:0; height:34px; border-radius:8px; font-family:var(--sans); font-size:13px;
+  color:var(--ink); cursor:pointer;
+}
+.bk-cal-day:hover:not(:disabled){ background:var(--sand); }
+.bk-cal-day.in-range{ background:rgba(79,184,224,.16); border-radius:0; }
+.bk-cal-day.range-start, .bk-cal-day.range-end{ background:var(--navy-deep); color:#FFFFFF; }
+.bk-cal-day.range-start{ border-radius:8px 0 0 8px; }
+.bk-cal-day.range-end{ border-radius:0 8px 8px 0; }
+.bk-cal-day.range-start.range-end{ border-radius:8px; }
+.bk-cal-footer{ display:flex; align-items:center; justify-content:space-between; margin-top:10px; padding-top:10px; border-top:1px solid var(--line); }
+.bk-cal-nights{ font-family:var(--mono); font-size:12px; color:var(--navy); }
+.bk-cal-done{ border:none; background:var(--navy-deep); color:#FFFFFF; font-family:var(--sans); font-weight:600; font-size:13px; padding:8px 16px; border-radius:8px; cursor:pointer; }
+.bk-cal-done:hover{ background:var(--navy); }
+.bk-form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:var(--s-2); align-items:end; }
+@media (max-width:980px){ .bk-form-grid{ grid-template-columns:1fr; } }
+.bk-search-grid[hidden], .bk-form-grid[hidden], .bk-confirm[hidden]{ display:none; }
+.bk-field-full{ grid-column:1 / -1; }
+.bk-step-head{
+  grid-column:1 / -1; font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--mist);
+}
+.bk-step-actions{
+  grid-column:1 / -1; display:flex; align-items:center; justify-content:space-between; gap:var(--s-2);
+  flex-wrap:wrap; margin-top:4px;
+}
+.bk-pay-note{ grid-column:1 / -1; font-family:var(--sans); font-size:12.5px; color:var(--mist); line-height:1.5; }
+.bk-confirm{ text-align:center; padding-top:calc(var(--s-3) + 8px); padding-bottom:calc(var(--s-3) + 8px); }
+.bk-confirm-icon{
+  width:48px; height:48px; border-radius:50%; background:rgba(79,217,166,.16); color:var(--navy-deep);
+  display:flex; align-items:center; justify-content:center; font-size:22px; margin:0 auto 14px;
+  border:1px solid rgba(79,217,166,.4);
+}
+.bk-confirm h3{ font-family:var(--serif); font-size:22px; color:var(--navy-deep); margin:0 0 8px; }
+.bk-confirm p{ font-family:var(--sans); font-size:14px; color:var(--ink); margin:0 0 6px; }
+.bk-confirm-ref strong{ font-family:var(--mono); color:var(--navy-deep); }
+.bk-confirm-note{ color:var(--mist) !important; font-size:12.5px !important; margin-top:10px !important; }
+.bk-confirm .bk-btn-ghost{ margin-top:14px; }
+.bk-field label{
+  display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--mist); margin-bottom:6px;
+}
+.bk-field input, .bk-field select{
+  width:100%; border:1px solid var(--line); border-radius:8px; padding:11px 12px; min-height:44px;
+  font-family:var(--sans); font-size:15px; color:var(--ink); background:#FFFFFF;
+}
+.bk-field input:focus, .bk-field select:focus{ outline:2px solid var(--glacier); outline-offset:1px; }
+.bk-cta{
+  background:var(--navy-deep); color:#FFFFFF; border:none; border-radius:8px; min-height:44px;
+  padding:13px 22px; font-family:var(--sans); font-weight:600; font-size:14.5px; white-space:nowrap; cursor:pointer;
+  transition:background .18s var(--ease);
+}
+.bk-cta:hover{ background:var(--navy); }
+.bk-cta:disabled{ opacity:.7; cursor:progress; }
+@media (max-width:980px){ .bk-cta{ grid-column:1 / -1; } }
+.bk-preview{
+  grid-column:1 / -1; margin-top:4px; font-family:var(--mono); font-size:13px; color:var(--navy);
+  background:rgba(79,184,224,.12); border:1px solid rgba(79,184,224,.25); border-radius:8px; padding:9px 14px;
+}
+.bk-preview strong{ color:var(--navy-deep); }
+.bk-selected{
+  grid-column:1 / -1; display:flex; align-items:center; justify-content:space-between; gap:10px;
+  background:rgba(79,217,166,.14); border:1px solid rgba(79,217,166,.35); color:var(--navy-deep);
+  border-radius:8px; padding:9px 14px; font-family:var(--sans); font-size:13.5px;
+}
+.bk-selected[hidden]{ display:none; }
+.bk-selected button{
+  background:none; border:none; color:var(--navy); font-size:17px; line-height:1; cursor:pointer;
+  width:28px; height:28px; min-height:0; border-radius:50%; flex:none;
+}
+.bk-selected button:hover{ background:rgba(11,36,56,.08); }
+.bk-status{
+  grid-column:1 / -1; margin-top:4px; font-family:var(--sans); font-size:13.5px; border-radius:8px; padding:9px 14px;
+}
+.bk-status.success{ background:rgba(79,217,166,.14); border:1px solid rgba(79,217,166,.35); color:var(--navy-deep); }
+.bk-status.error{ background:rgba(168,51,43,.1); border:1px solid rgba(168,51,43,.3); color:var(--danger); }
+.bk-sync{
+  grid-column:1 / -1; margin-top:2px; font-family:var(--mono); font-size:11px; color:var(--mist);
+  display:flex; align-items:center; gap:6px;
+}
+.bk-sync::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--aurora); box-shadow:0 0 0 3px rgba(79,217,166,.25); flex:none; }
+
+/* discount code row */
+.bk-discount{ grid-column:1 / -1; display:flex; align-items:end; gap:var(--s-2); flex-wrap:wrap; }
+.bk-discount-field{ flex:1 1 200px; }
+.bk-discount-apply, .bk-btn-ghost{
+  border:1px solid var(--navy-deep); background:none; color:var(--navy-deep); border-radius:8px; min-height:44px;
+  padding:0 20px; font-family:var(--sans); font-weight:600; font-size:13.5px; white-space:nowrap; cursor:pointer;
+  transition:background .18s var(--ease), color .18s var(--ease);
+}
+.bk-discount-apply:hover, .bk-btn-ghost:hover{ background:var(--navy-deep); color:#FFFFFF; }
+.bk-discount-apply.is-active{ background:var(--navy-deep); color:#FFFFFF; border-color:var(--navy-deep); }
+.bk-discount-msg{
+  flex:1 1 220px; display:flex; align-items:center; justify-content:space-between; gap:8px;
+  font-family:var(--sans); font-size:13px; padding:9px 14px; border-radius:8px;
+}
+.bk-discount-msg[hidden]{ display:none; }
+.bk-discount-msg.success{ background:rgba(79,217,166,.14); border:1px solid rgba(79,217,166,.35); color:var(--navy-deep); }
+.bk-discount-msg.error{ background:rgba(168,51,43,.1); border:1px solid rgba(168,51,43,.3); color:var(--danger); }
+.bk-discount-msg button{ background:none; border:none; color:inherit; font-size:16px; line-height:1; cursor:pointer; padding:0; flex:none; }
+.bk-preview s{ color:var(--mist); font-weight:400; margin-right:4px; }
+.bk-discount-applied{ color:var(--navy-deep); font-weight:600; }
+
+/* ---------- sticky mini booking bar ---------- */
+.sticky-bar{
+  position:fixed; left:0; right:0; bottom:0; z-index:90;
+  background:var(--navy-deep); color:#FFFFFF; border-top:1px solid rgba(255,255,255,.1);
+  transform:translateY(100%); transition:transform .3s var(--ease);
+  box-shadow:0 -12px 30px -14px rgba(0,0,0,.4);
+}
+.sticky-bar.show{ transform:translateY(0); }
+@media (prefers-reduced-motion: reduce){ .sticky-bar{ transition:none; } }
+.sticky-inner{
+  max-width:var(--max); margin:0 auto; padding:12px var(--s-3);
+  display:flex; align-items:center; justify-content:space-between; gap:var(--s-2); flex-wrap:wrap;
+}
+.sticky-dates{ font-size:13.5px; color:var(--ice); }
+.sticky-price{ font-family:var(--mono); font-size:13px; color:var(--aurora); }
+.sticky-cta{
+  background:var(--aurora); color:var(--navy-deep); font-weight:600; font-size:13.5px;
+  padding:10px 18px; border-radius:999px; text-decoration:none; white-space:nowrap; min-height:40px; display:inline-flex; align-items:center;
+}
+@media (max-width:640px){ .sticky-price{ display:none; } }
+
+/* ---------- three-step trust band ---------- */
+.trust{ background:var(--sand); padding:var(--s-8) var(--s-3) var(--s-6); }
+.trust-inner{ max-width:var(--max); margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s-3); }
+@media (max-width:760px){ .trust-inner{ grid-template-columns:1fr; } }
+.trust-step{ display:flex; gap:14px; align-items:flex-start; }
+.trust-num{
+  flex:none; width:34px; height:34px; border-radius:50%; background:var(--navy-deep); color:var(--aurora);
+  display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:13px;
+}
+.trust-step h4{ font-family:var(--serif); font-weight:600; font-size:17px; margin-bottom:3px; }
+.trust-step p{ font-size:14.5px; color:var(--mist); }
+
+/* ---------- section scaffolding ---------- */
+.section{ padding:var(--s-8) var(--s-3); scroll-margin-top:var(--anchor-offset); }
+.section-inner{ max-width:var(--max); margin:0 auto; }
+.sec-head{ max-width:60ch; margin-bottom:var(--s-4); }
+.sec-head.wide{ max-width:none; display:flex; align-items:flex-end; justify-content:space-between; gap:var(--s-3); flex-wrap:wrap; }
+.eyebrow{
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--glacier-dark); margin-bottom:10px; display:block;
+}
+h2{
+  font-family:var(--serif); font-weight:600; font-size:clamp(26px,3.6vw,38px); letter-spacing:-.01em; line-height:1.16;
+}
+.sec-sub{ margin-top:10px; color:var(--mist); font-size:16px; }
+
+/* ---------- currency toggle ---------- */
+.currency-toggle{ display:inline-flex; gap:6px; background:#FFFFFF; border:1px solid var(--line); border-radius:999px; padding:4px; }
+.cur-btn{
+  border:none; background:none; font-family:var(--mono); font-size:12.5px; color:var(--mist);
+  padding:8px 14px; border-radius:999px; cursor:pointer; transition:all .18s var(--ease); min-height:36px;
+}
+.cur-btn.active{ background:var(--navy-deep); color:#FFFFFF; }
+.cur-note{ display:block; margin-top:6px; font-family:var(--mono); font-size:10.5px; color:var(--mist); text-align:right; }
+
+/* ---------- filter chips ---------- */
+.filter-chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:var(--s-3); }
+.chip{
+  font-family:var(--mono); font-size:12px; letter-spacing:.03em; padding:9px 16px; min-height:38px;
+  border-radius:999px; border:1px solid var(--line); background:#FFFFFF; cursor:pointer; color:var(--mist);
+  transition:all .18s var(--ease);
+}
+.chip:hover{ border-color:var(--glacier); color:var(--navy-deep); }
+.chip.active{ background:var(--navy-deep); color:#FFFFFF; border-color:var(--navy-deep); }
+
+/* ---------- rooms ---------- */
+.room-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s-3); margin-top:var(--s-4); }
+@media (max-width:980px){ .room-grid{ grid-template-columns:1fr 1fr; } }
+@media (max-width:640px){ .room-grid{ grid-template-columns:1fr; } }
+.room-card{
+  background:#FFFFFF; border-radius:14px; overflow:hidden; border:1px solid var(--line);
+  transition:transform .2s var(--ease), box-shadow .2s var(--ease), opacity .2s var(--ease);
+}
+.room-card:hover{ transform:translateY(-3px); box-shadow:0 16px 36px -18px rgba(11,36,56,.3); }
+@media (prefers-reduced-motion: reduce){ .room-card:hover{ transform:none; } }
+.room-card.hide{ display:none; }
+.room-img{ aspect-ratio:4/3; overflow:hidden; position:relative; }
+.room-img img{ width:100%; height:100%; object-fit:cover; transition:transform .35s var(--ease); }
+.room-card:hover .room-img img{ transform:scale(1.05); }
+.room-avail{
+  position:absolute; top:10px; left:10px; background:rgba(7,21,35,.78); color:var(--ice);
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.03em; padding:5px 10px; border-radius:999px;
+}
+.room-body{ padding:var(--s-2) var(--s-2) var(--s-3); }
+.room-body h3{ font-family:var(--serif); font-weight:600; font-style:italic; font-size:19px; margin-bottom:6px; }
+.room-body p{ font-size:14px; color:var(--mist); min-height:2.6em; }
+.room-price-row{ margin-top:14px; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+.room-ota{ font-family:var(--mono); font-size:12.5px; color:var(--mist); text-decoration:line-through; }
+.room-direct{ font-family:var(--mono); font-size:15px; color:var(--navy-deep); font-weight:600; }
+.save-badge{
+  font-family:var(--mono); font-size:10.5px; color:var(--aurora); background:rgba(79,217,166,.12);
+  border:1px solid rgba(79,217,166,.35); padding:3px 8px; border-radius:999px; white-space:nowrap;
+}
+.room-foot{ margin-top:12px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.room-foot small{ font-size:10.5px; color:var(--mist); letter-spacing:.02em; }
+.room-link{
+  font-family:var(--sans); font-weight:600; font-size:13.5px; color:var(--navy);
+  text-decoration:none; border-bottom:1px solid var(--navy); padding-bottom:1px;
+}
+
+/* ---------- impact strip ---------- */
+.impact{ background:var(--navy); color:var(--ice); padding:var(--s-6) var(--s-3); }
+.impact-inner{ max-width:var(--max); margin:0 auto; }
+.impact-head{ max-width:64ch; }
+.impact-head h3{ font-family:var(--serif); font-weight:600; font-style:italic; font-size:clamp(21px,2.6vw,27px); color:#FFFFFF; }
+.impact-head p{ margin-top:8px; color:var(--ice); opacity:.85; font-size:15px; }
+.impact-grid{ margin-top:var(--s-4); display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s-3); }
+@media (max-width:760px){ .impact-grid{ grid-template-columns:1fr; } }
+.impact-card{ background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:var(--s-3); }
+.impact-card .v{ font-family:var(--serif); font-weight:600; font-size:30px; color:var(--aurora); }
+.impact-card .k{ margin-top:4px; font-size:13.5px; color:var(--ice); opacity:.85; }
+.impact-link{ margin-top:var(--s-3); display:inline-block; font-family:var(--mono); font-size:12.5px; color:var(--glacier); text-decoration:underline; text-underline-offset:3px; }
+
+/* ---------- promotions ---------- */
+.promo{ background:var(--navy-deep); color:var(--ice); }
+.promo-inner{
+  max-width:var(--max); margin:0 auto; padding:var(--s-8) var(--s-3) var(--s-4);
+  display:grid; grid-template-columns:1fr 1fr; gap:var(--s-4); align-items:center;
+}
+@media (max-width:820px){ .promo-inner{ grid-template-columns:1fr; } }
+.promo-img{ border-radius:14px; overflow:hidden; aspect-ratio:4/3; }
+.promo-img img{ width:100%; height:100%; object-fit:cover; }
+.promo-text .eyebrow{ color:var(--aurora); }
+.promo-text h2{ color:#FFFFFF; }
+.promo-text p{ margin-top:var(--s-2); color:var(--ice); opacity:.9; font-size:15.5px; max-width:52ch; }
+.promo-price{ margin-top:var(--s-3); font-family:var(--mono); font-size:14px; color:var(--aurora); display:block; }
+.promo-price strong{ display:block; font-family:var(--serif); font-size:26px; color:#FFFFFF; margin-top:2px; }
+.promo-cta{
+  margin-top:var(--s-3); display:inline-flex; align-items:center; gap:8px; min-height:44px;
+  background:var(--aurora); color:var(--navy-deep); font-weight:600; font-size:14px;
+  padding:12px 20px; border-radius:999px; text-decoration:none;
+}
+.promo-more{ max-width:var(--max); margin:0 auto; padding:0 var(--s-3) var(--s-8); display:grid; grid-template-columns:1fr 1fr; gap:var(--s-3); }
+@media (max-width:820px){ .promo-more{ grid-template-columns:1fr; } }
+.promo-mini{ background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:var(--s-3); display:flex; justify-content:space-between; align-items:flex-start; gap:var(--s-2); }
+.promo-mini h4{ font-family:var(--serif); font-weight:600; font-style:italic; font-size:17px; color:#FFFFFF; }
+.promo-mini p{ margin-top:6px; font-size:13.5px; color:var(--ice); opacity:.8; max-width:34ch; }
+.promo-mini .tag{ font-family:var(--mono); font-size:10.5px; padding:4px 9px; border-radius:999px; white-space:nowrap; flex:none; }
+.promo-mini .tag.on{ color:var(--aurora); border:1px solid rgba(79,217,166,.4); }
+.promo-mini .tag.off{ color:var(--mist); border:1px solid rgba(255,255,255,.15); }
+
+/* ---------- attractions teaser ---------- */
+.attr-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s-3); margin-top:var(--s-4); }
+@media (max-width:820px){ .attr-grid{ grid-template-columns:1fr; } }
+.attr-card{ border-radius:14px; overflow:hidden; position:relative; aspect-ratio:3/4; }
+.attr-card img{ width:100%; height:100%; object-fit:cover; transition:transform .35s var(--ease); }
+.attr-card:hover img{ transform:scale(1.06); }
+@media (prefers-reduced-motion: reduce){ .attr-card:hover img{ transform:none; } }
+.attr-overlay{
+  position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, rgba(7,21,35,.88) 100%);
+  display:flex; align-items:flex-end; padding:var(--s-2);
+}
+.attr-overlay h4{ font-family:var(--serif); font-style:italic; font-weight:500; color:#FFFFFF; font-size:19px; }
+.attr-overlay span{ display:block; font-family:var(--mono); font-size:11px; color:var(--aurora); margin-top:4px; }
+
+/* ---------- about ---------- */
+.about{ display:grid; grid-template-columns:1fr 1fr; gap:var(--s-4); align-items:center; }
+@media (max-width:820px){ .about{ grid-template-columns:1fr; } }
+.about-img{ border-radius:14px; overflow:hidden; aspect-ratio:4/3; }
+.about-img img{ width:100%; height:100%; object-fit:cover; }
+.about-text p{ margin-top:var(--s-2); color:var(--mist); font-size:15.5px; }
+.about-text p + p{ margin-top:10px; }
+
+/* ---------- staff/admin preview ---------- */
+.staff{ background:var(--navy); color:var(--ice); scroll-margin-top:var(--anchor-offset); }
+.staff-inner{ max-width:var(--max); margin:0 auto; padding:var(--s-8) var(--s-3); }
+.staff-tag{
+  font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--glacier); border:1px solid rgba(79,184,224,.4); border-radius:999px;
+  padding:6px 14px; display:inline-block; margin-bottom:var(--s-2);
+}
+.staff h2{ color:#FFFFFF; }
+.staff-sub{ margin-top:8px; color:var(--ice); opacity:.85; max-width:56ch; font-size:15.5px; }
+.dash{
+  margin-top:var(--s-4); background:var(--navy-deep); border:1px solid rgba(255,255,255,.08);
+  border-radius:14px; padding:var(--s-3);
+}
+.dash-tabs{ display:flex; flex-wrap:wrap; gap:4px; background:rgba(255,255,255,.05); border-radius:10px; padding:4px; margin-bottom:var(--s-3); width:fit-content; max-width:100%; }
+.dash-tab{
+  border:none; background:none; color:var(--ice); opacity:.7; font-family:var(--sans); font-weight:600;
+  font-size:13.5px; padding:9px 16px; min-height:40px; border-radius:8px; cursor:pointer; transition:all .18s var(--ease);
+}
+.dash-tab.active{ background:var(--navy-soft); opacity:1; color:#FFFFFF; }
+.dash-panel[hidden]{ display:none; }
+.dash-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+@media (max-width:640px){ .dash-grid{ grid-template-columns:1fr; } }
+.dash-stat{ background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:14px 16px; }
+.dash-stat .k{ display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--glacier); }
+.dash-stat .v{ display:block; margin-top:5px; font-family:var(--serif); font-weight:600; font-size:20px; color:#FFFFFF; }
+.dash-stat .v.ok{ color:var(--aurora); font-family:var(--mono); font-size:14px; }
+.dash-row{
+  margin-top:10px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:14px 16px;
+}
+.dash-row .name{ color:#FFFFFF; font-size:14.5px; }
+.dash-row .rate{ font-family:var(--mono); color:var(--ice); font-size:13px; background:rgba(79,184,224,.15); padding:4px 10px; border-radius:6px; }
+.dash-row .tag{ font-family:var(--mono); font-size:10.5px; color:var(--aurora); border:1px solid rgba(79,217,166,.4); padding:3px 8px; border-radius:999px; }
+.spark{ display:flex; align-items:flex-end; gap:14px; height:78px; margin-top:var(--s-3); padding:0 4px; }
+.spark-pair{ display:flex; flex-direction:column; align-items:center; gap:6px; flex:1; }
+.spark-bars{ display:flex; align-items:flex-end; gap:3px; height:52px; }
+.spark-bar{ width:9px; border-radius:3px 3px 0 0; }
+.spark-bar.ota{ background:rgba(255,255,255,.18); }
+.spark-bar.direct{ background:var(--aurora); }
+.spark-label{ font-family:var(--mono); font-size:9.5px; color:var(--mist); text-transform:uppercase; }
+.spark-legend{ display:flex; gap:16px; margin-top:10px; font-family:var(--mono); font-size:11px; color:var(--mist); }
+.spark-legend span{ display:inline-flex; align-items:center; gap:6px; }
+.spark-legend i{ width:8px; height:8px; border-radius:2px; display:inline-block; }
+.spark-legend i.direct{ background:var(--aurora); }
+.spark-legend i.ota{ background:rgba(255,255,255,.3); }
+
+.promo-toggle-row{
+  display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:14px 16px; margin-top:10px;
+}
+.promo-toggle-row:first-child{ margin-top:0; }
+.promo-toggle-row .name{ color:#FFFFFF; font-size:14.5px; }
+.promo-toggle-row .desc{ display:block; margin-top:2px; font-size:12.5px; color:var(--mist); }
+.tswitch{ position:relative; display:inline-flex; width:40px; height:23px; flex:none; }
+.tswitch input{ position:absolute; opacity:0; width:100%; height:100%; margin:0; cursor:pointer; }
+.tswitch .slider{ position:absolute; inset:0; background:rgba(255,255,255,.18); border-radius:999px; transition:background .2s var(--ease); pointer-events:none; }
+.tswitch .slider::before{ content:""; position:absolute; width:17px; height:17px; left:3px; top:3px; background:#FFFFFF; border-radius:50%; transition:transform .2s var(--ease); }
+.tswitch input:checked + .slider{ background:var(--aurora); }
+.tswitch input:checked + .slider::before{ transform:translateX(17px); }
+.tswitch input:focus-visible + .slider{ outline:2px solid var(--glacier); outline-offset:2px; }
+
+.pay-chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.pay-chip{ font-family:var(--mono); font-size:11.5px; color:var(--ice); border:1px solid rgba(255,255,255,.18); padding:7px 13px; border-radius:999px; background:rgba(255,255,255,.04); }
+
+.staff-note{ margin-top:var(--s-3); font-size:13px; color:var(--mist); }
+
+/* ---------- rate calendar (date-based pricing) ---------- */
+.rate-cal{ margin-top:var(--s-3); }
+.rate-cal-head{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
+.rate-cal-title{ font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--glacier); }
+.rate-cal-hint{ font-size:12px; color:var(--mist); }
+.rate-cal-grid{ display:grid; grid-template-columns:repeat(10,1fr); gap:6px; }
+@media (max-width:900px){ .rate-cal-grid{ grid-template-columns:repeat(5,1fr); } }
+@media (max-width:520px){ .rate-cal-grid{ grid-template-columns:repeat(2,1fr); } }
+.rate-cal-day{
+  position:relative; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:10px;
+  padding:10px 6px; text-align:center; transition:background .2s var(--ease), border-color .2s var(--ease);
+}
+.rate-cal-day.promo{ border-color:rgba(79,217,166,.4); }
+.rate-cal-day.promo::before{
+  content:"Promo"; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
+  font-family:var(--mono); font-size:8.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--navy-deep);
+  background:var(--aurora); padding:2px 6px; border-radius:999px; white-space:nowrap;
+}
+.rate-cal-day.rcd-updated{ background:rgba(79,217,166,.16); border-color:rgba(79,217,166,.45); }
+.rcd-dow{ display:block; font-family:var(--mono); font-size:9.5px; text-transform:uppercase; color:var(--mist); }
+.rcd-date{ display:block; font-family:var(--sans); font-size:12.5px; color:var(--ice); margin-top:2px; font-weight:600; }
+.rcd-rate{
+  display:block; width:100%; margin-top:8px; border:none; background:none; color:#FFFFFF; cursor:pointer;
+  font-family:var(--mono); font-size:11.5px; padding:5px 2px; border-radius:6px; transition:background .18s var(--ease);
+}
+.rcd-rate:hover{ background:rgba(255,255,255,.1); }
+.rcd-input{
+  width:100%; margin-top:8px; border:1px solid var(--glacier); border-radius:6px; background:var(--navy);
+  color:#FFFFFF; font-family:var(--mono); font-size:11.5px; padding:5px 4px; text-align:center;
+}
+.rcd-input[hidden]{ display:none; }
+.rate-cal-note{ margin-top:10px; font-family:var(--sans); font-size:12.5px; color:var(--mist); min-height:1.2em; }
+
+/* ---------- discount codes admin table ---------- */
+.code-table{ margin-top:2px; }
+.code-row{ display:grid; grid-template-columns:96px 1.2fr 1fr 56px; gap:12px; align-items:center; padding:12px 14px; border-radius:10px; margin-top:8px; }
+.code-row-head{
+  font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--mist);
+  padding:0 14px; margin-top:0;
+}
+.code-row:not(.code-row-head){ background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); }
+.code-name{ font-family:var(--mono); font-weight:700; color:#FFFFFF; font-size:13.5px; letter-spacing:.03em; }
+.code-desc{ font-size:13.5px; color:var(--ice); }
+.code-meta{ display:flex; gap:14px; flex-wrap:wrap; }
+.code-uses{ font-family:var(--mono); font-size:12px; color:var(--mist); }
+.code-expires{ font-size:12.5px; color:var(--mist); }
+.code-toggle{ display:flex; justify-content:flex-end; }
+.code-row.is-inactive .code-name, .code-row.is-inactive .code-desc{ opacity:.45; }
+@media (max-width:640px){
+  .code-row-head{ display:none; }
+  .code-row{ grid-template-columns:1fr auto; grid-template-areas:"name toggle" "desc desc" "meta meta"; row-gap:6px; }
+  .code-name{ grid-area:name; }
+  .code-toggle{ grid-area:toggle; }
+  .code-desc{ grid-area:desc; }
+  .code-meta{ grid-area:meta; }
+}
+.code-form{
+  display:flex; gap:12px; flex-wrap:wrap; align-items:end; margin-top:var(--s-3); padding-top:var(--s-3);
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.dash-field{ flex:1 1 130px; }
+.dash-field label{
+  display:block; font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--mist); margin-bottom:6px;
+}
+.dash-field input, .dash-field select{
+  width:100%; border:1px solid rgba(255,255,255,.15); border-radius:8px; padding:10px 12px; min-height:40px;
+  font-family:var(--sans); font-size:13.5px; color:#FFFFFF; background:rgba(255,255,255,.06);
+}
+.dash-field input::placeholder{ color:rgba(220,238,246,.4); }
+.dash-field input:focus, .dash-field select:focus{ outline:2px solid var(--glacier); outline-offset:1px; }
+.dash-field select option{ color:#0B2438; }
+.dash-btn{
+  background:var(--aurora); color:var(--navy-deep); border:none; border-radius:8px; min-height:40px;
+  padding:0 18px; font-family:var(--sans); font-weight:700; font-size:13px; white-space:nowrap; cursor:pointer;
+  transition:filter .18s var(--ease);
+}
+.dash-btn:hover{ filter:brightness(1.08); }
+
+/* ---------- footer ---------- */
+footer{ background:var(--navy-deep); color:var(--ice); padding:var(--s-6) var(--s-3) var(--s-3); }
+.footer-inner{ max-width:var(--max); margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr; gap:var(--s-4); }
+@media (max-width:760px){ .footer-inner{ grid-template-columns:1fr; gap:var(--s-3); } }
+.footer-inner h5{ font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--glacier); margin-bottom:10px; }
+.footer-word{ font-family:var(--serif); font-style:italic; font-weight:500; font-size:22px; color:#FFFFFF; }
+.footer-inner p, .footer-inner a{ font-size:14px; color:var(--ice); opacity:.85; text-decoration:none; display:block; margin-bottom:6px; }
+.footer-inner a:hover{ opacity:1; text-decoration:underline; }
+.footer-credit{
+  max-width:var(--max); margin:var(--s-4) auto 0; padding-top:var(--s-2); border-top:1px solid rgba(255,255,255,.1);
+  font-family:var(--mono); font-size:12px; color:var(--mist); display:flex; justify-content:space-between; gap:var(--s-2); flex-wrap:wrap;
+}
+.footer-credit a{ color:var(--glacier); }
+
+/* ---------- AI chat widget (scripted demo) ---------- */
+.chat-fab{
+  position:fixed; right:20px; bottom:20px; z-index:95; width:56px; height:56px; border-radius:50%;
+  background:var(--navy-deep); color:#FFFFFF; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 14px 30px -10px rgba(7,21,35,.55); transition:bottom .3s var(--ease), transform .18s var(--ease), background .18s var(--ease);
+}
+.chat-fab:hover{ background:var(--navy); transform:translateY(-2px); }
+.chat-fab.raised{ bottom:96px; }
+.chat-fab svg{ width:24px; height:24px; }
+.chat-fab-icon-close{ display:none; }
+.chat-fab.is-open .chat-fab-icon-chat{ display:none; }
+.chat-fab.is-open .chat-fab-icon-close{ display:block; }
+.chat-fab-dot{
+  position:absolute; top:6px; right:6px; width:11px; height:11px; border-radius:50%;
+  background:var(--aurora); border:2px solid var(--navy-deep);
+}
+@media (prefers-reduced-motion: reduce){ .chat-fab{ transition:none; } }
+
+.chat-panel{
+  position:fixed; right:20px; bottom:88px; z-index:95; width:360px; max-width:calc(100vw - 32px);
+  max-height:min(560px, calc(100vh - 120px)); display:flex; flex-direction:column;
+  background:var(--sand); border-radius:16px; box-shadow:0 24px 60px -20px rgba(7,21,35,.55); overflow:hidden;
+  transition:bottom .3s var(--ease);
+}
+.chat-panel[hidden]{ display:none; }
+.chat-panel.raised{ bottom:164px; }
+@media (max-width:480px){
+  .chat-panel{ right:16px; left:16px; width:auto; bottom:84px; }
+  .chat-panel.raised{ bottom:160px; }
+}
+.chat-head{
+  background:var(--navy-deep); color:#FFFFFF; padding:14px 16px; display:flex; align-items:center;
+  justify-content:space-between; gap:10px; flex:none;
+}
+.chat-head-title{ display:block; font-family:var(--serif); font-weight:600; font-size:15.5px; }
+.chat-head-sub{
+  display:flex; align-items:center; gap:6px; font-family:var(--mono); font-size:10.5px; color:var(--ice);
+  opacity:.8; margin-top:3px; text-transform:uppercase; letter-spacing:.04em;
+}
+.chat-head-sub i{ width:6px; height:6px; border-radius:50%; background:var(--aurora); display:inline-block; box-shadow:0 0 0 3px rgba(79,217,166,.25); flex:none; }
+.chat-close{
+  background:none; border:none; color:#FFFFFF; font-size:20px; line-height:1; cursor:pointer;
+  width:30px; height:30px; border-radius:50%; flex:none;
+}
+.chat-close:hover{ background:rgba(255,255,255,.14); }
+.chat-body{
+  flex:1 1 auto; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px;
+  background:var(--sand); min-height:220px;
+}
+.chat-msg{ max-width:84%; padding:10px 13px; border-radius:14px; font-family:var(--sans); font-size:13.5px; line-height:1.5; }
+.chat-msg.bot{ align-self:flex-start; background:#FFFFFF; border:1px solid var(--line); color:var(--ink); border-bottom-left-radius:4px; }
+.chat-msg.user{ align-self:flex-end; background:var(--navy-deep); color:#FFFFFF; border-bottom-right-radius:4px; }
+.chat-msg a, .chat-msg .chat-link{
+  color:var(--glacier-dark); font-weight:600; text-decoration:underline; text-underline-offset:2px;
+  background:none; border:none; padding:0; cursor:pointer; font-size:inherit; font-family:inherit;
+}
+.chat-msg.user a{ color:var(--ice); }
+.chat-typing{
+  align-self:flex-start; background:#FFFFFF; border:1px solid var(--line); border-radius:14px;
+  border-bottom-left-radius:4px; padding:13px 14px; display:flex; gap:4px;
+}
+.chat-typing span{ width:6px; height:6px; border-radius:50%; background:var(--mist); opacity:.5; animation:chatTyping 1s infinite ease-in-out; }
+.chat-typing span:nth-child(2){ animation-delay:.15s; }
+.chat-typing span:nth-child(3){ animation-delay:.3s; }
+@keyframes chatTyping{ 0%,60%,100%{ opacity:.3; transform:translateY(0); } 30%{ opacity:1; transform:translateY(-3px); } }
+@media (prefers-reduced-motion: reduce){ .chat-typing span{ animation:none; opacity:.6; } }
+.chat-quick{ display:flex; flex-wrap:wrap; gap:6px; padding:0 16px 12px; flex:none; background:var(--sand); }
+.chat-chip{
+  font-family:var(--sans); font-size:12px; color:var(--navy-deep); background:#FFFFFF; border:1px solid var(--line);
+  border-radius:999px; padding:7px 12px; cursor:pointer; transition:all .18s var(--ease); white-space:nowrap;
+}
+.chat-chip:hover{ border-color:var(--glacier); background:rgba(79,184,224,.08); }
+.chat-input-row{ display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line); background:#FFFFFF; flex:none; }
+.chat-input-row input{
+  flex:1; border:1px solid var(--line); border-radius:999px; padding:10px 16px; font-family:var(--sans);
+  font-size:13.5px; color:var(--ink); background:var(--sand); min-width:0;
+}
+.chat-input-row input:focus{ outline:2px solid var(--glacier); outline-offset:1px; }
+.chat-input-row button{
+  width:40px; height:40px; border-radius:50%; border:none; background:var(--navy-deep); color:#FFFFFF; cursor:pointer;
+  flex:none; display:flex; align-items:center; justify-content:center; transition:background .18s var(--ease);
+}
+.chat-input-row button:hover{ background:var(--navy); }
+.chat-disclaimer{ padding:0 16px 14px; margin:0; font-family:var(--sans); font-size:10.5px; color:var(--mist); line-height:1.4; background:#FFFFFF; flex:none; }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#top">Skip to content</a>
+
+<div class="demo-banner">
+  <strong>Design concept</strong> — prepared by Morpho Studio for internal review with Hótel Húsavík. Not a live site. Current site: <a href="https://www.hotelhusavik.is/" target="_blank" rel="noopener">hotelhusavik.is</a> · Business case: <a href="proposal-husavik.html">proposal &amp; pricing →</a>
+</div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="wordmark" href="#top">Hótel Húsavík</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#rooms">Rooms</a></li>
+      <li><a href="#promotions">Promotions</a></li>
+      <li><a href="#attractions">Attractions</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a class="nav-phone" href="tel:+3544633399">+354 463 3399</a></li>
+      <li><a class="nav-cta" href="#book">Book now</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <span class="hero-eyebrow hero-anim" style="animation-delay:.05s">Diamond Circle · North Iceland</span>
+      <h1 class="hero-anim" style="animation-delay:.15s">Sleep where the whales surface.</h1>
+      <p class="hero-sub hero-anim" style="animation-delay:.28s">A family-run hotel in the heart of Húsavík — steps from GeoSea, the whale-watching harbour, and the only Eurovision exhibition in the world.</p>
+      <span class="hero-badge hero-anim" style="animation-delay:.4s">Aurora forecast: good visibility tonight <em>live KP-index feed — illustrative</em></span>
+    </div>
+  </section>
+
+  <div class="booking-card" id="book">
+
+    <!-- STEP 1 — search -->
+    <div class="booking-inner bk-search-grid" id="bkStep1">
+      <div class="bk-selected" id="bkSelected" hidden>
+        <span>Selected: <strong id="bkSelectedName"></strong></span>
+        <button type="button" id="bkSelectedClear" aria-label="Clear selected room">×</button>
+      </div>
+      <div class="bk-field bk-dates-field">
+        <label for="bkDatesTrigger">Dates</label>
+        <button type="button" class="bk-dates-trigger" id="bkDatesTrigger" aria-haspopup="dialog" aria-expanded="false">
+          <span id="bkDatesTriggerText">Feb 12 → Feb 14</span>
+          <span class="bk-dates-trigger-nights" id="bkDatesTriggerNights">2 nights</span>
+        </button>
+        <input id="bk-arrival" type="date" value="2026-02-12" hidden>
+        <input id="bk-departure" type="date" value="2026-02-14" hidden>
+        <div class="bk-cal-popover" id="bkCalPopover" role="dialog" aria-label="Select arrival and departure dates" hidden>
+          <div class="bk-cal-head">
+            <div class="bk-cal-nav"><button type="button" id="bkCalPrev" aria-label="Previous month">‹</button></div>
+            <div class="bk-cal-month" id="bkCalMonth"></div>
+            <div class="bk-cal-nav"><button type="button" id="bkCalNext" aria-label="Next month">›</button></div>
+          </div>
+          <div class="bk-cal-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+          <div class="bk-cal-grid" id="bkCalGrid"></div>
+          <div class="bk-cal-footer">
+            <span class="bk-cal-nights" id="bkCalNights">2 nights</span>
+            <button type="button" class="bk-cal-done" id="bkCalDone">Done</button>
+          </div>
+        </div>
+      </div>
+      <div class="bk-field"><label for="bk-guests">Guests</label><input id="bk-guests" type="number" min="1" value="2"></div>
+      <div class="bk-field"><label for="bk-currency">Currency</label>
+        <select id="bk-currency">
+          <option value="ISK">ISK</option>
+          <option value="EUR">EUR</option>
+          <option value="USD">USD</option>
+        </select>
+      </div>
+      <div class="bk-discount">
+        <div class="bk-field bk-discount-field">
+          <label for="bk-discount-code">Discount code</label>
+          <input id="bk-discount-code" type="text" placeholder="e.g. APP10" autocomplete="off" maxlength="20">
+        </div>
+        <button class="bk-discount-apply" id="bkDiscountApply" type="button">Apply</button>
+        <div class="bk-discount-msg" id="bkDiscountMsg" role="status" aria-live="polite" hidden></div>
+      </div>
+      <button class="bk-cta" id="bkCta" type="button">Check availability →</button>
+      <div class="bk-preview" id="bkPreview">2 nights · from <strong>21,900 ISK</strong> total, lowest room type</div>
+      <div class="bk-status" id="bkStatus" role="status" aria-live="polite" hidden></div>
+      <button class="bk-cta" id="bkContinue" type="button" hidden>Continue to your details →</button>
+      <span class="bk-sync">Live rates &amp; availability — synced directly with godo, no double-booking</span>
+    </div>
+
+    <!-- STEP 2 — guest details -->
+    <div class="booking-inner bk-form-grid" id="bkStep2" hidden>
+      <div class="bk-step-head">Step 2 of 3 — Your details</div>
+      <div class="bk-preview" id="bkStep2Summary"></div>
+      <div class="bk-field bk-field-full"><label for="bk-guest-name">Full name</label><input id="bk-guest-name" type="text" autocomplete="name"></div>
+      <div class="bk-field"><label for="bk-guest-email">Email</label><input id="bk-guest-email" type="email" autocomplete="email"></div>
+      <div class="bk-field"><label for="bk-guest-phone">Phone</label><input id="bk-guest-phone" type="tel" autocomplete="tel"></div>
+      <div class="bk-field bk-field-full"><label for="bk-guest-requests">Special requests (optional)</label><input id="bk-guest-requests" type="text" placeholder="e.g. late check-in, dietary needs"></div>
+      <div class="bk-status" id="bkStep2Msg" role="status" aria-live="polite" hidden></div>
+      <div class="bk-step-actions">
+        <button class="bk-btn-ghost" id="bkStep2Back" type="button">← Back</button>
+        <button class="bk-cta" id="bkStep2Continue" type="button">Continue to payment →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 — payment -->
+    <div class="booking-inner bk-form-grid" id="bkStep3" hidden>
+      <div class="bk-step-head">Step 3 of 3 — Payment</div>
+      <div class="bk-preview" id="bkStep3Summary"></div>
+      <div class="bk-field bk-field-full"><label for="bk-card-name">Name on card</label><input id="bk-card-name" type="text" autocomplete="cc-name"></div>
+      <div class="bk-field bk-field-full"><label for="bk-card-number">Card number</label><input id="bk-card-number" type="text" inputmode="numeric" placeholder="4242 4242 4242 4242" autocomplete="cc-number"></div>
+      <div class="bk-field"><label for="bk-card-expiry">Expiry</label><input id="bk-card-expiry" type="text" placeholder="MM/YY" autocomplete="cc-exp"></div>
+      <div class="bk-field"><label for="bk-card-cvc">CVC</label><input id="bk-card-cvc" type="text" inputmode="numeric" placeholder="123" autocomplete="cc-csc"></div>
+      <div class="bk-pay-note">Illustrative only — no real charge is made here. A real integration would run through godo's PCI-compliant payment provider (see the admin panel below).</div>
+      <div class="bk-status" id="bkStep3Msg" role="status" aria-live="polite" hidden></div>
+      <div class="bk-step-actions">
+        <button class="bk-btn-ghost" id="bkStep3Back" type="button">← Back</button>
+        <button class="bk-cta" id="bkStep3Confirm" type="button">Confirm booking →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 — confirmation -->
+    <div class="booking-inner bk-confirm" id="bkStep4" hidden>
+      <div class="bk-confirm-icon">✓</div>
+      <h3>Booking confirmed</h3>
+      <p id="bkConfirmDetails"></p>
+      <p class="bk-confirm-ref">Reference <strong id="bkConfirmRef"></strong></p>
+      <p class="bk-confirm-note">This is a concept — no real charge was made and no reservation was created. A confirmation email would normally follow immediately, synced straight to godo.</p>
+      <button class="bk-btn-ghost" id="bkStep4Reset" type="button">Make another search</button>
+    </div>
+
+  </div>
+
+  <!-- ================= TRUST / HOW BOOKING WORKS ================= -->
+  <section class="trust reveal">
+    <div class="trust-inner">
+      <div class="trust-step">
+        <span class="trust-num">1</span>
+        <div><h4>Pick dates &amp; room</h4><p>Real-time availability — the same inventory godo and the front desk see.</p></div>
+      </div>
+      <div class="trust-step">
+        <span class="trust-num">2</span>
+        <div><h4>Pay securely</h4><p>Card or deposit, in ISK, EUR or USD — confirmed the moment payment clears.</p></div>
+      </div>
+      <div class="trust-step">
+        <span class="trust-num">3</span>
+        <div><h4>Confirmed instantly</h4><p>No phone tag, no "we'll email you" — your room is held the second you book.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ROOMS ================= -->
+  <section class="section" id="rooms">
+    <div class="section-inner">
+      <div class="sec-head wide reveal">
+        <div>
+          <span class="eyebrow">Rooms</span>
+          <h2>Six rooms, each with its own view of the bay or the mountain.</h2>
+          <p class="sec-sub">Rates, availability and the OTA comparison below are illustrative for this concept — live numbers on the real site would come straight from godo.</p>
+        </div>
+        <div>
+          <div class="currency-toggle" role="group" aria-label="Display currency">
+            <button class="cur-btn active" data-cur="ISK" type="button">ISK</button>
+            <button class="cur-btn" data-cur="EUR" type="button">EUR</button>
+            <button class="cur-btn" data-cur="USD" type="button">USD</button>
+          </div>
+          <span class="cur-note">approximate conversion</span>
+        </div>
+      </div>
+
+      <div class="filter-chips reveal" role="group" aria-label="Filter rooms">
+        <button class="chip active" data-filter="all" type="button">All rooms</button>
+        <button class="chip" data-filter="sea" type="button">Sea view</button>
+        <button class="chip" data-filter="mountain" type="button">Mountain view</button>
+        <button class="chip" data-filter="family" type="button">Family &amp; groups</button>
+        <button class="chip" data-filter="budget" type="button">Best value</button>
+      </div>
+
+      <div class="room-grid">
+
+        <div class="room-card reveal" data-tags="sea">
+          <div class="room-img">
+            <span class="room-avail">Only 3 left tonight</span>
+            <img src="https://webbox.imgix.net/images/uaekzdvhoxtrqfbo/dd57e4c5-727f-4824-b265-a270b5e591d3.png?auto=format,compress&fit=crop&crop=entropy&w=700&h=525" alt="Deluxe Double Room with Sea View" loading="lazy">
+          </div>
+          <div class="room-body">
+            <h3>Deluxe Double · Sea View</h3>
+            <p>Bright upper-floor corner room over Skjálfandi bay, with a king-size bed and a bathtub.</p>
+            <div class="room-price-row">
+              <span class="room-ota px" data-isk="41900">41,900 ISK</span>
+              <span class="room-direct px" data-isk="34900">34,900 ISK</span>
+              <span class="save-badge">Save ~17%</span>
+            </div>
+            <div class="room-foot">
+              <small>direct rate · illustrative</small>
+              <a class="room-link" href="#book" data-room-name="Deluxe Double · Sea View" data-room-price="34900">Details →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="room-card reveal" data-tags="mountain">
+          <div class="room-img"><img src="https://webbox.imgix.net/images/uaekzdvhoxtrqfbo/43de3cc6-7594-4e29-97e3-c136a7958c90.jpg?auto=format,compress&fit=crop&crop=entropy&w=700&h=525" alt="Superior Double Room with Mountain View" loading="lazy"></div>
+          <div class="room-body">
+            <h3>Superior Double · Mountain View</h3>
+            <p>King-size bed, a 55" ambilight TV, and views toward Húsavíkurfjall.</p>
+            <div class="room-price-row">
+              <span class="room-ota px" data-isk="35900">35,900 ISK</span>
+              <span class="room-direct px" data-isk="29900">29,900 ISK</span>
+              <span class="save-badge">Save ~17%</span>
+            </div>
+            <div class="room-foot">
+              <small>direct rate · illustrative</small>
+              <a class="room-link" href="#book" data-room-name="Superior Double · Mountain View" data-room-price="29900">Details →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="room-card reveal" data-tags="mountain budget">
+          <div class="room-img"><img src="https://webbox.imgix.net/images/uaekzdvhoxtrqfbo/ea9cc530-8220-457a-aaad-3ece1efaea37.jpg?auto=format,compress&fit=crop&crop=entropy&w=700&h=525" alt="Standard Double or Twin Room" loading="lazy"></div>
+          <div class="room-body">
+            <h3>Standard Double or Twin</h3>
+            <p>Ground-floor, easy access, one double or two single beds, mountain view.</p>
+            <div class="room-price-row">
+              <span class="room-ota px" data-isk="29900">29,900 ISK</span>
+              <span class="room-direct px" data-isk="24900">24,900 ISK</span>
+              <span class="save-badge">Save ~17%</span>
+            </div>
+            <div class="room-foot">
+              <small>direct rate · illustrative</small>
+              <a class="room-link" href="#book" data-room-name="Standard Double or Twin" data-room-price="24900">Details →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="room-card reveal" data-tags="budget">
+          <div class="room-img">
+            <span class="room-avail">Only 2 left tonight</span>
+            <img src="https://webbox.imgix.net/images/uaekzdvhoxtrqfbo/20ff44ce-922d-42f6-84eb-5541c4cbe9bb.jpg?auto=format,compress&fit=crop&crop=entropy&w=700&h=525" alt="Economy Double or Twin Room" loading="lazy">
+          </div>
+          <div class="room-body">
+            <h3>Economy Double or Twin</h3>
+            <p>Quiet upper-floor room, one double or two single beds, obstructed view.</p>
+            <div class="room-price-row">
+              <span class="room-ota px" data-isk="26500">26,500 ISK</span>
+              <span class="room-direct px" data-isk="21900">21,900 ISK</span>
+              <span class="save-badge">Save ~17%</span>
+            </div>
+            <div class="room-foot">
+              <small>direct rate · illustrative</small>
+              <a class="room-link" href="#book" data-room-name="Economy Double or Twin" data-room-price="21900">Details →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="room-card reveal" data-tags="mountain family">
+          <div class="room-img"><img src="https://webbox.imgix.net/images/uaekzdvhoxtrqfbo/f749c1e4-fc2d-418c-8050-6ebb5a1ccd0c.jpg?auto=format,compress&fit=crop&crop=entropy&w=700&h=525" alt="Triple Room with Mountain View" loading="lazy"></div>
+          <div class="room-body">
+            <h3>Triple · Mountain View</h3>
+            <p>Ground-floor, three singles or one double plus two singles, bathtub.</p>
+            <div class="room-price-row">
+              <span class="room-ota px" data-isk="39500">39,500 ISK</span>
+              <span class="room-direct px" data-isk="32900">32,900 ISK</span>
+              <span class="save-badge">Save ~17%</span>
+            </div>
+            <div class="room-foot">
+              <small>direct rate · illustrative</small>
+              <a class="room-link" href="#book" data-room-name="Triple · Mountain View" data-room-price="32900">Details →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="room-card reveal" data-tags="family sea">
+          <div class="room-img"><img src="https://webbox.imgix.net/images/uaekzdvhoxtrqfbo/57480987-e65f-49d8-bbd0-b8c86270aea9.jpg?auto=format,compress&fit=crop&crop=entropy&w=700&h=525" alt="Family Room" loading="lazy"></div>
+          <div class="room-body">
+            <h3>Family Room</h3>
+            <p>Up to five guests, five single beds, partial sea view, upper floor.</p>
+            <div class="room-price-row">
+              <span class="room-ota px" data-isk="47900">47,900 ISK</span>
+              <span class="room-direct px" data-isk="39900">39,900 ISK</span>
+              <span class="save-badge">Save ~17%</span>
+            </div>
+            <div class="room-foot">
+              <small>direct rate · illustrative</small>
+              <a class="room-link" href="#book" data-room-name="Family Room" data-room-price="39900">Details →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= IMPACT STRIP ================= -->
+  <section class="impact">
+    <div class="impact-inner">
+      <div class="impact-head reveal">
+        <h3>Every direct booking is one Hótel Húsavík keeps in full.</h3>
+        <p>OTA reference prices above are modelled on typical 15–20% commission rates. The figures below are the same math applied to a full year.</p>
+      </div>
+      <div class="impact-grid">
+        <div class="impact-card reveal">
+          <span class="v">~17%</span>
+          <span class="k">Average commission avoided per direct booking (illustrative)</span>
+        </div>
+        <div class="impact-card reveal">
+          <span class="v">0 kr</span>
+          <span class="k">Paid to Booking.com or Expedia on a direct reservation</span>
+        </div>
+        <div class="impact-card reveal">
+          <span class="v">&lt;30s</span>
+          <span class="k">Time for reception to change a rate or launch a promotion</span>
+        </div>
+      </div>
+      <a class="impact-link reveal" href="calculator.html">Run the real numbers for Hótel Húsavík in the commission calculator →</a>
+    </div>
+  </section>
+
+  <!-- ================= PROMOTIONS ================= -->
+  <section class="promo" id="promotions">
+    <div class="promo-inner reveal">
+      <div class="promo-img"><img src="https://webbox.imgix.net/images/uaekzdvhoxtrqfbo/495c4cf9-e4a0-40ab-a1b2-a43eaeb804fa.png?auto=format,compress&fit=crop&crop=entropy&w=900&h=675" alt="Winter Deal with GeoSea" loading="lazy"></div>
+      <div class="promo-text">
+        <span class="eyebrow">Featured promotion</span>
+        <h2>Winter Deal with GeoSea</h2>
+        <p>Stay in a cozy room, relax in GeoSea's thermal baths, enjoy complimentary breakfast, and watch the auroras dance over Skjálfandi bay. Minimum two-night stay — this is exactly the kind of offer that used to need a manual page edit; here it's a toggle on the rates screen.</p>
+        <span class="promo-price">Starting from<strong class="px" data-isk="19900">19,900 ISK</strong> / person / night</span>
+        <a class="promo-cta" id="promoCta" href="#book">Book the Winter Deal →</a>
+      </div>
+    </div>
+    <div class="promo-more">
+      <div class="promo-mini reveal">
+        <div><h4>Stay 3, Pay 2</h4><p>Third night free on any room type, shoulder season.</p></div>
+        <span class="tag on">Active</span>
+      </div>
+      <div class="promo-mini reveal">
+        <div><h4>Early Bird · North Iceland</h4><p>15% off bookings made 60+ days ahead.</p></div>
+        <span class="tag off">Scheduled</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ATTRACTIONS ================= -->
+  <section class="section" id="attractions">
+    <div class="section-inner">
+      <div class="sec-head reveal">
+        <span class="eyebrow">On your doorstep</span>
+        <h2>Everything that makes Húsavík worth the trip north.</h2>
+      </div>
+      <div class="attr-grid">
+        <div class="attr-card reveal">
+          <img src="https://webbox.imgix.net/images/uaekzdvhoxtrqfbo/a26264e9-495f-403e-bb41-eb3131052f74.jpg?auto=format,compress&fit=crop&crop=entropy&w=700&h=930" alt="Whale watching boat off Húsavík" loading="lazy">
+          <div class="attr-overlay"><div><h4>Whale Watching</h4><span>10% off with Gentle Giants</span></div></div>
+        </div>
+        <div class="attr-card reveal">
+          <img src="https://webbox.imgix.net/images/uaekzdvhoxtrqfbo/202120ee-08ff-475a-a951-2b1c552a3410.jpg?auto=format,compress&fit=crop&crop=entropy&w=700&h=930" alt="GeoSea geothermal sea baths at sunset" loading="lazy">
+          <div class="attr-overlay"><div><h4>GeoSea</h4><span>15% off for hotel guests</span></div></div>
+        </div>
+        <div class="attr-card reveal">
+          <img src="https://webbox.imgix.net/images/uaekzdvhoxtrqfbo/2cf32806-06d2-4652-87c2-b0f45b1e1958.jpg?auto=format,compress&fit=crop&crop=entropy&w=700&h=930" alt="Eurovision Exhibition costumes and memorabilia" loading="lazy">
+          <div class="attr-overlay"><div><h4>Eurovision Exhibition</h4><span>The only one in the world</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section class="section" id="about" style="background:var(--sand-deep)">
+    <div class="section-inner about">
+      <div class="about-img reveal"><img src="https://webbox.imgix.net/images/uaekzdvhoxtrqfbo/34e6ea13-51a3-4b4d-abba-7da6d7c00efb.jpg?auto=format,compress&fit=crop&crop=entropy&w=900&h=675" alt="Guests relaxing on the terrace at Hótel Húsavík" loading="lazy"></div>
+      <div class="about-text reveal">
+        <span class="eyebrow">About us</span>
+        <h2>Four hundred years by this bay, three generations behind the desk.</h2>
+        <p>We're the Örlygsson family — hoteliers now, but fishermen and farmers before that. Our great-grandparents grew up on opposite shores of Skjálfandi Bay, on farms with no road between them, long before anyone came here to watch whales. In 1945 the family crossed the bay and settled in Húsavík itself, and we've stayed close to the town ever since — on the town council, in parliament, and eventually behind the front desk.</p>
+        <p>We opened as a guesthouse in 2009, became a hotel two years later, and built the town's Eurovision Exhibition and Exploration Museum along the way — because if you're going to run a small hotel in the Arctic, you might as well fill it with the things you actually love. Guests get 10% off food and drinks at Jaja Ding Dong, the bar we run next door.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STAFF / ADMIN PREVIEW ================= -->
+  <section class="staff" id="dashboard">
+    <div class="staff-inner">
+      <span class="staff-tag reveal">What your team sees</span>
+      <h2 class="reveal">One screen for prices, promotions, and the godo connection.</h2>
+      <p class="staff-sub reveal">Guests never see this — but it's the other half of the concept: the dashboard where reception updates a rate, launches a promotion, or checks a payment, without touching a template.</p>
+
+      <div class="dash reveal">
+        <div class="dash-tabs" role="tablist" aria-label="Admin dashboard preview">
+          <button class="dash-tab active" role="tab" aria-selected="true" data-tab="rates" type="button">Rates</button>
+          <button class="dash-tab" role="tab" aria-selected="false" data-tab="promotions" type="button">Promotions</button>
+          <button class="dash-tab" role="tab" aria-selected="false" data-tab="codes" type="button">Codes</button>
+          <button class="dash-tab" role="tab" aria-selected="false" data-tab="payments" type="button">Payments</button>
+        </div>
+
+        <div class="dash-panel" data-panel="rates">
+          <div class="dash-grid">
+            <div class="dash-stat"><span class="k">Direct vs. OTA</span><span class="v">62%</span></div>
+            <div class="dash-stat"><span class="k">Avg. nightly rate</span><span class="v px" id="avgRateStat" data-isk="27400">27,400 kr</span></div>
+            <div class="dash-stat"><span class="k">godo sync</span><span class="v ok" id="syncStatus">● Live · synced 4s ago</span></div>
+          </div>
+          <div class="dash-row">
+            <span class="name">Deluxe Double · Sea View</span>
+            <span class="rate px" data-isk="34900">34,900 ISK</span>
+            <span class="tag">Winter Deal active</span>
+          </div>
+
+          <div class="rate-cal">
+            <div class="rate-cal-head">
+              <span class="rate-cal-title">Rates by date · lowest room type</span>
+              <span class="rate-cal-hint">Click any night to set a new rate — updates instantly</span>
+            </div>
+            <div class="rate-cal-grid" id="rateCalGrid">
+              <div class="rate-cal-day" data-date="Feb 12">
+                <span class="rcd-dow">Thu</span><span class="rcd-date">Feb 12</span>
+                <button class="rcd-rate px" type="button" data-isk="27900" aria-label="Edit rate for Feb 12">27,900 ISK</button>
+                <input class="rcd-input" type="number" min="1000" step="100" hidden aria-label="New rate for Feb 12 in ISK">
+              </div>
+              <div class="rate-cal-day" data-date="Feb 13">
+                <span class="rcd-dow">Fri</span><span class="rcd-date">Feb 13</span>
+                <button class="rcd-rate px" type="button" data-isk="31900" aria-label="Edit rate for Feb 13">31,900 ISK</button>
+                <input class="rcd-input" type="number" min="1000" step="100" hidden aria-label="New rate for Feb 13 in ISK">
+              </div>
+              <div class="rate-cal-day" data-date="Feb 14">
+                <span class="rcd-dow">Sat</span><span class="rcd-date">Feb 14</span>
+                <button class="rcd-rate px" type="button" data-isk="31900" aria-label="Edit rate for Feb 14">31,900 ISK</button>
+                <input class="rcd-input" type="number" min="1000" step="100" hidden aria-label="New rate for Feb 14 in ISK">
+              </div>
+              <div class="rate-cal-day promo" data-date="Feb 15" title="Winter Deal active">
+                <span class="rcd-dow">Sun</span><span class="rcd-date">Feb 15</span>
+                <button class="rcd-rate px" type="button" data-isk="24900" aria-label="Edit rate for Feb 15">24,900 ISK</button>
+                <input class="rcd-input" type="number" min="1000" step="100" hidden aria-label="New rate for Feb 15 in ISK">
+              </div>
+              <div class="rate-cal-day promo" data-date="Feb 16" title="Winter Deal active">
+                <span class="rcd-dow">Mon</span><span class="rcd-date">Feb 16</span>
+                <button class="rcd-rate px" type="button" data-isk="24900" aria-label="Edit rate for Feb 16">24,900 ISK</button>
+                <input class="rcd-input" type="number" min="1000" step="100" hidden aria-label="New rate for Feb 16 in ISK">
+              </div>
+              <div class="rate-cal-day" data-date="Feb 17">
+                <span class="rcd-dow">Tue</span><span class="rcd-date">Feb 17</span>
+                <button class="rcd-rate px" type="button" data-isk="26900" aria-label="Edit rate for Feb 17">26,900 ISK</button>
+                <input class="rcd-input" type="number" min="1000" step="100" hidden aria-label="New rate for Feb 17 in ISK">
+              </div>
+              <div class="rate-cal-day" data-date="Feb 18">
+                <span class="rcd-dow">Wed</span><span class="rcd-date">Feb 18</span>
+                <button class="rcd-rate px" type="button" data-isk="26900" aria-label="Edit rate for Feb 18">26,900 ISK</button>
+                <input class="rcd-input" type="number" min="1000" step="100" hidden aria-label="New rate for Feb 18 in ISK">
+              </div>
+              <div class="rate-cal-day" data-date="Feb 19">
+                <span class="rcd-dow">Thu</span><span class="rcd-date">Feb 19</span>
+                <button class="rcd-rate px" type="button" data-isk="27900" aria-label="Edit rate for Feb 19">27,900 ISK</button>
+                <input class="rcd-input" type="number" min="1000" step="100" hidden aria-label="New rate for Feb 19 in ISK">
+              </div>
+              <div class="rate-cal-day" data-date="Feb 20">
+                <span class="rcd-dow">Fri</span><span class="rcd-date">Feb 20</span>
+                <button class="rcd-rate px" type="button" data-isk="31900" aria-label="Edit rate for Feb 20">31,900 ISK</button>
+                <input class="rcd-input" type="number" min="1000" step="100" hidden aria-label="New rate for Feb 20 in ISK">
+              </div>
+              <div class="rate-cal-day" data-date="Feb 21">
+                <span class="rcd-dow">Sat</span><span class="rcd-date">Feb 21</span>
+                <button class="rcd-rate px" type="button" data-isk="31900" aria-label="Edit rate for Feb 21">31,900 ISK</button>
+                <input class="rcd-input" type="number" min="1000" step="100" hidden aria-label="New rate for Feb 21 in ISK">
+              </div>
+            </div>
+            <p class="rate-cal-note" id="rateCalNote" aria-live="polite">Tip: click a night to set a new rate for that date only — the average above recalculates live.</p>
+          </div>
+
+          <div class="spark" aria-hidden="true">
+            <div class="spark-pair"><div class="spark-bars"><span class="spark-bar ota" style="height:55%"></span><span class="spark-bar direct" style="height:40%"></span></div><span class="spark-label">Apr</span></div>
+            <div class="spark-pair"><div class="spark-bars"><span class="spark-bar ota" style="height:48%"></span><span class="spark-bar direct" style="height:46%"></span></div><span class="spark-label">May</span></div>
+            <div class="spark-pair"><div class="spark-bars"><span class="spark-bar ota" style="height:50%"></span><span class="spark-bar direct" style="height:58%"></span></div><span class="spark-label">Jun</span></div>
+            <div class="spark-pair"><div class="spark-bars"><span class="spark-bar ota" style="height:44%"></span><span class="spark-bar direct" style="height:64%"></span></div><span class="spark-label">Jul</span></div>
+            <div class="spark-pair"><div class="spark-bars"><span class="spark-bar ota" style="height:40%"></span><span class="spark-bar direct" style="height:72%"></span></div><span class="spark-label">Aug</span></div>
+            <div class="spark-pair"><div class="spark-bars"><span class="spark-bar ota" style="height:38%"></span><span class="spark-bar direct" style="height:80%"></span></div><span class="spark-label">Sep</span></div>
+          </div>
+          <div class="spark-legend"><span><i class="direct"></i>Direct</span><span><i class="ota"></i>OTA</span><span style="margin-left:auto;">Illustrative trend</span></div>
+        </div>
+
+        <div class="dash-panel" data-panel="promotions" hidden>
+          <label class="promo-toggle-row">
+            <div><span class="name">Winter Deal · GeoSea</span><span class="desc">19,900 ISK / person / night, min. 2 nights</span></div>
+            <span class="tswitch"><input type="checkbox" checked><span class="slider"></span></span>
+          </label>
+          <label class="promo-toggle-row">
+            <div><span class="name">Stay 3, Pay 2</span><span class="desc">Third night free, shoulder season</span></div>
+            <span class="tswitch"><input type="checkbox" checked><span class="slider"></span></span>
+          </label>
+          <label class="promo-toggle-row">
+            <div><span class="name">Early Bird · North Iceland</span><span class="desc">15% off, booked 60+ days ahead</span></div>
+            <span class="tswitch"><input type="checkbox"><span class="slider"></span></span>
+          </label>
+          <p class="staff-note">This preview responds to clicks — nothing is saved. On the real thing, flipping this switch is the whole workflow.</p>
+        </div>
+
+        <div class="dash-panel" data-panel="codes" hidden>
+          <div class="code-table" id="codeTable" role="table" aria-label="Discount codes">
+            <div class="code-row code-row-head" role="row" aria-hidden="true">
+              <span>Code</span><span>Discount</span><span>Usage &amp; expiry</span><span>Active</span>
+            </div>
+          </div>
+          <form class="code-form" id="codeForm">
+            <div class="dash-field">
+              <label for="code-input">Code</label>
+              <input id="code-input" type="text" maxlength="16" placeholder="e.g. SUMMER20" autocomplete="off">
+            </div>
+            <div class="dash-field">
+              <label for="code-type">Type</label>
+              <select id="code-type">
+                <option value="pct">% off</option>
+                <option value="fixed">ISK off</option>
+              </select>
+            </div>
+            <div class="dash-field">
+              <label for="code-value">Value</label>
+              <input id="code-value" type="number" min="1" placeholder="10">
+            </div>
+            <div class="dash-field">
+              <label for="code-expiry">Expires</label>
+              <input id="code-expiry" type="text" placeholder="No expiry" autocomplete="off">
+            </div>
+            <button class="dash-btn" id="codeAdd" type="submit">+ New code</button>
+          </form>
+          <p class="staff-note" id="codeFormMsg" aria-live="polite"></p>
+          <p class="staff-note">This preview writes to the same code list guests use below — create one here, then try it in the booking widget's discount field.</p>
+        </div>
+
+        <div class="dash-panel" data-panel="payments" hidden>
+          <div class="dash-grid">
+            <div class="dash-stat"><span class="k">Checkout</span><span class="v ok">● PCI-compliant</span></div>
+            <div class="dash-stat"><span class="k">Settles to</span><span class="v" style="font-size:15px;">Existing ISK bank account</span></div>
+            <div class="dash-stat"><span class="k">Currencies</span><span class="v" style="font-size:15px;">ISK · EUR · USD</span></div>
+          </div>
+          <div class="dash-row">
+            <span class="name">Reservation #10432 · Deluxe Double</span>
+            <span class="rate px" data-isk="69800">69,800 ISK</span>
+            <span class="tag">Paid</span>
+          </div>
+          <div class="dash-row">
+            <span class="name">Reservation #10431 · Family Room</span>
+            <span class="rate px" data-isk="119700">119,700 ISK</span>
+            <span class="tag">Paid</span>
+          </div>
+          <div class="pay-chips">
+            <span class="pay-chip">Visa / Mastercard</span>
+            <span class="pay-chip">Apple Pay</span>
+            <span class="pay-chip">Bank transfer</span>
+            <span class="pay-chip">Pay-later deposit</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="staff-note reveal">Illustrative numbers throughout — the point is the shape of the screen, not the figures.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <span class="footer-word">Hótel Húsavík</span>
+      <p style="margin-top:10px; max-width:36ch;">Laugarbrekka 26, Húsavík, Norðurþing, 640, Iceland</p>
+    </div>
+    <div>
+      <h5>Contact</h5>
+      <a href="tel:+3544633399">+354 463 3399</a>
+      <a href="mailto:info@husavikhotels.com">info@husavikhotels.com</a>
+    </div>
+    <div>
+      <h5>Follow</h5>
+      <a href="https://www.facebook.com/hotelhusavik/" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://www.instagram.com/hotelhusavik/" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+  <div class="footer-credit">
+    <span>Concept prepared by Morpho Studio — not the live hotelhusavik.is site.</span>
+    <a href="proposal-husavik.html">Open the full proposal &amp; pricing →</a>
+  </div>
+</footer>
+
+<div class="sticky-bar" id="stickyBar">
+  <div class="sticky-inner">
+    <span class="sticky-dates" id="stickyDates">Feb 12 → Feb 14 · 2 guests</span>
+    <span class="sticky-price" id="stickyPrice">from 21,900 ISK</span>
+    <a class="sticky-cta" href="#book">Check availability →</a>
+  </div>
+</div>
+
+<!-- ================= AI CHAT WIDGET (scripted demo) ================= -->
+<button class="chat-fab" id="chatFab" type="button" aria-label="Chat with Hótel Húsavík" aria-expanded="false" aria-controls="chatPanel">
+  <svg class="chat-fab-icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"/></svg>
+  <svg class="chat-fab-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+  <span class="chat-fab-dot" id="chatFabDot" aria-hidden="true"></span>
+</button>
+
+<div class="chat-panel" id="chatPanel" role="dialog" aria-label="Chat with Hótel Húsavík" hidden>
+  <div class="chat-head">
+    <div>
+      <span class="chat-head-title">Hótel Húsavík</span>
+      <span class="chat-head-sub"><i aria-hidden="true"></i>Scripted demo assistant</span>
+    </div>
+    <button class="chat-close" id="chatClose" type="button" aria-label="Close chat">×</button>
+  </div>
+  <div class="chat-body" id="chatBody" aria-live="polite"></div>
+  <div class="chat-quick" id="chatQuick"></div>
+  <form class="chat-input-row" id="chatForm">
+    <input type="text" id="chatInput" placeholder="Ask about check-in, parking, GeoSea…" autocomplete="off" aria-label="Type your question">
+    <button type="submit" aria-label="Send message">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 19.5 20 12 4.5 4.5 6.75 12 4.5 19.5Z"/></svg>
+    </button>
+  </form>
+  <p class="chat-disclaimer">Illustrative — scripted answers to common questions. A live deployment would connect this to a trained AI assistant with real-time godo data.</p>
+</div>
+
+<script>
+(function(){
+  /* ---------- scroll reveal ---------- */
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var revealEls = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)){
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+    revealEls.forEach(function(el){ io.observe(el); });
+  }
+
+  /* ---------- mobile nav toggle ---------- */
+  var navToggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  if (navToggle && navLinks){
+    navToggle.addEventListener('click', function(){
+      var open = navLinks.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    navLinks.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){
+        navLinks.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  /* ---------- currency conversion ---------- */
+  var RATES = { ISK:1, EUR:148, USD:138 };
+  var currency = 'ISK';
+  function formatPrice(isk){
+    if (currency === 'ISK'){
+      return Math.round(isk).toLocaleString('is-IS') + ' ISK';
+    }
+    var symbol = currency === 'EUR' ? '€' : '$';
+    var val = isk / RATES[currency];
+    return symbol + Math.round(val).toLocaleString('en-US');
+  }
+  function updatePrices(){
+    document.querySelectorAll('.px[data-isk]').forEach(function(el){
+      var isk = parseFloat(el.getAttribute('data-isk'));
+      el.textContent = formatPrice(isk);
+    });
+    updateBookingPreview();
+  }
+  var curButtons = document.querySelectorAll('.cur-btn');
+  var bkCurrencySelect = document.getElementById('bk-currency');
+  curButtons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      currency = btn.getAttribute('data-cur');
+      curButtons.forEach(function(b){ b.classList.toggle('active', b === btn); });
+      if (bkCurrencySelect) bkCurrencySelect.value = currency;
+      updatePrices();
+    });
+  });
+  if (bkCurrencySelect){
+    bkCurrencySelect.addEventListener('change', function(){
+      currency = bkCurrencySelect.value;
+      curButtons.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-cur') === currency); });
+      updatePrices();
+    });
+  }
+
+  /* ---------- room filter chips ---------- */
+  var chips = document.querySelectorAll('.chip[data-filter]');
+  var roomCards = document.querySelectorAll('.room-card[data-tags]');
+  chips.forEach(function(chip){
+    chip.addEventListener('click', function(){
+      chips.forEach(function(c){ c.classList.toggle('active', c === chip); });
+      var filter = chip.getAttribute('data-filter');
+      roomCards.forEach(function(card){
+        var tags = card.getAttribute('data-tags') || '';
+        var show = filter === 'all' || tags.indexOf(filter) !== -1;
+        card.classList.toggle('hide', !show);
+      });
+    });
+  });
+
+  /* ---------- booking preview + sticky bar ---------- */
+  var arrivalInput = document.getElementById('bk-arrival');
+  var departureInput = document.getElementById('bk-departure');
+  var guestsInput = document.getElementById('bk-guests');
+  var bkPreview = document.getElementById('bkPreview');
+  var stickyDates = document.getElementById('stickyDates');
+  var stickyPrice = document.getElementById('stickyPrice');
+  var LOWEST_RATE_ISK = 21900;
+  var selectedRoomPrice = null;
+  var selectedRoomName = null;
+  var DISCOUNT_CODES = {
+    'APP10': { type:'pct', value:10, label:'App client discount — 10% off', active:true, uses:12, expires:'No expiry' },
+    'WELCOME5': { type:'pct', value:5, label:'Welcome code — 5% off your first stay', active:true, uses:31, expires:'No expiry' },
+    'STAFF20': { type:'pct', value:20, label:'Staff & partners — 20% off', active:true, uses:4, expires:'No expiry' },
+    'WINTER15': { type:'pct', value:15, label:'Winter campaign — 15% off', active:false, uses:0, expires:'Dec 1 – Mar 1' }
+  };
+  var activeDiscount = null;
+
+  function fmtDate(str){
+    var d = new Date(str + 'T00:00:00');
+    if (isNaN(d.getTime())) return str;
+    return d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
+  }
+
+  function getBookingSummary(){
+    var a = new Date(arrivalInput.value + 'T00:00:00');
+    var d = new Date(departureInput.value + 'T00:00:00');
+    var nights = Math.round((d - a) / 86400000);
+    if (!nights || nights < 1) nights = 1;
+    var rate = selectedRoomPrice || LOWEST_RATE_ISK;
+    var subtotal = rate * nights;
+    var total = subtotal;
+    if (activeDiscount){
+      var off = activeDiscount.type === 'pct' ? Math.round(subtotal * activeDiscount.value / 100) : activeDiscount.value;
+      total = Math.max(0, subtotal - off);
+    }
+    return {
+      nights: nights,
+      subtotal: subtotal,
+      total: total,
+      guests: guestsInput ? guestsInput.value : '2',
+      roomLabel: selectedRoomName ? selectedRoomName : 'lowest room type',
+      arrival: arrivalInput.value,
+      departure: departureInput.value
+    };
+  }
+
+  function priceHtmlFor(s){
+    return activeDiscount
+      ? '<s>' + formatPrice(s.subtotal) + '</s><strong>' + formatPrice(s.total) + '</strong>'
+      : '<strong>' + formatPrice(s.total) + '</strong>';
+  }
+
+  function updateBookingPreview(){
+    if (!arrivalInput || !departureInput) return;
+    var s = getBookingSummary();
+    var discountNote = activeDiscount ? ' — <span class="bk-discount-applied">' + activeDiscount.code + ' applied</span>' : '';
+    if (bkPreview){
+      bkPreview.innerHTML = s.nights + (s.nights === 1 ? ' night · from ' : ' nights · from ') + priceHtmlFor(s) + ' total, ' + s.roomLabel + discountNote;
+    }
+    if (stickyDates){
+      stickyDates.textContent = fmtDate(s.arrival) + ' → ' + fmtDate(s.departure) + ' · ' + s.guests + ' guests';
+    }
+    if (stickyPrice){
+      stickyPrice.textContent = 'from ' + formatPrice(s.total);
+    }
+  }
+  [arrivalInput, departureInput, guestsInput].forEach(function(input){
+    if (input) input.addEventListener('input', function(){
+      updateBookingPreview();
+      hideBkStatus();
+      if (bkContinue) bkContinue.hidden = true;
+    });
+  });
+  updateBookingPreview();
+
+  /* ---------- date-range calendar popover ---------- */
+  (function(){
+    var trigger = document.getElementById('bkDatesTrigger');
+    var triggerText = document.getElementById('bkDatesTriggerText');
+    var triggerNights = document.getElementById('bkDatesTriggerNights');
+    var popover = document.getElementById('bkCalPopover');
+    var monthLabel = document.getElementById('bkCalMonth');
+    var grid = document.getElementById('bkCalGrid');
+    var nightsLabel = document.getElementById('bkCalNights');
+    var prevBtn = document.getElementById('bkCalPrev');
+    var nextBtn = document.getElementById('bkCalNext');
+    var doneBtn = document.getElementById('bkCalDone');
+    if (!trigger || !popover || !arrivalInput || !departureInput) return;
+
+    function pad(n){ return n < 10 ? '0' + n : '' + n; }
+    function parseISO(str){ return new Date(str + 'T00:00:00'); }
+    function toISO(d){ return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+    function fmtShort(d){ return d.toLocaleDateString('en-US', { month:'short', day:'numeric' }); }
+    function sameDay(a, b){ return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
+
+    var rangeStart = parseISO(arrivalInput.value);
+    var rangeEnd = parseISO(departureInput.value);
+    var viewMonth = new Date(rangeStart.getFullYear(), rangeStart.getMonth(), 1);
+    var pickingStart = true;
+
+    function nightsBetween(){
+      var n = Math.round((rangeEnd - rangeStart) / 86400000);
+      return n && n > 0 ? n : 1;
+    }
+
+    function updateTrigger(){
+      var n = nightsBetween();
+      var label = n + (n === 1 ? ' night' : ' nights');
+      triggerText.textContent = fmtShort(rangeStart) + ' → ' + fmtShort(rangeEnd);
+      triggerNights.textContent = label;
+      nightsLabel.textContent = label;
+    }
+
+    function commitToInputs(){
+      arrivalInput.value = toISO(rangeStart);
+      departureInput.value = toISO(rangeEnd);
+      arrivalInput.dispatchEvent(new Event('input', { bubbles:true }));
+      departureInput.dispatchEvent(new Event('input', { bubbles:true }));
+    }
+
+    function renderMonth(){
+      monthLabel.textContent = viewMonth.toLocaleDateString('en-US', { month:'long', year:'numeric' });
+      grid.innerHTML = '';
+      var firstDay = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), 1);
+      var startOffset = firstDay.getDay();
+      var daysInMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 0).getDate();
+      for (var i = 0; i < startOffset; i++){
+        grid.appendChild(document.createElement('span'));
+      }
+      var _loop = function(day){
+        var d = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), day);
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'bk-cal-day';
+        btn.textContent = day;
+        if (sameDay(d, rangeStart)) btn.classList.add('range-start');
+        if (sameDay(d, rangeEnd)) btn.classList.add('range-end');
+        if (d > rangeStart && d < rangeEnd) btn.classList.add('in-range');
+        btn.addEventListener('click', function(){ pickDay(d); });
+        grid.appendChild(btn);
+      };
+      for (var day = 1; day <= daysInMonth; day++) _loop(day);
+    }
+
+    function pickDay(d){
+      if (pickingStart){
+        rangeStart = d; rangeEnd = d; pickingStart = false;
+      } else if (d < rangeStart){
+        rangeStart = d; rangeEnd = d;
+      } else {
+        rangeEnd = d; pickingStart = true;
+      }
+      renderMonth();
+      updateTrigger();
+    }
+
+    function onOutsideClick(e){
+      if (!popover.contains(e.target) && e.target !== trigger) closePopover();
+    }
+    function onKeydown(e){
+      if (e.key === 'Escape') closePopover();
+    }
+
+    function openPopover(){
+      viewMonth = new Date(rangeStart.getFullYear(), rangeStart.getMonth(), 1);
+      pickingStart = true;
+      renderMonth();
+      popover.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+      document.addEventListener('click', onOutsideClick, true);
+      document.addEventListener('keydown', onKeydown, true);
+    }
+
+    function closePopover(){
+      if (popover.hidden) return;
+      popover.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('click', onOutsideClick, true);
+      document.removeEventListener('keydown', onKeydown, true);
+      commitToInputs();
+      updateTrigger();
+    }
+
+    trigger.addEventListener('click', function(e){
+      e.stopPropagation();
+      if (popover.hidden) openPopover(); else closePopover();
+    });
+    if (doneBtn) doneBtn.addEventListener('click', closePopover);
+    if (prevBtn) prevBtn.addEventListener('click', function(){
+      viewMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth() - 1, 1);
+      renderMonth();
+    });
+    if (nextBtn) nextBtn.addEventListener('click', function(){
+      viewMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 1);
+      renderMonth();
+    });
+
+    updateTrigger();
+  })();
+
+  /* ---------- discount code — illustrative, matched against a small demo list ---------- */
+  var discountInput = document.getElementById('bk-discount-code');
+  var discountApplyBtn = document.getElementById('bkDiscountApply');
+  var discountMsg = document.getElementById('bkDiscountMsg');
+
+  function showDiscountMsg(type, html){
+    if (!discountMsg) return;
+    discountMsg.hidden = false;
+    discountMsg.className = 'bk-discount-msg ' + type;
+    discountMsg.innerHTML = html;
+  }
+  function hideDiscountMsg(){
+    if (!discountMsg) return;
+    discountMsg.hidden = true;
+    discountMsg.innerHTML = '';
+    discountMsg.className = 'bk-discount-msg';
+  }
+  function removeDiscount(){
+    activeDiscount = null;
+    if (discountInput) discountInput.value = '';
+    if (discountApplyBtn){ discountApplyBtn.textContent = 'Apply'; discountApplyBtn.classList.remove('is-active'); }
+    hideDiscountMsg();
+    updateBookingPreview();
+  }
+  function applyDiscountCode(){
+    if (!discountInput) return;
+    var code = discountInput.value.trim().toUpperCase();
+    if (!code){
+      showDiscountMsg('error', 'Enter a code first — try <strong>APP10</strong>.');
+      return;
+    }
+    var found = DISCOUNT_CODES[code];
+    if (!found || !found.active){
+      activeDiscount = null;
+      if (discountApplyBtn){ discountApplyBtn.textContent = 'Apply'; discountApplyBtn.classList.remove('is-active'); }
+      showDiscountMsg('error', found ? 'That code isn’t active right now.' : 'Code not recognized — try <strong>APP10</strong>.');
+      updateBookingPreview();
+      return;
+    }
+    activeDiscount = { code: code, type: found.type, value: found.value, label: found.label };
+    discountInput.value = code;
+    if (discountApplyBtn){ discountApplyBtn.textContent = 'Remove'; discountApplyBtn.classList.add('is-active'); }
+    showDiscountMsg('success', '✓ ' + found.label + '<button type="button" id="bkDiscountClear" aria-label="Remove discount code">×</button>');
+    found.uses = (found.uses || 0) + 1;
+    renderCodeTable();
+    updateBookingPreview();
+  }
+  if (discountApplyBtn){
+    discountApplyBtn.addEventListener('click', function(){
+      if (activeDiscount){ removeDiscount(); } else { applyDiscountCode(); }
+    });
+  }
+  if (discountInput){
+    discountInput.addEventListener('keydown', function(e){
+      if (e.key === 'Enter'){
+        e.preventDefault();
+        if (activeDiscount){ removeDiscount(); } else { applyDiscountCode(); }
+      }
+    });
+  }
+  if (discountMsg){
+    discountMsg.addEventListener('click', function(e){
+      if (e.target && e.target.id === 'bkDiscountClear') removeDiscount();
+    });
+  }
+
+  /* ---------- multi-step booking wizard: search → details → payment → confirmation ---------- */
+  var bkStep1 = document.getElementById('bkStep1');
+  var bkStep2 = document.getElementById('bkStep2');
+  var bkStep3 = document.getElementById('bkStep3');
+  var bkStep4 = document.getElementById('bkStep4');
+  var bkSteps = [bkStep1, bkStep2, bkStep3, bkStep4];
+  var bkContinue = document.getElementById('bkContinue');
+  var bkStep2Summary = document.getElementById('bkStep2Summary');
+  var bkStep3Summary = document.getElementById('bkStep3Summary');
+  var bkStep2Msg = document.getElementById('bkStep2Msg');
+  var bkStep3Msg = document.getElementById('bkStep3Msg');
+  var bkConfirmDetails = document.getElementById('bkConfirmDetails');
+  var bkConfirmRef = document.getElementById('bkConfirmRef');
+
+  function capFirst(str){
+    return str ? str.charAt(0).toUpperCase() + str.slice(1) : str;
+  }
+
+  function goToStep(n){
+    bkSteps.forEach(function(el, i){
+      if (el) el.hidden = (i !== (n - 1));
+    });
+    var card = document.getElementById('book');
+    if (card) card.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  function renderStepSummary(el){
+    if (!el) return;
+    var s = getBookingSummary();
+    var lines = fmtDate(s.arrival) + ' → ' + fmtDate(s.departure) + ' · ' + s.nights + (s.nights === 1 ? ' night' : ' nights') + ' · ' + s.guests + ' guests';
+    var discountNote = activeDiscount ? ' · ' + activeDiscount.code + ' applied' : '';
+    el.innerHTML = '<strong>' + capFirst(s.roomLabel) + '</strong><br>' + lines + '<br>' + priceHtmlFor(s) + ' total' + discountNote;
+  }
+
+  function showStepMsg(el, text){
+    if (!el) return;
+    el.hidden = false;
+    el.className = 'bk-status error';
+    el.textContent = text;
+  }
+  function hideStepMsg(el){
+    if (!el) return;
+    el.hidden = true;
+    el.textContent = '';
+    el.className = 'bk-status';
+  }
+
+  var bkStep2Continue = document.getElementById('bkStep2Continue');
+  var bkStep2Back = document.getElementById('bkStep2Back');
+  if (bkContinue){
+    bkContinue.addEventListener('click', function(){
+      renderStepSummary(bkStep2Summary);
+      goToStep(2);
+    });
+  }
+  if (bkStep2Back){
+    bkStep2Back.addEventListener('click', function(){ goToStep(1); });
+  }
+  if (bkStep2Continue){
+    bkStep2Continue.addEventListener('click', function(){
+      var name = (document.getElementById('bk-guest-name') || {}).value || '';
+      var email = (document.getElementById('bk-guest-email') || {}).value || '';
+      var phone = (document.getElementById('bk-guest-phone') || {}).value || '';
+      name = name.trim(); email = email.trim(); phone = phone.trim();
+      if (!name || !email || email.indexOf('@') === -1 || !phone){
+        showStepMsg(bkStep2Msg, 'Please fill in your name, a valid email, and a phone number.');
+        return;
+      }
+      hideStepMsg(bkStep2Msg);
+      renderStepSummary(bkStep3Summary);
+      goToStep(3);
+    });
+  }
+
+  var bkStep3Confirm = document.getElementById('bkStep3Confirm');
+  var bkStep3Back = document.getElementById('bkStep3Back');
+  if (bkStep3Back){
+    bkStep3Back.addEventListener('click', function(){ goToStep(2); });
+  }
+  if (bkStep3Confirm){
+    bkStep3Confirm.addEventListener('click', function(){
+      var cardName = (document.getElementById('bk-card-name') || {}).value || '';
+      var cardNumber = ((document.getElementById('bk-card-number') || {}).value || '').replace(/\s+/g, '');
+      var expiry = (document.getElementById('bk-card-expiry') || {}).value || '';
+      var cvc = (document.getElementById('bk-card-cvc') || {}).value || '';
+      if (!cardName.trim() || cardNumber.length < 12 || !expiry.trim() || !cvc.trim()){
+        showStepMsg(bkStep3Msg, 'Please double check your card details.');
+        return;
+      }
+      hideStepMsg(bkStep3Msg);
+      var originalLabel = bkStep3Confirm.textContent;
+      bkStep3Confirm.disabled = true;
+      bkStep3Confirm.textContent = 'Processing…';
+      window.setTimeout(function(){
+        bkStep3Confirm.disabled = false;
+        bkStep3Confirm.textContent = originalLabel;
+        renderConfirmation();
+        goToStep(4);
+      }, 900);
+    });
+  }
+
+  function renderConfirmation(){
+    var s = getBookingSummary();
+    var ref = 'HH-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+    if (bkConfirmRef) bkConfirmRef.textContent = ref;
+    if (bkConfirmDetails){
+      bkConfirmDetails.innerHTML = capFirst(s.roomLabel) + ' · ' + fmtDate(s.arrival) + ' → ' + fmtDate(s.departure) +
+        ' (' + s.nights + (s.nights === 1 ? ' night' : ' nights') + ') · ' + formatPrice(s.total) + ' total';
+    }
+  }
+
+  var bkStep4Reset = document.getElementById('bkStep4Reset');
+  if (bkStep4Reset){
+    bkStep4Reset.addEventListener('click', function(){
+      ['bk-guest-name', 'bk-guest-email', 'bk-guest-phone', 'bk-guest-requests', 'bk-card-name', 'bk-card-number', 'bk-card-expiry', 'bk-card-cvc'].forEach(function(id){
+        var el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      hideStepMsg(bkStep2Msg);
+      hideStepMsg(bkStep3Msg);
+      hideBkStatus();
+      if (bkContinue) bkContinue.hidden = true;
+      goToStep(1);
+    });
+  }
+
+  /* ---------- select a room from "Details" / the promo, jump to the booking widget ---------- */
+  var bkSelected = document.getElementById('bkSelected');
+  var bkSelectedName = document.getElementById('bkSelectedName');
+  var bkSelectedClear = document.getElementById('bkSelectedClear');
+  var bkStatus = document.getElementById('bkStatus');
+
+  function hideBkStatus(){
+    if (bkStatus){ bkStatus.hidden = true; bkStatus.textContent = ''; bkStatus.className = 'bk-status'; }
+  }
+
+  function selectRoom(name, priceIsk){
+    selectedRoomName = name;
+    selectedRoomPrice = priceIsk || null;
+    if (bkSelectedName) bkSelectedName.textContent = name;
+    if (bkSelected) bkSelected.hidden = false;
+    hideBkStatus();
+    if (bkContinue) bkContinue.hidden = true;
+    updateBookingPreview();
+    goToStep(1);
+  }
+
+  function clearSelectedRoom(){
+    selectedRoomName = null;
+    selectedRoomPrice = null;
+    if (bkSelected) bkSelected.hidden = true;
+    hideBkStatus();
+    if (bkContinue) bkContinue.hidden = true;
+    updateBookingPreview();
+  }
+  if (bkSelectedClear){
+    bkSelectedClear.addEventListener('click', clearSelectedRoom);
+  }
+
+  document.querySelectorAll('.room-link[data-room-name]').forEach(function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var name = link.getAttribute('data-room-name');
+      var price = parseInt(link.getAttribute('data-room-price'), 10);
+      selectRoom(name, isNaN(price) ? null : price);
+    });
+  });
+
+  var promoCta = document.getElementById('promoCta');
+  if (promoCta){
+    promoCta.addEventListener('click', function(e){
+      e.preventDefault();
+      selectRoom('Winter Deal · GeoSea package', null);
+    });
+  }
+
+  /* ---------- "Check availability" — validates dates, shows a real result ---------- */
+  var bkCta = document.getElementById('bkCta');
+  if (bkCta){
+    bkCta.addEventListener('click', function(){
+      if (!arrivalInput || !departureInput) return;
+      var a = new Date(arrivalInput.value + 'T00:00:00');
+      var d = new Date(departureInput.value + 'T00:00:00');
+      var guests = guestsInput ? parseInt(guestsInput.value, 10) : 2;
+
+      if (!arrivalInput.value || !departureInput.value || isNaN(a.getTime()) || isNaN(d.getTime()) || d <= a){
+        if (bkStatus){
+          bkStatus.hidden = false;
+          bkStatus.className = 'bk-status error';
+          bkStatus.textContent = 'Departure date must be after arrival — please check your dates.';
+        }
+        if (bkContinue) bkContinue.hidden = true;
+        return;
+      }
+      if (guests && guests > 5){
+        if (bkStatus){
+          bkStatus.hidden = false;
+          bkStatus.className = 'bk-status error';
+          bkStatus.textContent = 'For 6+ guests, call +354 463 3399 — the Family Room sleeps up to 5.';
+        }
+        if (bkContinue) bkContinue.hidden = true;
+        return;
+      }
+
+      hideBkStatus();
+      if (bkContinue) bkContinue.hidden = true;
+      var originalLabel = bkCta.textContent;
+      bkCta.disabled = true;
+      bkCta.textContent = 'Checking…';
+      window.setTimeout(function(){
+        bkCta.disabled = false;
+        bkCta.textContent = originalLabel;
+        if (bkStatus){
+          bkStatus.hidden = false;
+          bkStatus.className = 'bk-status success';
+          var baseMsg = selectedRoomName
+            ? ('✓ ' + selectedRoomName + ' is open for these dates.')
+            : '✓ Available — 4 of 6 room types open for these dates, see below.';
+          bkStatus.textContent = baseMsg + (activeDiscount ? (' ' + activeDiscount.code + ' discount is applied to the total.') : '');
+        }
+        if (bkContinue) bkContinue.hidden = false;
+        if (!selectedRoomName){
+          var rooms = document.getElementById('rooms');
+          if (rooms) rooms.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+        }
+      }, 650);
+    });
+  }
+
+  /* ---------- sticky bar visibility ---------- */
+  var stickyBar = document.getElementById('stickyBar');
+  var bookAnchor = document.getElementById('book');
+  if (stickyBar && bookAnchor && 'IntersectionObserver' in window){
+    var barIo = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var show = !e.isIntersecting && e.boundingClientRect.top < 0;
+        stickyBar.classList.toggle('show', show);
+        var cf = document.getElementById('chatFab');
+        var cp = document.getElementById('chatPanel');
+        if (cf) cf.classList.toggle('raised', show);
+        if (cp) cp.classList.toggle('raised', show);
+      });
+    }, { threshold: 0 });
+    barIo.observe(bookAnchor);
+  }
+
+  /* ---------- AI chat widget (scripted demo) ---------- */
+  var chatFab = document.getElementById('chatFab');
+  var chatPanel = document.getElementById('chatPanel');
+  var chatClose = document.getElementById('chatClose');
+  var chatBody = document.getElementById('chatBody');
+  var chatForm = document.getElementById('chatForm');
+  var chatInput = document.getElementById('chatInput');
+  var chatQuick = document.getElementById('chatQuick');
+  var chatFabDot = document.getElementById('chatFabDot');
+  var chatOpenedOnce = false;
+
+  var CHAT_FAQ = [
+    { id:'checkin', label:'Check-in & check-out', keywords:['check-in','checkin','check in','check-out','checkout','arrival time','what time'],
+      answer:'Check-in is from 3:00 PM, check-out until 11:00 AM. Early check-in or late check-out can often be arranged — just ask reception.' },
+    { id:'parking', label:'Parking', keywords:['parking','park','car'],
+      answer:'Free private parking is available on-site for all guests, no reservation needed.' },
+    { id:'breakfast', label:'Breakfast', keywords:['breakfast','food','eat'],
+      answer:'A breakfast buffet is included with most rates and served daily from 7:00–10:00 AM in the dining room.' },
+    { id:'cancel', label:'Cancellation policy', keywords:['cancel','refund','cancellation'],
+      answer:'Most direct-booked rates are free to cancel up to 48 hours before arrival. Non-refundable rates are marked clearly at checkout.' },
+    { id:'geosea', label:'GeoSea discount', keywords:['geosea','thermal','baths','spa'],
+      answer:'Hotel guests get 15% off entry to GeoSea geothermal sea baths, a short walk from the hotel.' },
+    { id:'whales', label:'Whale watching', keywords:['whale','watching','tour'],
+      answer:'Húsavík is Europe\u2019s whale watching capital. Hotel guests get 10% off tours with Gentle Giants, departing from the harbor nearby.' },
+    { id:'eurovision', label:'Eurovision Exhibition', keywords:['eurovision','song contest','ding dong'],
+      answer:'We\u2019re home to the officially licensed Eurovision Song Contest Exhibition, plus the Jaja Ding Dong bar next door — guests get 10% off food and drinks there.' },
+    { id:'pets', label:'Pet policy', keywords:['pet','dog','cat','animal'],
+      answer:'We\u2019re happy to host well-behaved pets in select rooms for a small extra fee — mention it when you book so we can prepare the right room.' },
+    { id:'wifi', label:'Wifi', keywords:['wifi','wi-fi','internet'],
+      answer:'Free wifi is available throughout the hotel and in every room.' },
+    { id:'discount', label:'Discount codes', keywords:['discount','promo code','coupon'],
+      answer:'If you have a discount code, enter it in the "Discount code" field of the booking form below — it applies instantly to your total.' },
+    { id:'currency', label:'Payment & currency', keywords:['currency','payment','isk','euro','dollar'],
+      answer:'You can book and pay in ISK, EUR, or USD. We accept all major cards, Apple Pay, and bank transfer at checkout.' },
+    { id:'location', label:'Getting here', keywords:['location','address','directions','distance','airport','akureyri'],
+      answer:'We\u2019re at Laugarbrekka 26 in Húsavík, North Iceland — about 90 minutes from Akureyri and a great base for the Diamond Circle and Arctic Coast Way.' }
+  ];
+
+  function escapeHtml(str){
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function addChatMsg(role, html){
+    if (!chatBody) return;
+    var div = document.createElement('div');
+    div.className = 'chat-msg ' + role;
+    div.innerHTML = html;
+    chatBody.appendChild(div);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+  function showChatTyping(){
+    if (!chatBody) return;
+    var t = document.createElement('div');
+    t.className = 'chat-typing';
+    t.id = 'chatTypingIndicator';
+    t.innerHTML = '<span></span><span></span><span></span>';
+    chatBody.appendChild(t);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+  function hideChatTyping(){
+    var t = document.getElementById('chatTypingIndicator');
+    if (t) t.remove();
+  }
+  function wireJumpLink(){
+    var jumpBtn = document.getElementById('chatJumpBook');
+    if (!jumpBtn) return;
+    jumpBtn.addEventListener('click', function(){
+      closeChat();
+      var book = document.getElementById('book');
+      if (book) book.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block:'start' });
+    });
+  }
+  function findAnswer(text){
+    var q = text.toLowerCase();
+    if (/\b(book|reservation|availability|room|price|rate)\b/.test(q)){
+      return 'You can check live availability and book directly below on this page. <button type="button" class="chat-link" id="chatJumpBook">Jump to booking →</button>';
+    }
+    for (var i = 0; i < CHAT_FAQ.length; i++){
+      var f = CHAT_FAQ[i];
+      for (var k = 0; k < f.keywords.length; k++){
+        if (q.indexOf(f.keywords[k]) !== -1) return f.answer;
+      }
+    }
+    return 'I don\u2019t have a scripted answer for that yet. Email <a href="mailto:info@husavikhotels.com">info@husavikhotels.com</a> or call <a href="tel:+3544633399">+354 463 3399</a> — once this becomes a trained AI assistant, it will answer this live from real hotel data.';
+  }
+  function sendUserText(text){
+    addChatMsg('user', escapeHtml(text));
+    showChatTyping();
+    window.setTimeout(function(){
+      hideChatTyping();
+      addChatMsg('bot', findAnswer(text));
+      wireJumpLink();
+    }, 700);
+  }
+  function sendQuick(faq){
+    addChatMsg('user', escapeHtml(faq.label));
+    showChatTyping();
+    window.setTimeout(function(){
+      hideChatTyping();
+      addChatMsg('bot', faq.answer);
+    }, 700);
+  }
+  function openChat(){
+    if (!chatPanel || !chatFab) return;
+    chatPanel.hidden = false;
+    chatFab.classList.add('is-open');
+    chatFab.setAttribute('aria-expanded', 'true');
+    if (chatFabDot) chatFabDot.hidden = true;
+    if (!chatOpenedOnce){
+      chatOpenedOnce = true;
+      addChatMsg('bot', 'Hi! I\u2019m the Hótel Húsavík demo assistant. Ask me about check-in, parking, GeoSea, whale watching, or anything else — or tap a quick question below.<br><br><em>This is a scripted preview. A live version would be trained on your real FAQ and policies.</em>');
+    }
+    if (chatInput) chatInput.focus();
+  }
+  function closeChat(){
+    if (!chatPanel || !chatFab) return;
+    chatPanel.hidden = true;
+    chatFab.classList.remove('is-open');
+    chatFab.setAttribute('aria-expanded', 'false');
+  }
+  if (chatFab){
+    chatFab.addEventListener('click', function(){
+      if (chatPanel.hidden) openChat(); else closeChat();
+    });
+  }
+  if (chatClose) chatClose.addEventListener('click', closeChat);
+  if (chatForm){
+    chatForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      if (!chatInput) return;
+      var text = chatInput.value.trim();
+      if (!text) return;
+      chatInput.value = '';
+      sendUserText(text);
+    });
+  }
+  if (chatQuick){
+    CHAT_FAQ.forEach(function(f){
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chat-chip';
+      chip.textContent = f.label;
+      chip.addEventListener('click', function(){ sendQuick(f); });
+      chatQuick.appendChild(chip);
+    });
+  }
+
+  /* ---------- admin dashboard tabs ---------- */
+  var dashTabs = document.querySelectorAll('.dash-tab');
+  var dashPanels = document.querySelectorAll('.dash-panel');
+  dashTabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      dashTabs.forEach(function(t){
+        var active = t === tab;
+        t.classList.toggle('active', active);
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      var target = tab.getAttribute('data-tab');
+      dashPanels.forEach(function(panel){
+        panel.hidden = panel.getAttribute('data-panel') !== target;
+      });
+    });
+  });
+
+  function bumpSync(){
+    syncSeconds = 0;
+    if (syncEl) syncEl.textContent = '● Live · synced just now';
+  }
+
+  /* ---------- rate calendar (date-based pricing demo) ---------- */
+  var avgRateStat = document.getElementById('avgRateStat');
+  var rateCalNote = document.getElementById('rateCalNote');
+
+  function recalcAvgRate(){
+    var btns = document.querySelectorAll('.rcd-rate[data-isk]');
+    if (!btns.length || !avgRateStat) return;
+    var total = 0;
+    btns.forEach(function(b){ total += parseFloat(b.getAttribute('data-isk')) || 0; });
+    var avg = Math.round(total / btns.length);
+    avgRateStat.setAttribute('data-isk', avg);
+    avgRateStat.textContent = formatPrice(avg);
+  }
+
+  document.querySelectorAll('.rate-cal-day').forEach(function(day){
+    var btn = day.querySelector('.rcd-rate');
+    var input = day.querySelector('.rcd-input');
+    if (!btn || !input) return;
+
+    function startEdit(){
+      input.value = Math.round(parseFloat(btn.getAttribute('data-isk')) || 0);
+      btn.hidden = true;
+      input.hidden = false;
+      input.focus();
+      input.select();
+    }
+    function commitEdit(cancel){
+      if (!cancel){
+        var val = parseFloat(input.value);
+        if (val && val > 0){
+          btn.setAttribute('data-isk', val);
+          btn.textContent = formatPrice(val);
+          day.classList.add('rcd-updated');
+          window.setTimeout(function(){ day.classList.remove('rcd-updated'); }, 900);
+          if (rateCalNote){
+            rateCalNote.textContent = day.getAttribute('data-date') + ' updated to ' + formatPrice(val) + ' — synced to godo instantly.';
+          }
+          recalcAvgRate();
+          bumpSync();
+        }
+      }
+      input.hidden = true;
+      btn.hidden = false;
+    }
+    btn.addEventListener('click', startEdit);
+    input.addEventListener('keydown', function(e){
+      if (e.key === 'Enter'){ e.preventDefault(); commitEdit(false); }
+      if (e.key === 'Escape'){ e.preventDefault(); commitEdit(true); }
+    });
+    input.addEventListener('blur', function(){ commitEdit(false); });
+  });
+  recalcAvgRate();
+
+  /* ---------- discount codes admin table ---------- */
+  var codeTable = document.getElementById('codeTable');
+  var codeForm = document.getElementById('codeForm');
+  var codeFormMsg = document.getElementById('codeFormMsg');
+
+  function describeDiscount(entry){
+    return entry.type === 'pct' ? entry.value + '% off' : formatPrice(entry.value) + ' off';
+  }
+
+  function renderCodeTable(){
+    if (!codeTable) return;
+    codeTable.querySelectorAll('.code-row:not(.code-row-head)').forEach(function(row){ row.remove(); });
+    Object.keys(DISCOUNT_CODES).forEach(function(code){
+      var entry = DISCOUNT_CODES[code];
+      var row = document.createElement('div');
+      row.className = 'code-row' + (entry.active ? '' : ' is-inactive');
+      row.setAttribute('role', 'row');
+      row.setAttribute('data-code', code);
+      row.innerHTML =
+        '<span class="code-name">' + code + '</span>' +
+        '<span class="code-desc">' + describeDiscount(entry) + '</span>' +
+        '<span class="code-meta"><span class="code-uses">' + (entry.uses || 0) + ' uses</span><span class="code-expires">' + entry.expires + '</span></span>' +
+        '<span class="code-toggle"><span class="tswitch"><input type="checkbox"' + (entry.active ? ' checked' : '') + '><span class="slider"></span></span></span>';
+      var toggle = row.querySelector('input[type="checkbox"]');
+      if (toggle){
+        toggle.addEventListener('change', function(){
+          entry.active = toggle.checked;
+          row.classList.toggle('is-inactive', !entry.active);
+          if (!entry.active && activeDiscount && activeDiscount.code === code){
+            removeDiscount();
+            showDiscountMsg('error', code + ' was just deactivated in the admin panel.');
+          }
+          bumpSync();
+        });
+      }
+      codeTable.appendChild(row);
+    });
+  }
+  renderCodeTable();
+
+  if (codeForm){
+    codeForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      var codeInputEl = document.getElementById('code-input');
+      var typeEl = document.getElementById('code-type');
+      var valueEl = document.getElementById('code-value');
+      var expiryEl = document.getElementById('code-expiry');
+      var code = codeInputEl ? codeInputEl.value.trim().toUpperCase() : '';
+      var type = typeEl ? typeEl.value : 'pct';
+      var value = valueEl ? parseFloat(valueEl.value) : NaN;
+      var expires = (expiryEl && expiryEl.value.trim()) ? expiryEl.value.trim() : 'No expiry';
+
+      if (!code){
+        if (codeFormMsg) codeFormMsg.textContent = 'Enter a code first.';
+        return;
+      }
+      if (DISCOUNT_CODES[code]){
+        if (codeFormMsg) codeFormMsg.textContent = code + ' already exists — pick a different code.';
+        return;
+      }
+      if (!value || value <= 0){
+        if (codeFormMsg) codeFormMsg.textContent = 'Enter a value greater than 0.';
+        return;
+      }
+
+      DISCOUNT_CODES[code] = {
+        type: type,
+        value: value,
+        label: 'Custom code — ' + (type === 'pct' ? value + '% off' : formatPrice(value) + ' off'),
+        active: true,
+        uses: 0,
+        expires: expires
+      };
+      renderCodeTable();
+      bumpSync();
+      if (codeFormMsg) codeFormMsg.textContent = '✓ ' + code + ' created and active — try it in the booking widget above.';
+      codeForm.reset();
+      if (codeInputEl) codeInputEl.focus();
+    });
+  }
+
+  /* ---------- live-feeling sync counter ---------- */
+  var syncEl = document.getElementById('syncStatus');
+  var syncSeconds = 4;
+  if (syncEl){
+    setInterval(function(){
+      syncSeconds += 1;
+      if (syncSeconds > 30) syncSeconds = 1;
+      syncEl.textContent = '● Live · synced ' + syncSeconds + 's ago';
+    }, 1000);
+  }
+})();
+</script>
+
+</body>
+</html>
