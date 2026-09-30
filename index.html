@@ -89,13 +89,24 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
   z-index:50; pointer-events:none;
 }
 .wingline .morpho-dot{
-  position:absolute; top:-6px; left:0;
-  width:12px; height:12px; border-radius:50% 50% 50% 4px;
-  background:var(--m-blue);
-  box-shadow:0 0 0 4px rgba(47,182,232,.22), 0 0 18px 4px rgba(31,111,224,.35);
-  transform:translateX(-6px) rotate(45deg);
-  will-change:left, background;
+  position:absolute; top:-8px; left:0;
+  width:16px; height:16px;
+  color:var(--m-blue);
+  filter:drop-shadow(0 0 6px currentColor);
+  transform:translateX(-8px);
+  will-change:left, color;
 }
+.wingline .morpho-dot svg{ display:block; width:100%; height:100%; }
+.wingline .morpho-dot path{ fill:currentColor; }
+
+/* ---------- wing flap: shared by the traveling mark and the hero butterfly ----------
+   fill-box + an edge-aligned origin pivots each wing from where it meets the
+   body, not its own bounding-box center, so it reads as a flap, not a squash. */
+.wing{ transform-box:fill-box; animation:flap 1.8s ease-in-out infinite; }
+.wing-l{ transform-origin:100% 50%; }
+.wing-r{ transform-origin:0% 50%; }
+@keyframes flap{ 0%, 100%{ transform:scaleX(1); } 50%{ transform:scaleX(.55); } }
+@media (prefers-reduced-motion: reduce){ .wing{ animation:none; } }
 
 /* ---------- nav ---------- */
 .nav{
@@ -178,9 +189,11 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
   content:""; width:6px; height:6px; border-radius:50%;
   background:var(--m-grad); flex:none;
 }
+.dark .trust-bar{ border-top-color:var(--line-dark); }
+.dark .trust-bar span{ color:var(--mist); }
 
 /* ---------- shared section scaffolding ---------- */
-.section{ padding:var(--s-12) var(--s-3); }
+.section{ padding:var(--s-16) var(--s-3); }
 .section-inner{ max-width:var(--max); margin:0 auto; }
 .eyebrow{
   font-family:var(--mono); font-size:12px; letter-spacing:.14em;
@@ -191,9 +204,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible{
 .eyebrow::after{ content:""; height:1px; width:48px; background:var(--m-grad); }
 .dark .eyebrow{ color:var(--m-cyan); }
 h2{
-  font-family:var(--display); font-weight:600;
-  font-size:clamp(28px, 4.2vw, 44px); line-height:1.12;
-  letter-spacing:-.02em; max-width:20ch;
+  font-family:var(--display); font-weight:500;
+  font-size:clamp(30px, 5vw, 52px); line-height:1.1;
+  letter-spacing:-.025em; max-width:20ch;
   margin-bottom:var(--s-3);
 }
 .lede{ color:var(--basalt); max-width:56ch; font-size:18px; }
@@ -207,7 +220,8 @@ h2{
 
 /* ---------- reveal on scroll ---------- */
 .reveal{ opacity:0; transform:translateY(16px);
-  transition:opacity .6s var(--ease), transform .6s var(--ease); }
+  transition:opacity .6s var(--ease), transform .6s var(--ease);
+  transition-delay:calc(var(--stagger-i, 0) * 70ms); }
 .reveal.in{ opacity:1; transform:none; }
 @media (prefers-reduced-motion: reduce){
   .reveal{ opacity:1; transform:none; transition:none; }
@@ -216,18 +230,25 @@ h2{
 /* ============================================================
    HERO
    ============================================================ */
-.hero{ padding:calc(var(--s-8) + var(--s-2)) var(--s-3) 0; overflow:hidden; }
-.hero-inner{ max-width:var(--max); margin:0 auto; }
+.hero{ padding:calc(var(--s-8) + var(--s-2)) var(--s-3) 0; overflow:hidden; position:relative; }
+.hero::before{
+  content:""; position:absolute; left:50%; top:-120px;
+  width:900px; height:460px; transform:translateX(-50%);
+  background:radial-gradient(ellipse at center, rgba(47,182,232,.20), rgba(110,107,232,.12) 50%, transparent 72%);
+  pointer-events:none;
+}
+.hero-inner{ max-width:var(--max); margin:0 auto; position:relative; }
 .hero .eyebrow{ margin-bottom:var(--s-4); }
 h1{
-  font-family:var(--display); font-weight:700;
-  font-size:clamp(40px, 6.5vw, 76px); line-height:1.04;
-  letter-spacing:-.03em; max-width:16ch;
+  font-family:var(--display); font-weight:500;
+  font-size:clamp(44px, 7.5vw, 104px); line-height:1.02;
+  letter-spacing:-.035em; max-width:16ch;
 }
 .hero-sub{
-  margin-top:var(--s-3); max-width:54ch;
+  margin-top:var(--s-4); max-width:54ch;
   color:var(--basalt); font-size:19px;
 }
+.dark .hero-sub{ color:var(--mist); }
 .hero-credential{
   margin-top:var(--s-3); max-width:56ch;
   font-family:var(--mono); font-size:13px; letter-spacing:.02em;
@@ -235,7 +256,7 @@ h1{
   background:var(--fog-deep); border-left:2px solid var(--m-blue);
   padding:10px var(--s-3); border-radius:0 8px 8px 0;
 }
-.hero-actions{ margin-top:var(--s-4); display:flex; gap:var(--s-2); flex-wrap:wrap; }
+.hero-actions{ margin-top:var(--s-5); display:flex; gap:var(--s-2); flex-wrap:wrap; }
 .btn{
   display:inline-flex; align-items:center; gap:10px;
   font-family:var(--body); font-weight:600; font-size:16px;
@@ -247,6 +268,8 @@ h1{
 .btn-primary:hover{ background:var(--m-text); transform:translateY(-1px); }
 .btn-ghost{ color:var(--ink); border-color:var(--line); background:transparent; }
 .btn-ghost:hover{ border-color:var(--ink); }
+.dark .btn-ghost{ color:var(--fog); border-color:var(--line-dark); }
+.dark .btn-ghost:hover{ border-color:var(--fog); }
 .btn .arrow{ transition:transform .18s var(--ease); }
 .btn:hover .arrow{ transform:translateX(3px); }
 
@@ -260,6 +283,7 @@ h1{
   border-top:1px solid var(--line); max-width:var(--max); margin:0 auto;
   flex-wrap:wrap;
 }
+.dark .hero-caption{ color:var(--mist); border-top-color:var(--line-dark); }
 @keyframes wingTilt{
   0%{ opacity:.8; } 50%{ opacity:1; } 100%{ opacity:.8; }
 }
@@ -399,8 +423,8 @@ h1{
 }
 @media (max-width:760px){ .step{ grid-template-columns:56px 1fr; } .step p{ grid-column:2; } }
 .step-num{
-  font-family:var(--mono); font-size:14px; color:var(--m-text);
-  letter-spacing:.08em;
+  font-family:var(--mono); font-size:34px; font-weight:500; color:var(--m-text);
+  letter-spacing:-.01em; line-height:1;
 }
 .step h3{
   font-family:var(--display); font-weight:600; font-size:22px; letter-spacing:-.01em;
@@ -584,6 +608,19 @@ h1{
   pointer-events:none;
 }
 .contact-inner{ max-width:var(--max); margin:0 auto; position:relative; }
+
+/* ---------- statement: one bold sentence as a scroll break ---------- */
+.statement{ position:relative; overflow:hidden; text-align:center; }
+.statement::before{
+  content:""; position:absolute; left:50%; top:50%;
+  width:820px; height:420px; transform:translate(-50%,-50%);
+  background:radial-gradient(ellipse at center, rgba(110,107,232,.18), rgba(31,111,224,.10) 50%, transparent 72%);
+  pointer-events:none;
+}
+.statement h2{
+  margin:0 auto; max-width:17ch; position:relative;
+  font-size:clamp(30px, 5.2vw, 60px);
+}
 .contact .lede{ max-width:50ch; }
 .contact-actions{ margin-top:var(--s-6); display:flex; gap:var(--s-3); flex-wrap:wrap; align-items:center; }
 .btn-morpho{
@@ -747,7 +784,21 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
 <a class="skip-link" href="#main">Skip to content</a>
 
 <!-- signature: the morpho mark travels as you read; hue tilts with scroll -->
-<div class="wingline" aria-hidden="true"><span class="morpho-dot" id="morphoDot"></span></div>
+<div class="wingline" aria-hidden="true">
+  <span class="morpho-dot" id="morphoDot">
+    <svg viewBox="0 0 24 24">
+      <g class="wing wing-l">
+        <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z"/>
+        <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" opacity=".8"/>
+      </g>
+      <g class="wing wing-r">
+        <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z"/>
+        <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" opacity=".8"/>
+      </g>
+      <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#0D1A26"/>
+    </svg>
+  </span>
+</div>
 
 <header class="nav">
   <div class="nav-inner">
@@ -798,14 +849,14 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
 <main id="main">
 
   <!-- ================= HERO ================= -->
-  <section class="hero" id="top">
+  <section class="hero dark" id="top">
     <div class="hero-inner">
       <p class="eyebrow">Húsavík, Iceland · Roots in Costa Rica</p>
       <h1>The morpho’s blue isn’t paint. <span class="irid">It’s structure.</span></h1>
-      <p class="hero-sub">Good digital work is the same: the results come from how it’s built, not how it’s decorated. Morpho is a small studio building websites, AI&nbsp;automation, and apps for hotels, tour operators, restaurants, laundromats, and other small businesses tired of paying rent to someone else’s software.</p>
+      <p class="hero-sub">Good digital work is the same: results come from how it’s built, not how it’s decorated. Morpho builds websites, AI&nbsp;automation, and apps for small businesses tired of paying rent to someone else’s software.</p>
       <p class="hero-credential">Built by one person, not an agency: 10+ years leading global enterprise programs — medical technology, business-process re-architecture, multi-country compliance — now applied at small-business scale.</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#contact">Start a project <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn-morpho" href="#contact">Start a project <span class="arrow" aria-hidden="true">→</span></a>
         <a class="btn btn-ghost" href="#process">See how it works</a>
       </div>
     </div>
@@ -843,16 +894,20 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
         </g>
         <!-- butterfly at the apex -->
         <g transform="translate(588,86) scale(1.05)">
-          <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z" fill="url(#w1)"/>
-          <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z" fill="url(#w1)"/>
-          <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" fill="url(#w1)" opacity=".8"/>
-          <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" fill="url(#w1)" opacity=".8"/>
-          <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#0D1A26"/>
+          <g class="wing wing-l">
+            <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z" fill="url(#w1)"/>
+            <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" fill="url(#w1)" opacity=".8"/>
+          </g>
+          <g class="wing wing-r">
+            <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z" fill="url(#w1)"/>
+            <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" fill="url(#w1)" opacity=".8"/>
+          </g>
+          <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#F2F5F8"/>
         </g>
         <!-- Icelandic table-mountain ridge -->
         <path d="M0,296 L90,296 L130,268 L250,268 L290,296 L420,296 L470,258 L610,258 L660,296 L800,296 L840,272 L960,272 L1000,296 L1200,296 L1200,320 L0,320 Z"
-              fill="#0D1A26" opacity=".16"/>
-        <line x1="0" y1="296" x2="1200" y2="296" stroke="#0D1A26" stroke-opacity=".28" stroke-width="1"/>
+              fill="#F2F5F8" opacity=".14"/>
+        <line x1="0" y1="296" x2="1200" y2="296" stroke="#F2F5F8" stroke-opacity=".22" stroke-width="1"/>
       </svg>
       <p class="hero-caption">
         <span>Morpho peleides · structural color, no pigment</span>
@@ -985,6 +1040,13 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
         </dl>
       </div>
       <p class="calc-note reveal">A rough estimate for guesthouses and hotels — tour operators and restaurants have their own version of this math, and the discovery call covers it. Platforms still have a role; the goal is balance, not war.</p>
+    </div>
+  </section>
+
+  <!-- ================= STATEMENT ================= -->
+  <section class="section dark statement">
+    <div class="section-inner">
+      <h2 class="reveal" data-scramble>You own the code. You own the content. You own what happens next.</h2>
     </div>
   </section>
 
@@ -1345,7 +1407,7 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
     var max = doc.scrollHeight - window.innerHeight;
     var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
     dot.style.left = (p * 100) + '%';
-    dot.style.background = p < .5
+    dot.style.color = p < .5
       ? mix('#6E6BE8', '#1F6FE0', p * 2)
       : mix('#1F6FE0', '#2FB6E8', (p - .5) * 2);
     ticking = false;
@@ -1356,13 +1418,65 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
   update();
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Scramble-text reveal: characters cycle through a random set before
+     settling into the real words — used sparingly, only on the hero
+     headline and the mid-page statement break, never on body copy. */
+  var SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&+=';
+  function scrambleText(el){
+    if (reduce || !el || el.__scrambled) return;
+    el.__scrambled = true;
+    var nodes = [];
+    (function walk(node){
+      if (node.nodeType === 3 && node.nodeValue.trim()){ nodes.push(node); }
+      else { node.childNodes.forEach(walk); }
+    })(el);
+    nodes.forEach(function(node){
+      var original = node.nodeValue;
+      var len = original.length;
+      var duration = Math.min(900, 480 + len * 3);
+      var start = null;
+      function frame(ts){
+        if (start === null) start = ts;
+        var t = Math.min(1, (ts - start) / duration);
+        var revealCount = Math.floor(t * len);
+        var out = '';
+        for (var i = 0; i < len; i++){
+          var ch = original[i];
+          out += (ch === ' ' || i < revealCount) ? ch : SCRAMBLE_CHARS[(Math.random() * SCRAMBLE_CHARS.length) | 0];
+        }
+        node.nodeValue = out;
+        if (t < 1){ requestAnimationFrame(frame); } else { node.nodeValue = original; }
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+  var heroH1 = document.querySelector('.hero h1');
+  if (heroH1) scrambleText(heroH1);
+
   var els = document.querySelectorAll('.reveal');
+  if (!reduce){
+    /* Stagger reveals that share a section: index within the nearest
+       <section>, capped at 6 steps of 70ms so long sections don't
+       end up with a multi-second tail. */
+    var groups = new Map();
+    els.forEach(function(el){
+      var group = el.closest('section') || document.body;
+      var i = groups.get(group) || 0;
+      el.style.setProperty('--stagger-i', Math.min(i, 6));
+      groups.set(group, i + 1);
+    });
+  }
   if (reduce || !('IntersectionObserver' in window)){
     els.forEach(function(el){ el.classList.add('in'); });
   } else {
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(e){
-        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+        if(e.isIntersecting){
+          e.target.classList.add('in');
+          if (e.target.hasAttribute('data-scramble')) scrambleText(e.target);
+          io.unobserve(e.target);
+        }
       });
     }, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
     els.forEach(function(el){ io.observe(el); });
