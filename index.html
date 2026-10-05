@@ -1,10 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-R425EYS14F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-R425EYS14F');
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Morpho Studio — Web design, AI automation & apps · Húsavík, Iceland</title>
 <meta name="description" content="Morpho is a small digital studio in Húsavík, Iceland — with roots in Costa Rica — building websites, AI automation, and apps for hotels, tour operators, restaurants, laundromats, and other small businesses tired of renting software they'll never own.">
+<link rel="canonical" href="https://hellomorpho.com/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Morpho Studio">
+<meta property="og:title" content="Morpho Studio — Web design, AI automation & apps · Húsavík, Iceland">
+<meta property="og:description" content="Morpho is a small digital studio in Húsavík, Iceland — with roots in Costa Rica — building websites, AI automation, and apps for hotels, tour operators, restaurants, laundromats, and other small businesses tired of renting software they'll never own.">
+<meta property="og:url" content="https://hellomorpho.com/">
+<meta property="og:image" content="https://hellomorpho.com/assets/img/favicon/icon-512.png">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="es_CR">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Morpho Studio — Web design, AI automation & apps · Húsavík, Iceland">
+<meta name="twitter:description" content="Morpho is a small digital studio in Húsavík, Iceland — with roots in Costa Rica — building websites, AI automation, and apps for hotels, tour operators, restaurants, laundromats, and other small businesses tired of renting software they'll never own.">
+<meta name="twitter:image" content="https://hellomorpho.com/assets/img/favicon/icon-512.png">
+
 <link rel="icon" type="image/x-icon" href="assets/img/favicon/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon/favicon-16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon/favicon-32.png">
@@ -390,6 +414,11 @@ h1{
 .about-body p{ color:var(--ink); font-size:17px; max-width:60ch; }
 .about-body p + p{ margin-top:var(--s-2); }
 .about-body .muted{ color:var(--basalt); }
+.about-body .about-name{ font-family:var(--mono); font-size:13px; letter-spacing:.04em;
+  color:var(--basalt); text-transform:uppercase; margin-bottom:var(--s-1); }
+.about-body .about-name strong{ color:var(--ink); font-weight:600; }
+.about-body .about-name a{ color:inherit; text-decoration:none; }
+.about-body .about-name a:hover{ text-decoration:underline; text-underline-offset:3px; }
 .about-facts{
   margin-top:var(--s-4); display:grid; gap:var(--s-2);
   border-top:1px solid var(--line); padding-top:var(--s-3);
@@ -668,7 +697,7 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
   "logo": "https://hellomorpho.com/assets/img/favicon/icon-512.png",
   "image": "https://hellomorpho.com/assets/img/favicon/icon-512.png",
   "description": "Morpho is a small digital studio in Húsavík, Iceland — with roots in Costa Rica — building websites, AI automation, and apps for hotels, tour operators, restaurants, laundromats, and other small businesses tired of renting software they'll never own.",
-  "email": "hi@hellomorpho.com",
+  "email": "arnoldo@hellomorpho.com",
   "priceRange": "190,000 kr – 780,000 kr",
   "currenciesAccepted": "ISK",
   "address": {
@@ -687,7 +716,15 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
   },
   "founder": {
     "@type": "Person",
-    "name": "Arnoldo Argüello"
+    "@id": "https://hellomorpho.com/#founder",
+    "name": "Arnoldo Argüello",
+    "jobTitle": "Founder",
+    "url": "https://hellomorpho.com/#about",
+    "image": "https://hellomorpho.com/assets/img/founder-headshot.jpg",
+    "worksFor": { "@id": "https://hellomorpho.com/#organization" },
+    "sameAs": [
+      "https://www.linkedin.com/in/arnoldo-arguello"
+    ]
   },
   "makesOffer": [
     {
@@ -773,6 +810,62 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
         "price": "29000",
         "priceCurrency": "ISK",
         "unitText": "MONTH"
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does a website cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The packages above show honest starting prices — a Website from 390,000 kr, a Direct Booking Site from 590,000 kr, a custom app from 450,000 kr, AI Automation from 190,000 kr setup plus 39,000 kr/month. Your exact quote is fixed in writing in the discovery plan and won’t change unless the scope does. If it isn’t in your budget, you keep the plan and owe nothing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why not just use a cheap AI chatbot subscription?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Generic chatbot SaaS is cheap because it’s generic — trained on nothing specific to you, connected to nothing you already use, and billed forever. What we build is trained on your business, connects to the systems you already run, and for apps, you can own the result outright instead of renting it every month. If a $99/month tool genuinely covers what you need, we’ll say so on the discovery call — we’d rather lose the sale than sell you something you don’t need."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to understand AI to use the automation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. You’ll see the results — answered questions, drafted replies, sent reminders — in tools you already use. The training session covers everything in plain language, and the monthly note tells you what ran and what changed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can you work with our existing booking system?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Usually, yes. Most projects connect to what you already have — booking engines, channel managers, point-of-sale — rather than replacing it. If your current system genuinely can’t support what you need, you’ll hear that in the discovery plan, with options."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if we stop working together?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nothing breaks. You own the code, the domain, the content, and the accounts from day one, and everything is documented so any developer can pick it up. The retainer is convenience, not a hostage situation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "We’re not in Iceland. Can we still work with you?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes — the studio is based in Húsavík but works with businesses across Iceland and Europe, in English or Spanish. Everything from discovery to launch works over video calls and shared links."
       }
     }
   ]
@@ -1062,11 +1155,12 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
              only, so this section reads as "real person with a track record"
              rather than "brand mythology." -->
         <figure class="about-art reveal">
-          <img src="assets/img/founder-headshot.jpg" width="1600" height="2000" alt="Founder of Morpho, standing in front of Goðafoss waterfall in Iceland" loading="lazy">
+          <img src="assets/img/founder-headshot.jpg" width="1600" height="2000" alt="Arnoldo Argüello, founder of Morpho Studio, standing in front of Goðafoss waterfall in Iceland" loading="lazy">
           <figcaption><span>Arnoldo Arguello</span></figcaption>
         </figure>
 
         <div class="about-body reveal">
+          <p class="about-name"><strong><a href="https://www.linkedin.com/in/arnoldo-arguello" target="_blank" rel="me noopener">Arnoldo Argüello</a></strong> — founder, Morpho Studio</p>
           <p>Morpho is run by one person: born in Costa Rica, more than a decade leading global programs in medical technology — enterprise platforms, business improvement, and multi-country compliance — and now based in Húsavík, on Iceland’s north coast.</p>
           <p class="muted">Both of my countries run on small operators guiding people through extraordinary landscapes. Enterprise work taught me discipline — fixed scopes, honest timelines, no surprises in week five. This studio brings that discipline to a size, and price, that fits a small business.</p>
 
@@ -1330,7 +1424,7 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
       <h2 class="reveal">Tell us what’s eating your time.</h2>
       <p class="lede reveal">One email is enough — a sentence about your business and the thing you’d most like to stop doing by hand. You’ll get a reply within one business day, and the discovery call is free.</p>
       <div class="contact-actions reveal">
-        <a class="btn btn-morpho" href="mailto:hi@hellomorpho.com?subject=Project%20inquiry">Email hi@hellomorpho.com <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn-morpho" href="mailto:arnoldo@hellomorpho.com?subject=Project%20inquiry">Email arnoldo@hellomorpho.com <span class="arrow" aria-hidden="true">→</span></a>
         <!-- Cal.com booking: wired to the real account (arnoldo-a-morphos),
              event renamed to "Discovery call" in Cal.com's dashboard.
              Slug stays "30min" — don't change it in Cal.com without
@@ -1370,7 +1464,8 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
       Morpho Studio
     </span>
     <span>9.93°N → 66.04°N</span>
-    <a href="mailto:hi@hellomorpho.com">hi@hellomorpho.com</a>
+    <a href="mailto:arnoldo@hellomorpho.com">arnoldo@hellomorpho.com</a>
+    <a href="https://www.linkedin.com/in/arnoldo-arguello" target="_blank" rel="me noopener">LinkedIn</a>
   </div>
 </footer>
 
