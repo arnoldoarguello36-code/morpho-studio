@@ -319,28 +319,29 @@ h1{
 
 /* ---------- mph: hero specimen plate ----------
    Reuses the hero's own copy/colors; only adds the butterfly "plate" as a
-   second grid column. The poster image bakes in a near-black background
-   (#021328-ish) from the source asset, which doesn't match this site's
-   --ink/--ink-soft gradient — a radial mask feathers the flat corners to
-   transparent so the section's real background shows through instead of a
-   hard rectangle. */
+   second grid column. Rather than fading the image's baked-in background
+   out with a blurred mask (which read as a soft, disconnected blob), the
+   plate owns a crisp hairline frame — a deliberate "specimen card" edge —
+   and its label row is pulled into normal flow so it sits on the same
+   top grid line as the eyebrow text, tying the two columns to one shared
+   baseline instead of floating independently. */
 .mph-hero-grid{
   display:grid; grid-template-columns:1.05fr 1fr; gap:clamp(24px,5vw,72px);
-  align-items:center; max-width:var(--max); margin:0 auto; position:relative;
+  align-items:start; max-width:var(--max); margin:0 auto; position:relative;
 }
 .mph-hero-grid > .hero-inner{ max-width:none; margin:0; }
-.mph-plate{ margin:0; position:relative; display:grid; gap:16px; min-width:0; }
+.mph-plate{ margin:0; position:relative; display:grid; gap:16px; min-width:0; padding-top:2px; }
+.mph-plate-label{ display:flex; justify-content:space-between; }
 .mph-plate-frame{
   position:relative; aspect-ratio:1; width:100%; max-width:480px; justify-self:center;
-  mask-image:radial-gradient(closest-side, #000 72%, transparent 100%);
-  -webkit-mask-image:radial-gradient(closest-side, #000 72%, transparent 100%);
+  border:1px solid var(--line-dark); border-radius:6px; overflow:hidden;
+  background:var(--ink-soft);
 }
-.mph-plate-frame .mph-tick{ position:absolute; width:14px; height:14px; border-color:var(--line-dark); border-style:solid; border-width:0; }
-.mph-tick.tl{ top:0; left:0; border-top-width:1px; border-left-width:1px; }
-.mph-tick.tr{ top:0; right:0; border-top-width:1px; border-right-width:1px; }
-.mph-tick.bl{ bottom:0; left:0; border-bottom-width:1px; border-left-width:1px; }
-.mph-tick.br{ bottom:0; right:0; border-bottom-width:1px; border-right-width:1px; }
-.mph-plate-label{ position:absolute; top:-22px; left:0; right:0; display:flex; justify-content:space-between; }
+.mph-plate-frame .mph-tick{ position:absolute; width:14px; height:14px; border-color:var(--line-dark); border-style:solid; border-width:0; z-index:1; }
+.mph-tick.tl{ top:-1px; left:-1px; border-top-width:1px; border-left-width:1px; }
+.mph-tick.tr{ top:-1px; right:-1px; border-top-width:1px; border-right-width:1px; }
+.mph-tick.bl{ bottom:-1px; left:-1px; border-bottom-width:1px; border-left-width:1px; }
+.mph-tick.br{ bottom:-1px; right:-1px; border-bottom-width:1px; border-right-width:1px; }
 .mph-tilt{ position:absolute; inset:6%; transform-style:preserve-3d; transition:transform .6s var(--ease); will-change:transform; }
 .mph-float{ position:absolute; inset:0; animation:mphFloat 7s ease-in-out infinite; }
 @keyframes mphFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
@@ -1039,8 +1040,8 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
 
       <!-- Specimen plate: the butterfly as evidence, not decoration -->
       <figure class="mph-plate">
+        <div class="mph-plate-label"><span class="mph-mono">Fig. 1</span><span class="mph-mono">Dorsal view</span></div>
         <div class="mph-plate-frame" id="mphPlate">
-          <div class="mph-plate-label"><span class="mph-mono">Fig. 1</span><span class="mph-mono">Dorsal view</span></div>
           <span class="mph-tick tl"></span><span class="mph-tick tr"></span><span class="mph-tick bl"></span><span class="mph-tick br"></span>
           <div class="mph-tilt" id="mphTilt">
             <div class="mph-float">
