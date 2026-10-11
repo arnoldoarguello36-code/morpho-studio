@@ -314,6 +314,62 @@ h1{
 .wing-shimmer{ animation:wingTilt 9s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce){ .wing-shimmer{ animation:none; } }
 
+/* ---------- mph: shared small-caps label (specimen plate + process stage) ---------- */
+.mph-mono{ font-family:var(--mono); font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--mist); }
+
+/* ---------- mph: hero specimen plate ----------
+   Reuses the hero's own copy/colors; only adds the butterfly "plate" as a
+   second grid column. The poster image bakes in a near-black background
+   (#021328-ish) from the source asset, which doesn't match this site's
+   --ink/--ink-soft gradient — a radial mask feathers the flat corners to
+   transparent so the section's real background shows through instead of a
+   hard rectangle. */
+.mph-hero-grid{
+  display:grid; grid-template-columns:1.05fr 1fr; gap:clamp(24px,5vw,72px);
+  align-items:center; max-width:var(--max); margin:0 auto; position:relative;
+}
+.mph-hero-grid > .hero-inner{ max-width:none; margin:0; }
+.mph-plate{ margin:0; position:relative; display:grid; gap:16px; min-width:0; }
+.mph-plate-frame{
+  position:relative; aspect-ratio:1; width:100%; max-width:480px; justify-self:center;
+  mask-image:radial-gradient(closest-side, #000 72%, transparent 100%);
+  -webkit-mask-image:radial-gradient(closest-side, #000 72%, transparent 100%);
+}
+.mph-plate-frame .mph-tick{ position:absolute; width:14px; height:14px; border-color:var(--line-dark); border-style:solid; border-width:0; }
+.mph-tick.tl{ top:0; left:0; border-top-width:1px; border-left-width:1px; }
+.mph-tick.tr{ top:0; right:0; border-top-width:1px; border-right-width:1px; }
+.mph-tick.bl{ bottom:0; left:0; border-bottom-width:1px; border-left-width:1px; }
+.mph-tick.br{ bottom:0; right:0; border-bottom-width:1px; border-right-width:1px; }
+.mph-plate-label{ position:absolute; top:-22px; left:0; right:0; display:flex; justify-content:space-between; }
+.mph-tilt{ position:absolute; inset:6%; transform-style:preserve-3d; transition:transform .6s var(--ease); will-change:transform; }
+.mph-float{ position:absolute; inset:0; animation:mphFloat 7s ease-in-out infinite; }
+@keyframes mphFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
+.mph-float img{ width:100%; height:100%; display:block; user-select:none; -webkit-user-drag:none; }
+@property --mph-a{ syntax:"<angle>"; initial-value:0deg; inherits:false; }
+.mph-sheen{
+  position:absolute; inset:0; mix-blend-mode:overlay; opacity:.5; pointer-events:none;
+  background:conic-gradient(from var(--mph-a) at 55% 50%, #ff6fd0, var(--m-cyan), var(--m-blue), var(--m-violet), #ffd98a, #ff6fd0);
+  -webkit-mask:radial-gradient(closest-side,#000 55%,transparent); mask:radial-gradient(closest-side,#000 55%,transparent);
+  animation:mphSpin 14s linear infinite;
+}
+@keyframes mphSpin{ to{ --mph-a:360deg; } }
+.mph-caption{
+  display:flex; flex-wrap:wrap; justify-content:space-between; gap:6px 18px;
+  border-top:1px solid var(--line-dark); padding-top:12px;
+  max-width:480px; justify-self:center; width:100%;
+}
+.mph-caption i{ font-style:italic; text-transform:none; letter-spacing:.02em; font-family:var(--body); font-size:14px; color:var(--fog); }
+@media (max-width:860px){
+  .mph-hero-grid{ grid-template-columns:1fr; }
+  .mph-plate{ order:-1; }
+  .mph-plate-frame{ max-width:min(380px,82vw); }
+  .mph-caption{ max-width:min(380px,82vw); }
+}
+@media (prefers-reduced-motion: reduce){
+  .mph-float, .mph-sheen{ animation:none; }
+  .mph-tilt{ transition:none; }
+}
+
 /* ============================================================
    SERVICES
    ============================================================ */
@@ -463,6 +519,32 @@ h1{
   font-size:12px; color:var(--basalt); letter-spacing:.08em; margin-top:6px;
 }
 .step p{ color:var(--basalt); font-size:16px; max-width:52ch; }
+
+/* ---------- mph: process stage (sticky 3D canvas + WebGL-less fallback) ----------
+   The steps keep their existing look; this only adds a sticky visual
+   column next to them. The stage box carries its own dark (--ink)
+   background regardless of the section's light background, same as the
+   prototype, so it reads correctly with or without the page around it. */
+.mph-process-grid{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(24px,5vw,72px); align-items:start; margin-top:var(--s-6); }
+.mph-process-grid .steps{ margin-top:0; }
+.mph-stage{ position:sticky; top:88px; height:min(74vh,620px); display:grid; grid-template-rows:auto 1fr auto; gap:12px; min-width:0; }
+.mph-stage-top,.mph-stage-bottom{ display:flex; justify-content:space-between; gap:12px; }
+.mph-stage-view{
+  position:relative; min-height:0; border:1px solid var(--line-dark); border-radius:var(--radius); overflow:hidden;
+  background:radial-gradient(60% 55% at 50% 45%, color-mix(in srgb, var(--m-blue) 14%, transparent), transparent 70%), var(--ink);
+}
+.mph-stage canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+.mph-stage-fallback{
+  position:absolute; inset:8%; width:84%; height:84%; object-fit:contain; mix-blend-mode:lighten;
+  filter:grayscale(calc(1 - var(--mph-p,1))) brightness(calc(.55 + var(--mph-p,1) * .45)); transition:filter .3s;
+}
+.mph-meter{ height:2px; background:var(--line-dark); position:relative; flex:1; align-self:center; max-width:160px; }
+.mph-meter span{ position:absolute; inset:0 auto 0 0; width:calc(var(--mph-p,0) * 100%); background:linear-gradient(90deg, var(--m-cyan), var(--m-blue)); }
+#mphStageName{ font-family:var(--mono); font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--fog); }
+@media (max-width:860px){
+  .mph-process-grid{ grid-template-columns:1fr; gap:0; }
+  .mph-stage{ position:sticky; top:0; height:38vh; min-height:250px; z-index:5; background:var(--fog); padding-block:10px; box-shadow:0 18px 24px -8px var(--fog); }
+}
 
 /* ============================================================
    EXAMPLES
@@ -943,69 +1025,35 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
 
   <!-- ================= HERO ================= -->
   <section class="hero dark" id="top">
-    <div class="hero-inner">
-      <p class="eyebrow">Húsavík, Iceland · Roots in Costa Rica</p>
-      <h1>The morpho’s blue isn’t paint. <span class="irid">It’s structure.</span></h1>
-      <p class="hero-sub">Good digital work is the same: results come from how it’s built, not how it’s decorated. Morpho builds websites, AI&nbsp;automation, and apps for small businesses tired of paying rent to someone else’s software.</p>
-      <p class="hero-credential">Built by one person, not an agency: 10+ years leading global enterprise programs — medical technology, business-process re-architecture, multi-country compliance — now applied at small-business scale.</p>
-      <div class="hero-actions">
-        <a class="btn btn-morpho" href="#contact">Start a project <span class="arrow" aria-hidden="true">→</span></a>
-        <a class="btn btn-ghost" href="#process">See how it works</a>
+    <div class="mph-hero-grid">
+      <div class="hero-inner">
+        <p class="eyebrow">Húsavík, Iceland · Roots in Costa Rica</p>
+        <h1>The morpho’s blue isn’t paint. <span class="irid">It’s structure.</span></h1>
+        <p class="hero-sub">Good digital work is the same: results come from how it’s built, not how it’s decorated. Morpho builds websites, AI&nbsp;automation, and apps for small businesses tired of paying rent to someone else’s software.</p>
+        <p class="hero-credential">Built by one person, not an agency: 10+ years leading global enterprise programs — medical technology, business-process re-architecture, multi-country compliance — now applied at small-business scale.</p>
+        <div class="hero-actions">
+          <a class="btn btn-morpho" href="#contact">Start a project <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn btn-ghost" href="#process">See how it works</a>
+        </div>
       </div>
-    </div>
 
-    <!-- Aurora-wing arcs over an Icelandic ridge: two lands, one blue -->
-    <div class="hero-art" aria-hidden="true">
-      <svg viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="w1" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#6E6BE8" stop-opacity=".9"/>
-            <stop offset=".5" stop-color="#1F6FE0" stop-opacity=".9"/>
-            <stop offset="1" stop-color="#2FB6E8" stop-opacity=".9"/>
-          </linearGradient>
-          <linearGradient id="w2" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#6E6BE8" stop-opacity=".45"/>
-            <stop offset=".5" stop-color="#1F6FE0" stop-opacity=".45"/>
-            <stop offset="1" stop-color="#2FB6E8" stop-opacity=".45"/>
-          </linearGradient>
-          <linearGradient id="w3" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#6E6BE8" stop-opacity=".18"/>
-            <stop offset=".5" stop-color="#1F6FE0" stop-opacity=".18"/>
-            <stop offset="1" stop-color="#2FB6E8" stop-opacity=".18"/>
-          </linearGradient>
-        </defs>
-        <!-- structural color: the same curve layered like wing scales -->
-        <g fill="none" stroke-linecap="round">
-          <path class="wing-shimmer" d="M0,240 C 300,235 480,100 600,100 C 720,100 900,235 1200,240"
-                stroke="url(#w1)" stroke-width="3"/>
-          <path class="wing-shimmer" style="animation-delay:-3s"
-                d="M0,252 C 310,242 470,135 600,135 C 730,135 890,242 1200,252"
-                stroke="url(#w2)" stroke-width="2.5"/>
-          <path class="wing-shimmer" style="animation-delay:-6s"
-                d="M0,264 C 320,252 460,170 600,170 C 740,170 880,252 1200,264"
-                stroke="url(#w3)" stroke-width="2"/>
-        </g>
-        <!-- butterfly at the apex -->
-        <g transform="translate(588,86) scale(1.05)">
-          <g class="wing wing-l">
-            <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z" fill="url(#w1)"/>
-            <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" fill="url(#w1)" opacity=".8"/>
-          </g>
-          <g class="wing wing-r">
-            <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z" fill="url(#w1)"/>
-            <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" fill="url(#w1)" opacity=".8"/>
-          </g>
-          <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#F2F5F8"/>
-        </g>
-        <!-- Icelandic table-mountain ridge -->
-        <path d="M0,296 L90,296 L130,268 L250,268 L290,296 L420,296 L470,258 L610,258 L660,296 L800,296 L840,272 L960,272 L1000,296 L1200,296 L1200,320 L0,320 Z"
-              fill="#F2F5F8" opacity=".14"/>
-        <line x1="0" y1="296" x2="1200" y2="296" stroke="#F2F5F8" stroke-opacity=".22" stroke-width="1"/>
-      </svg>
-      <p class="hero-caption">
-        <span>Morpho peleides · structural color, no pigment</span>
-        <span>9.93°N Costa Rica → 66.04°N Iceland</span>
-      </p>
+      <!-- Specimen plate: the butterfly as evidence, not decoration -->
+      <figure class="mph-plate">
+        <div class="mph-plate-frame" id="mphPlate">
+          <div class="mph-plate-label"><span class="mph-mono">Fig. 1</span><span class="mph-mono">Dorsal view</span></div>
+          <span class="mph-tick tl"></span><span class="mph-tick tr"></span><span class="mph-tick bl"></span><span class="mph-tick br"></span>
+          <div class="mph-tilt" id="mphTilt">
+            <div class="mph-float">
+              <img src="assets/img/morpho-poster.webp" width="560" height="560" alt="Translucent blue morpho butterfly with iridescent wings" fetchpriority="high">
+            </div>
+          </div>
+          <div class="mph-sheen" aria-hidden="true"></div>
+        </div>
+        <figcaption class="mph-caption">
+          <span class="mph-mono"><i>Morpho peleides</i> · structural color, no pigment</span>
+          <span class="mph-mono">9.93°N → 66.04°N</span>
+        </figcaption>
+      </figure>
     </div>
 
     <!-- trust bar: real, checkable facts instead of manufactured testimonials
@@ -1191,26 +1239,37 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
       <h2 class="reveal">Four steps. Fixed price. No surprises in week five.</h2>
       <p class="lede reveal">You’ll always know what’s happening, what it costs, and what you’ll have at the end.</p>
 
-      <div class="steps">
-        <div class="step reveal">
-          <span class="step-num">01</span>
-          <h3>Discover <span class="dur">One call · free</span></h3>
-          <p>We look at your current setup together — website, bookings, the tasks eating your evenings. You get a written plan with a fixed price within three days. Keep it even if we never speak again.</p>
+      <div class="mph-process-grid" id="mphProcessGrid">
+        <div class="mph-stage" id="mphStage" aria-hidden="true">
+          <div class="mph-stage-top"><span class="mph-mono" id="mphStageFig">Fig. 2</span><span id="mphStageName">Outline</span></div>
+          <div class="mph-stage-view">
+            <canvas id="mphCanvas"></canvas>
+            <img class="mph-stage-fallback" id="mphStageFallback" src="assets/img/morpho-poster.webp" alt="" hidden>
+          </div>
+          <div class="mph-stage-bottom"><span class="mph-mono">Build</span><span class="mph-meter" id="mphMeter"><span></span></span><span class="mph-mono" id="mphPct">0%</span></div>
         </div>
-        <div class="step reveal">
-          <span class="step-num">02</span>
-          <h3>Design <span class="dur">1–2 weeks</span></h3>
-          <p>You review real screens with your real content — your rooms, your tours, your prices. Two revision rounds are included, and most projects only need one.</p>
-        </div>
-        <div class="step reveal">
-          <span class="step-num">03</span>
-          <h3>Build <span class="dur">2–4 weeks</span></h3>
-          <p>A private link updates as the work progresses, so you can click through the real thing any evening. Nothing is revealed at the end that you haven’t already seen.</p>
-        </div>
-        <div class="step reveal">
-          <span class="step-num">04</span>
-          <h3>Run <span class="dur">Launch + optional retainer</span></h3>
-          <p>Launch, a training session for your team, and thirty days of included fixes. After that, an optional monthly retainer keeps automations tuned and content fresh — cancel any month.</p>
+
+        <div class="steps" id="mphSteps">
+          <div class="step reveal" data-name="Outline">
+            <span class="step-num">01</span>
+            <h3>Discover <span class="dur">One call · free</span></h3>
+            <p>We look at your current setup together — website, bookings, the tasks eating your evenings. You get a written plan with a fixed price within three days. Keep it even if we never speak again.</p>
+          </div>
+          <div class="step reveal" data-name="Wireframe · low poly">
+            <span class="step-num">02</span>
+            <h3>Design <span class="dur">1–2 weeks</span></h3>
+            <p>You review real screens with your real content — your rooms, your tours, your prices. Two revision rounds are included, and most projects only need one.</p>
+          </div>
+          <div class="step reveal" data-name="Structural color">
+            <span class="step-num">03</span>
+            <h3>Build <span class="dur">2–4 weeks</span></h3>
+            <p>A private link updates as the work progresses, so you can click through the real thing any evening. Nothing is revealed at the end that you haven’t already seen.</p>
+          </div>
+          <div class="step reveal" data-name="In flight">
+            <span class="step-num">04</span>
+            <h3>Run <span class="dur">Launch + optional retainer</span></h3>
+            <p>Launch, a training session for your team, and thirty days of included fixes. After that, an optional monthly retainer keeps automations tuned and content fresh — cancel any month.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -1618,6 +1677,8 @@ footer a:hover{ text-decoration:underline; text-underline-offset:3px; }
     "layout": "month_view"
   });
 </script>
+
+<script src="assets/js/morpho3d.js" defer></script>
 
 </body>
 </html>
