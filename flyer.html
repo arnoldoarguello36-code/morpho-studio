@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morpho Studio — Websites, AI automation &amp; apps for small businesses</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/x-icon" href="assets/img/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/img/favicon/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fog:        #F2F5F8;
+  --fog-deep:   #E5EBF0;
+  --ink:        #0D1A26;
+  --ink-soft:   #142638;
+  --basalt:     #56646E;
+  --mist:       #93A3AD;
+  --line:       rgba(13,26,38,.14);
+
+  --m-blue:   #1F6FE0;
+  --m-cyan:   #2FB6E8;
+  --m-violet: #6E6BE8;
+  --m-text:   #1D5FBF;
+  --m-grad:   linear-gradient(100deg, var(--m-violet), var(--m-blue) 45%, var(--m-cyan));
+
+  --display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --body:    "Instrument Sans", system-ui, -apple-system, sans-serif;
+  --mono:    "Spline Sans Mono", ui-monospace, "SF Mono", monospace;
+
+  --max: 760px;
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ -webkit-text-size-adjust:100%; }
+body{
+  font-family:var(--body);
+  background:var(--fog);
+  color:var(--ink);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+
+.sheet{ max-width:var(--max); margin:0 auto; padding:56px 28px 72px; }
+
+.brand{
+  display:flex; align-items:center; gap:10px;
+  font-family:var(--display); font-weight:700; font-size:20px;
+  letter-spacing:-.02em; color:var(--ink); text-decoration:none;
+  margin-bottom:28px;
+}
+.brand-mark{ width:24px; height:24px; flex:none; }
+
+.eyebrow{
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--m-text);
+  display:flex; align-items:center; gap:12px; margin-bottom:14px;
+}
+.eyebrow::after{ content:""; height:1px; width:40px; background:var(--m-grad); }
+
+h1{
+  font-family:var(--display); font-weight:500;
+  font-size:clamp(28px, 5vw, 38px); line-height:1.15;
+  letter-spacing:-.02em; max-width:22ch; margin-bottom:14px;
+}
+
+.lede{ font-size:16px; color:var(--basalt); max-width:48ch; margin-bottom:36px; }
+
+.svc-grid{
+  display:grid; gap:20px;
+  grid-template-columns:repeat(3, 1fr);
+  margin-bottom:36px;
+}
+@media (max-width:640px){ .svc-grid{ grid-template-columns:1fr; } }
+
+.svc{
+  background:#fff; border:1px solid var(--line); border-radius:12px;
+  padding:20px;
+}
+.svc-label{
+  font-family:var(--mono); font-size:11px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--m-text); display:block; margin-bottom:10px;
+}
+.svc h3{
+  font-family:var(--display); font-weight:600; font-size:17px;
+  letter-spacing:-.01em; margin-bottom:8px; line-height:1.25;
+}
+.svc p{ font-size:14px; color:var(--basalt); }
+
+.price-strip{
+  display:grid; gap:1px; background:var(--line);
+  border:1px solid var(--line); border-radius:12px; overflow:hidden;
+  grid-template-columns:repeat(5, 1fr);
+  margin-bottom:36px;
+}
+@media (max-width:640px){ .price-strip{ grid-template-columns:1fr 1fr; } }
+.price-cell{ background:#fff; padding:16px 14px; }
+.price-cell .k{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--mist); display:block; margin-bottom:6px;
+}
+.price-cell .v{ font-family:var(--display); font-weight:600; font-size:15px; }
+.price-cell .v small{ font-family:var(--body); font-weight:400; font-size:12px; color:var(--basalt); }
+
+.process{
+  display:flex; gap:0; margin-bottom:36px; border-top:1px solid var(--line);
+  padding-top:24px; flex-wrap:wrap;
+}
+.process .step{ flex:1 1 150px; padding-right:16px; }
+.process .step .num{
+  font-family:var(--mono); font-size:11px; color:var(--mist); display:block; margin-bottom:6px;
+}
+.process .step h4{ font-family:var(--display); font-weight:600; font-size:14px; margin-bottom:4px; }
+.process .step p{ font-size:12.5px; color:var(--basalt); }
+
+.quote{
+  font-family:var(--display); font-weight:500; font-size:19px; line-height:1.4;
+  color:var(--ink); border-left:3px solid var(--m-blue); padding-left:18px;
+  margin-bottom:36px; max-width:46ch;
+}
+
+.cta{
+  background:var(--ink); color:var(--fog); border-radius:14px;
+  padding:28px 24px; margin-bottom:28px;
+}
+.cta p.lead{ font-family:var(--display); font-weight:500; font-size:18px; margin-bottom:14px; color:#fff; }
+.cta-actions{ display:flex; gap:12px; flex-wrap:wrap; }
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--mono); font-size:13px; letter-spacing:.02em;
+  padding:11px 18px; border-radius:8px; text-decoration:none;
+}
+.btn-primary{ background:var(--m-blue); color:#fff; }
+.btn-ghost{ background:rgba(242,245,248,.1); color:var(--fog); border:1px solid rgba(242,245,248,.22); }
+
+.meta{
+  display:flex; flex-wrap:wrap; gap:8px 24px;
+  font-family:var(--mono); font-size:12px; color:var(--basalt);
+}
+
+@media print{
+  body{ background:#fff; }
+  .cta{ background:var(--ink) !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .sheet{ padding:24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="sheet">
+
+  <a class="brand" href="https://hellomorpho.com" target="_blank" rel="noopener">
+    <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true">
+      <defs>
+        <linearGradient id="mg-flyer" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#6E6BE8"/><stop offset=".5" stop-color="#1F6FE0"/><stop offset="1" stop-color="#2FB6E8"/>
+        </linearGradient>
+      </defs>
+      <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z" fill="url(#mg-flyer)"/>
+      <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z" fill="url(#mg-flyer)"/>
+      <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" fill="url(#mg-flyer)" opacity=".8"/>
+      <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" fill="url(#mg-flyer)" opacity=".8"/>
+      <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#0D1A26"/>
+      <path d="M11.4 9.2 C 10.7 7.6, 9.7 6.5, 8.6 5.8 M12.6 9.2 C 13.3 7.6, 14.3 6.5, 15.4 5.8"
+            stroke="#0D1A26" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </svg>
+    Morpho Studio
+  </a>
+
+  <p class="eyebrow">Websites · AI automation · apps</p>
+  <h1>Software for small businesses, built to be owned — not rented.</h1>
+  <p class="lede">A small digital studio based in Húsavík, Iceland, with roots in Costa Rica. We build for hotels, tour operators, restaurants, and other small businesses that are tired of monthly platform fees and generic SaaS.</p>
+
+  <div class="svc-grid">
+    <div class="svc">
+      <span class="svc-label">Web design</span>
+      <h3>Sites that take bookings, not just compliments.</h3>
+      <p>Hand-built, multilingual, fast on a weak phone signal. Direct booking so fewer commissions go to the big platforms. You own the code, the domain, and the content.</p>
+    </div>
+    <div class="svc">
+      <span class="svc-label">AI services</span>
+      <h3>Your front desk, answered at 2 a.m.</h3>
+      <p>Automation trained on your business — rooms, tours, menu — not generic chatbot filler. Confirmations, reminders, and review replies handled automatically, with a clear handoff to a human.</p>
+    </div>
+    <div class="svc">
+      <span class="svc-label">App creation</span>
+      <h3>Tools shaped to how you actually work.</h3>
+      <p>Updatable menus, availability dashboards, queue or booking tools — one workflow, built for you, not a template. Pay once, no monthly software rent.</p>
+    </div>
+  </div>
+
+  <div class="price-strip">
+    <div class="price-cell">
+      <span class="k">Website</span>
+      <span class="v">from 390,000 kr</span>
+    </div>
+    <div class="price-cell">
+      <span class="k">Direct booking site</span>
+      <span class="v">from 590,000 kr</span>
+    </div>
+    <div class="price-cell">
+      <span class="k">App</span>
+      <span class="v">from 450,000 kr</span>
+    </div>
+    <div class="price-cell">
+      <span class="k">AI automation</span>
+      <span class="v">from 190,000 kr <small>+ 39,000 kr/mo</small></span>
+    </div>
+    <div class="price-cell">
+      <span class="k">Site care</span>
+      <span class="v">from 29,000 kr<small>/mo</small></span>
+    </div>
+  </div>
+
+  <div class="process">
+    <div class="step">
+      <span class="num">01</span>
+      <h4>Discover</h4>
+      <p>One free call. Written plan with a fixed price within three days.</p>
+    </div>
+    <div class="step">
+      <span class="num">02</span>
+      <h4>Design</h4>
+      <p>1–2 weeks. Real screens, your real content.</p>
+    </div>
+    <div class="step">
+      <span class="num">03</span>
+      <h4>Build</h4>
+      <p>2–4 weeks. A private link you can follow as it progresses.</p>
+    </div>
+    <div class="step">
+      <span class="num">04</span>
+      <h4>Run</h4>
+      <p>Launch, training, 30 days of fixes. Optional retainer after that.</p>
+    </div>
+  </div>
+
+  <p class="quote">"You own the code. You own the content. You own what happens next."</p>
+
+  <div class="cta">
+    <p class="lead">Free discovery call — no pressure, no obligation.</p>
+    <div class="cta-actions">
+      <a class="btn btn-primary" href="https://cal.com/arnoldo-a-morphos/30min" target="_blank" rel="noopener">Book a time →</a>
+      <a class="btn btn-ghost" href="mailto:arnoldo@hellomorpho.com?subject=Project%20inquiry">Email arnoldo@hellomorpho.com</a>
+    </div>
+  </div>
+
+  <div class="meta">
+    <span>Arnoldo Arguello — Founder, Morpho Studio</span>
+    <span>hellomorpho.com</span>
+    <span>Húsavík, Iceland · roots in Costa Rica</span>
+    <span>English · Español</span>
+  </div>
+
+</div>
+
+</body>
+</html>
