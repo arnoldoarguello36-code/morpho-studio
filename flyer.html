@@ -141,7 +141,22 @@ h1{
   font-family:var(--mono); font-size:12px; color:var(--basalt);
 }
 
+.header-row{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; margin-bottom:28px;
+}
+.header-row .brand{ margin-bottom:0; }
+.lang-toggle{
+  font-family:var(--mono); font-size:12px; letter-spacing:.04em;
+  background:#fff; color:var(--ink); border:1px solid var(--line);
+  border-radius:999px; padding:7px 14px; cursor:pointer; flex:none;
+}
+.lang-toggle:hover{ border-color:var(--m-blue); color:var(--m-text); }
+
+.is-hidden{ display:none !important; }
+
 @media print{
+  .lang-toggle{ display:none !important; }
   body{ background:#fff; }
   .cta{ background:var(--ink) !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   .sheet{ padding:24px; }
@@ -152,108 +167,236 @@ h1{
 
 <div class="sheet">
 
-  <a class="brand" href="https://hellomorpho.com" target="_blank" rel="noopener">
-    <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true">
-      <defs>
-        <linearGradient id="mg-flyer" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#6E6BE8"/><stop offset=".5" stop-color="#1F6FE0"/><stop offset="1" stop-color="#2FB6E8"/>
-        </linearGradient>
-      </defs>
-      <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z" fill="url(#mg-flyer)"/>
-      <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z" fill="url(#mg-flyer)"/>
-      <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" fill="url(#mg-flyer)" opacity=".8"/>
-      <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" fill="url(#mg-flyer)" opacity=".8"/>
-      <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#0D1A26"/>
-      <path d="M11.4 9.2 C 10.7 7.6, 9.7 6.5, 8.6 5.8 M12.6 9.2 C 13.3 7.6, 14.3 6.5, 15.4 5.8"
-            stroke="#0D1A26" stroke-width="1" fill="none" stroke-linecap="round"/>
-    </svg>
-    Morpho Studio
-  </a>
+  <div class="header-row">
+    <a class="brand" href="https://hellomorpho.com" target="_blank" rel="noopener">
+      <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true">
+        <defs>
+          <linearGradient id="mg-flyer" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6E6BE8"/><stop offset=".5" stop-color="#1F6FE0"/><stop offset="1" stop-color="#2FB6E8"/>
+          </linearGradient>
+        </defs>
+        <path d="M11 11.6 C 8.2 6.2, 3.2 4.0, 2.0 7.0 C 0.9 10.0, 5.8 12.7, 11 11.6 Z" fill="url(#mg-flyer)"/>
+        <path d="M13 11.6 C 15.8 6.2, 20.8 4.0, 22.0 7.0 C 23.1 10.0, 18.2 12.7, 13 11.6 Z" fill="url(#mg-flyer)"/>
+        <path d="M11.2 13.3 C 7.0 13.2, 3.8 15.2, 4.9 17.8 C 6.0 20.3, 10.2 18.6, 11.4 14.3 Z" fill="url(#mg-flyer)" opacity=".8"/>
+        <path d="M12.8 13.3 C 17.0 13.2, 20.2 15.2, 19.1 17.8 C 18.0 20.3, 13.8 18.6, 12.6 14.3 Z" fill="url(#mg-flyer)" opacity=".8"/>
+        <ellipse cx="12" cy="13" rx="1" ry="4.4" fill="#0D1A26"/>
+        <path d="M11.4 9.2 C 10.7 7.6, 9.7 6.5, 8.6 5.8 M12.6 9.2 C 13.3 7.6, 14.3 6.5, 15.4 5.8"
+              stroke="#0D1A26" stroke-width="1" fill="none" stroke-linecap="round"/>
+      </svg>
+      Morpho Studio
+    </a>
+    <button class="lang-toggle" id="langToggle" type="button">IS</button>
+  </div>
 
-  <p class="eyebrow">Websites · AI automation · apps</p>
-  <h1>Software for small businesses, built to be owned — not rented.</h1>
-  <p class="lede">A small digital studio based in Húsavík, Iceland, with roots in Costa Rica. We build for hotels, tour operators, restaurants, and other small businesses that are tired of monthly platform fees and generic SaaS.</p>
+  <p class="eyebrow">
+    <span class="lang-en">Websites · AI automation · apps</span>
+    <span class="lang-is is-hidden">Vefsíður · sjálfvirkni · forrit</span>
+  </p>
+  <h1>
+    <span class="lang-en">Software for small businesses, built to be owned — not rented.</span>
+    <span class="lang-is is-hidden">Hugbúnaður fyrir lítil fyrirtæki — byggður til að eiga, ekki leigja.</span>
+  </h1>
+  <p class="lede">
+    <span class="lang-en">A small digital studio based in Húsavík, Iceland, with roots in Costa Rica. We build for hotels, tour operators, restaurants, and other small businesses that are tired of monthly platform fees and generic SaaS.</span>
+    <span class="lang-is is-hidden">Lítil hönnunarstofa með aðsetur í Húsavík, með rætur í Kosta Ríka. Við byggjum vefsíður, sjálfvirkni og forrit fyrir hótel, ferðaþjónustufyrirtæki, veitingastaði og önnur lítil fyrirtæki sem eru þreytt á mánaðarlegum greiðslum til hugbúnaðarpalla.</span>
+  </p>
 
   <div class="svc-grid">
     <div class="svc">
-      <span class="svc-label">Web design</span>
-      <h3>Sites that take bookings, not just compliments.</h3>
-      <p>Hand-built, multilingual, fast on a weak phone signal. Direct booking so fewer commissions go to the big platforms. You own the code, the domain, and the content.</p>
+      <span class="svc-label">
+        <span class="lang-en">Web design</span>
+        <span class="lang-is is-hidden">Vefhönnun</span>
+      </span>
+      <h3>
+        <span class="lang-en">Sites that take bookings, not just compliments.</span>
+        <span class="lang-is is-hidden">Vefsíður sem taka á móti bókunum — ekki bara hrósi.</span>
+      </h3>
+      <p>
+        <span class="lang-en">Hand-built, multilingual, fast on a weak phone signal. Direct booking so fewer commissions go to the big platforms. You own the code, the domain, and the content.</span>
+        <span class="lang-is is-hidden">Handsmíðaðar, fjöltyngdar og hraðvirkar, jafnvel á veikri farsímatengingu. Bein bókun svo minna af tekjunum fer í þóknun til stóru bókunarsíðnanna. Þú eignast kóðann, lénið og innihaldið.</span>
+      </p>
     </div>
     <div class="svc">
-      <span class="svc-label">AI services</span>
-      <h3>Your front desk, answered at 2 a.m.</h3>
-      <p>Automation trained on your business — rooms, tours, menu — not generic chatbot filler. Confirmations, reminders, and review replies handled automatically, with a clear handoff to a human.</p>
+      <span class="svc-label">
+        <span class="lang-en">AI services</span>
+        <span class="lang-is is-hidden">Gervigreindarlausnir</span>
+      </span>
+      <h3>
+        <span class="lang-en">Your front desk, answered at 2 a.m.</span>
+        <span class="lang-is is-hidden">Afgreiðslan þín, svarað klukkan 2 að nóttu.</span>
+      </h3>
+      <p>
+        <span class="lang-en">Automation trained on your business — rooms, tours, menu — not generic chatbot filler. Confirmations, reminders, and review replies handled automatically, with a clear handoff to a human.</span>
+        <span class="lang-is is-hidden">Sjálfvirkni þjálfuð á þínu fyrirtæki — herbergjunum, ferðunum, matseðlinum — ekki almennt spjallmenni. Staðfestingar, áminningar og svör við umsögnum eru afgreidd sjálfvirkt, með skýrri yfirfærslu til manneskju þegar þarf.</span>
+      </p>
     </div>
     <div class="svc">
-      <span class="svc-label">App creation</span>
-      <h3>Tools shaped to how you actually work.</h3>
-      <p>Updatable menus, availability dashboards, queue or booking tools — one workflow, built for you, not a template. Pay once, no monthly software rent.</p>
+      <span class="svc-label">
+        <span class="lang-en">App creation</span>
+        <span class="lang-is is-hidden">Hugbúnaðarsmíði</span>
+      </span>
+      <h3>
+        <span class="lang-en">Tools shaped to how you actually work.</span>
+        <span class="lang-is is-hidden">Verkfæri sniðin að því hvernig þú vinnur.</span>
+      </h3>
+      <p>
+        <span class="lang-en">Updatable menus, availability dashboards, queue or booking tools — one workflow, built for you, not a template. Pay once, no monthly software rent.</span>
+        <span class="lang-is is-hidden">Uppfæranlegir matseðlar, yfirlit yfir framboð, bókunar- eða biðlistakerfi — eitt verkflæði, smíðað fyrir þig, ekki sniðmát. Greitt einu sinni — engin mánaðarleg hugbúnaðarleiga.</span>
+      </p>
     </div>
   </div>
 
   <div class="price-strip">
     <div class="price-cell">
-      <span class="k">Website</span>
-      <span class="v">from 390,000 kr</span>
+      <span class="k">
+        <span class="lang-en">Website</span>
+        <span class="lang-is is-hidden">Vefsíða</span>
+      </span>
+      <span class="v">
+        <span class="lang-en">from 390,000 kr</span>
+        <span class="lang-is is-hidden">frá 390.000 kr</span>
+      </span>
     </div>
     <div class="price-cell">
-      <span class="k">Direct booking site</span>
-      <span class="v">from 590,000 kr</span>
+      <span class="k">
+        <span class="lang-en">Direct booking site</span>
+        <span class="lang-is is-hidden">Vefsíða með bókunarkerfi</span>
+      </span>
+      <span class="v">
+        <span class="lang-en">from 590,000 kr</span>
+        <span class="lang-is is-hidden">frá 590.000 kr</span>
+      </span>
     </div>
     <div class="price-cell">
-      <span class="k">App</span>
-      <span class="v">from 450,000 kr</span>
+      <span class="k">
+        <span class="lang-en">App</span>
+        <span class="lang-is is-hidden">Forrit</span>
+      </span>
+      <span class="v">
+        <span class="lang-en">from 450,000 kr</span>
+        <span class="lang-is is-hidden">frá 450.000 kr</span>
+      </span>
     </div>
     <div class="price-cell">
-      <span class="k">AI automation</span>
-      <span class="v">from 190,000 kr <small>+ 39,000 kr/mo</small></span>
+      <span class="k">
+        <span class="lang-en">AI automation</span>
+        <span class="lang-is is-hidden">Gervigreindarsjálfvirkni</span>
+      </span>
+      <span class="v">
+        <span class="lang-en">from 190,000 kr <small>+ 39,000 kr/mo</small></span>
+        <span class="lang-is is-hidden">frá 190.000 kr <small>+ 39.000 kr/mán</small></span>
+      </span>
     </div>
     <div class="price-cell">
-      <span class="k">Site care</span>
-      <span class="v">from 29,000 kr<small>/mo</small></span>
+      <span class="k">
+        <span class="lang-en">Site care</span>
+        <span class="lang-is is-hidden">Umsjón vefsíðu</span>
+      </span>
+      <span class="v">
+        <span class="lang-en">from 29,000 kr<small>/mo</small></span>
+        <span class="lang-is is-hidden">frá 29.000 kr<small>/mán</small></span>
+      </span>
     </div>
   </div>
 
   <div class="process">
     <div class="step">
       <span class="num">01</span>
-      <h4>Discover</h4>
-      <p>One free call. Written plan with a fixed price within three days.</p>
+      <h4>
+        <span class="lang-en">Discover</span>
+        <span class="lang-is is-hidden">Kynning</span>
+      </h4>
+      <p>
+        <span class="lang-en">One free call. Written plan with a fixed price within three days.</span>
+        <span class="lang-is is-hidden">Eitt frítt símtal. Skrifleg áætlun með föstu verði innan þriggja daga.</span>
+      </p>
     </div>
     <div class="step">
       <span class="num">02</span>
-      <h4>Design</h4>
-      <p>1–2 weeks. Real screens, your real content.</p>
+      <h4>
+        <span class="lang-en">Design</span>
+        <span class="lang-is is-hidden">Hönnun</span>
+      </h4>
+      <p>
+        <span class="lang-en">1–2 weeks. Real screens, your real content.</span>
+        <span class="lang-is is-hidden">1–2 vikur. Raunveruleg skjáskot með þínu eigin efni.</span>
+      </p>
     </div>
     <div class="step">
       <span class="num">03</span>
-      <h4>Build</h4>
-      <p>2–4 weeks. A private link you can follow as it progresses.</p>
+      <h4>
+        <span class="lang-en">Build</span>
+        <span class="lang-is is-hidden">Smíði</span>
+      </h4>
+      <p>
+        <span class="lang-en">2–4 weeks. A private link you can follow as it progresses.</span>
+        <span class="lang-is is-hidden">2–4 vikur. Einkatengill sem þú getur fylgst með meðan verkið vindur fram.</span>
+      </p>
     </div>
     <div class="step">
       <span class="num">04</span>
-      <h4>Run</h4>
-      <p>Launch, training, 30 days of fixes. Optional retainer after that.</p>
+      <h4>
+        <span class="lang-en">Run</span>
+        <span class="lang-is is-hidden">Keyrsla</span>
+      </h4>
+      <p>
+        <span class="lang-en">Launch, training, 30 days of fixes. Optional retainer after that.</span>
+        <span class="lang-is is-hidden">Útgáfa, þjálfun og 30 daga af lagfæringum. Valfrjáls áskrift eftir það.</span>
+      </p>
     </div>
   </div>
 
-  <p class="quote">"You own the code. You own the content. You own what happens next."</p>
+  <p class="quote">
+    <span class="lang-en">"You own the code. You own the content. You own what happens next."</span>
+    <span class="lang-is is-hidden">"Þú eignast kóðann. Þú eignast efnið. Þú ræður því sem gerist næst."</span>
+  </p>
 
   <div class="cta">
-    <p class="lead">Free discovery call — no pressure, no obligation.</p>
+    <p class="lead">
+      <span class="lang-en">Free discovery call — no pressure, no obligation.</span>
+      <span class="lang-is is-hidden">Frítt kynningarsamtal — engin skuldbinding.</span>
+    </p>
     <div class="cta-actions">
-      <a class="btn btn-primary" href="https://cal.com/arnoldo-a-morphos/30min" target="_blank" rel="noopener">Book a time →</a>
-      <a class="btn btn-ghost" href="mailto:arnoldo@hellomorpho.com?subject=Project%20inquiry">Email arnoldo@hellomorpho.com</a>
+      <a class="btn btn-primary" href="https://cal.com/arnoldo-a-morphos/30min" target="_blank" rel="noopener">
+        <span class="lang-en">Book a time →</span>
+        <span class="lang-is is-hidden">Bóka tíma →</span>
+      </a>
+      <a class="btn btn-ghost" href="mailto:arnoldo@hellomorpho.com?subject=Project%20inquiry">
+        <span class="lang-en">Email arnoldo@hellomorpho.com</span>
+        <span class="lang-is is-hidden">Senda tölvupóst: arnoldo@hellomorpho.com</span>
+      </a>
     </div>
   </div>
 
   <div class="meta">
-    <span>Arnoldo Arguello — Founder, Morpho Studio</span>
+    <span>
+      <span class="lang-en">Arnoldo Arguello — Founder, Morpho Studio</span>
+      <span class="lang-is is-hidden">Arnoldo Arguello — Stofnandi, Morpho Studio</span>
+    </span>
     <span>hellomorpho.com</span>
-    <span>Húsavík, Iceland · roots in Costa Rica</span>
-    <span>English · Español</span>
+    <span>
+      <span class="lang-en">Húsavík, Iceland · roots in Costa Rica</span>
+      <span class="lang-is is-hidden">Húsavík, Ísland · rætur í Kosta Ríka</span>
+    </span>
+    <span>
+      <span class="lang-en">English · Español</span>
+      <span class="lang-is is-hidden">Enska · Spænska</span>
+    </span>
   </div>
+
+  <script>
+    (function(){
+      var btn = document.getElementById('langToggle');
+      var isIcelandic = false;
+      btn.addEventListener('click', function(){
+        isIcelandic = !isIcelandic;
+        document.querySelectorAll('.lang-en').forEach(function(el){ el.classList.toggle('is-hidden', isIcelandic); });
+        document.querySelectorAll('.lang-is').forEach(function(el){ el.classList.toggle('is-hidden', !isIcelandic); });
+        btn.textContent = isIcelandic ? 'EN' : 'IS';
+        document.documentElement.lang = isIcelandic ? 'is' : 'en';
+      });
+    })();
+  </script>
 
 </div>
 
